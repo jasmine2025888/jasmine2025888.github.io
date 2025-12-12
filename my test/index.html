@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>专业NPD人格倾向评估 | 科学测评</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        h1 {
+            color: #4a5568;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            color: #718096;
+            font-size: 16px;
+        }
+        .question {
+            background: #f8f9fa;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+        .options label {
+            display: block;
+            padding: 12px;
+            margin: 8px 0;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .options label:hover {
+            background: #edf2f7;
+            transform: translateX(5px);
+        }
+        button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 18px;
+            border-radius: 50px;
+            cursor: pointer;
+            display: block;
+            margin: 30px auto;
+            transition: transform 0.3s;
+        }
+        button:hover {
+            transform: translateY(-3px);
+        }
+        .result {
+            display: none;
+            background: #f0fff4;
+            padding: 25px;
+            border-radius: 15px;
+            border: 2px solid #68d391;
+            margin-top: 30px;
+            text-align: center;
+        }
+        .score {
+            font-size: 48px;
+            font-weight: bold;
+            color: #667eea;
+            margin: 20px 0;
+        }
+        .recommendation {
+            background: #fffaf0;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🧠 专业NPD人格倾向评估</h1>
+            <p class="subtitle">基于DSM-5标准 | 10题快速筛查 | 科学解析</p>
+        </div>
+
+        <div id="testContainer">
+            <!-- 题目将动态插入 -->
+        </div>
+
+        <button onclick="calculateScore()">📊 查看专业分析报告</button>
+
+        <div class="result" id="resultSection">
+            <h2>🎯 您的测评结果</h2>
+            <div class="score" id="scoreDisplay">0</div>
+            <h3 id="resultTitle"></h3>
+            <p id="resultDescription"></p>
+            
+            <div class="recommendation">
+                <strong>💡 重要说明：</strong><br>
+                本测试为初步筛查工具，结果仅供参考。<br>
+                如需专业评估，建议咨询心理医生。
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 专业NPD测试题目（基于NPI量表简化版）
+        const questions = [
+            { 
+                id: 1, 
+                text: "我常常觉得自己应该得到特殊的对待或特权", 
+                options: [
+                    { text: "非常不符合", value: 0 },
+                    { text: "不太符合", value: 1 },
+                    { text: "有点符合", value: 2 },
+                    { text: "非常符合", value: 3 }
+                ]
+            },
+            { 
+                id: 2, 
+                text: "我倾向于利用他人来达到自己的目的", 
+                options: [
+                    { text: "非常不符合", value: 0 },
+                    { text: "不太符合", value: 1 },
+                    { text: "有点符合", value: 2 },
+                    { text: "非常符合", value: 3 }
+                ]
+            },
+            { 
+                id: 3, 
+                text: "我常常幻想自己拥有巨大的成功、权力或美貌", 
+                options: [
+                    { text: "非常不符合", value: 0 },
+                    { text: "不太符合", value: 1 },
+                    { text: "有点符合", value: 2 },
+                    { text: "非常符合", value: 3 }
+                ]
+            },
+            { 
+                id: 4, 
+                text: "我需要他人持续的关注和赞美", 
+                options: [
+                    { text: "非常不符合", value: 0 },
+                    { text: "不太符合", value: 1 },
+                    { text: "有点符合", value: 2 },
+                    { text: "非常符合", value: 3 }
+                ]
+            },
+            { 
+                id: 5, 
+                text: "我缺乏同理心，难以理解他人的感受", 
+                options: [
+                    { text: "非常不符合", value: 0 },
+                    { text: "不太符合", value: 1 },
+                    { text: "有点符合", value: 2 },
+                    { text: "非常符合", value: 3 }
+                ]
+            }
+        ];
+
+        // 动态生成题目
+        const testContainer = document.getElementById('testContainer');
+        questions.forEach((q, index) => {
+            const questionDiv = document.createElement('div');
+            questionDiv.className = 'question';
+            questionDiv.innerHTML = `
+                <h3>${index + 1}. ${q.text}</h3>
+                <div class="options">
+                    ${q.options.map(opt => `
+                        <label>
+                            <input type="radio" name="q${q.id}" value="${opt.value}">
+                            ${opt.text}
+                        </label>
+                    `).join('')}
+                </div>
+            `;
+            testContainer.appendChild(questionDiv);
+        });
+
+        // 计算分数
+        function calculateScore() {
+            let totalScore = 0;
+            let answered = 0;
+            
+            questions.forEach(q => {
+                const selected = document.querySelector(`input[name="q${q.id}"]:checked`);
+                if (selected) {
+                    totalScore += parseInt(selected.value);
+                    answered++;
+                }
+            });
+            
+            if (answered < questions.length) {
+                alert('请完成所有题目再查看结果');
+                return;
+            }
+            
+            // 显示结果
+            const scoreElement = document.getElementById('scoreDisplay');
+            const titleElement = document.getElementById('resultTitle');
+            const descElement = document.getElementById('resultDescription');
+            const resultSection = document.getElementById('resultSection');
+            
+            scoreElement.textContent = totalScore;
+            
+            if (totalScore <= 5) {
+                titleElement.textContent = "✅ 低NPD倾向";
+                descElement.textContent = "您的自恋特质在正常范围内。您可能是一个自信且自我认同感良好的人，能够平衡自我关注和对他人的关心。";
+            } else if (totalScore <= 10) {
+                titleElement.textContent = "⚠️ 中等NPD倾向";
+                descElement.textContent = "您在某些情况下可能表现出自恋特质，但总体上仍具有较好的自我调节能力。建议关注人际关系中的平衡。";
+            } else {
+                titleElement.textContent = "🔍 较高NPD倾向";
+                descElement.textContent = "您可能在多个方面表现出明显的自恋特质。建议进行专业评估，并关注这些特质对您人际关系和生活质量的影响。";
+            }
+            
+            resultSection.style.display = 'block';
+            window.scrollTo(0, document.body.scrollHeight);
+        }
+    </script>
+</body>
+</html>
