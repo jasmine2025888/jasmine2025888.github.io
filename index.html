@@ -97,8 +97,8 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>🧠 专业NPD人格倾向评估</h1>
-            <p class="subtitle">基于DSM-5标准 | 10题快速筛查 | 科学解析</p>
+            <h1>🧠 专业NPD人格倾向评估（10题版）</h1>
+            <p class="subtitle">基于DSM-5标准 | 科学解析 | 专属报告</p>
         </div>
 
         <div id="testContainer">
@@ -122,7 +122,7 @@
     </div>
 
     <script>
-        // 专业NPD测试题目（基于NPI量表简化版）
+        // 专业NPD测试题目（10题版）
         const questions = [
             { 
                 id: 1, 
@@ -173,8 +173,58 @@
                     { text: "有点符合", value: 2 },
                     { text: "非常符合", value: 3 }
                 ]
+            },
+            { 
+                id: 6, 
+                text: "我很容易因为别人的批评而感到受伤或愤怒", 
+                options: [
+                    { text: "非常不符合", value: 0 },
+                    { text: "不太符合", value: 1 },
+                    { text: "有点符合", value: 2 },
+                    { text: "非常符合", value: 3 }
+                ]
+            },
+            { 
+                id: 7, 
+                text: "我时常期待别人对我的成就表示钦佩", 
+                options: [
+                    { text: "非常不符合", value: 0 },
+                    { text: "不太符合", value: 1 },
+                    { text: "有点符合", value: 2 },
+                    { text: "非常符合", value: 3 }
+                ]
+            },
+            { 
+                id: 8, 
+                text: "在人群中，我通常觉得自己应该成为焦点", 
+                options: [
+                    { text: "非常不符合", value: 0 },
+                    { text: "不太符合", value: 1 },
+                    { text: "有点符合", value: 2 },
+                    { text: "非常符合", value: 3 }
+                ]
+            },
+            { 
+                id: 9, 
+                text: "我有时会夸大自己的才能或成就", 
+                options: [
+                    { text: "非常不符合", value: 0 },
+                    { text: "不太符合", value: 1 },
+                    { text: "有点符合", value: 2 },
+                    { text: "非常符合", value: 3 }
+                ]
+            },
+            { 
+                id: 10, 
+                text: "我认为自己有很多独特的、普通人无法理解的品质", 
+                options: [
+                    { text: "非常不符合", value: 0 },
+                    { text: "不太符合", value: 1 },
+                    { text: "有点符合", value: 2 },
+                    { text: "非常符合", value: 3 }
+                ]
             }
-        ];
+        ]; // 数组正确结束
 
         // 动态生成题目
         const testContainer = document.getElementById('testContainer');
@@ -195,7 +245,7 @@
             testContainer.appendChild(questionDiv);
         });
 
-        // 计算分数
+        // 计算分数（已适配10题，总分30分）
         function calculateScore() {
             let totalScore = 0;
             let answered = 0;
@@ -213,7 +263,7 @@
                 return;
             }
             
-            // 显示结果
+            // 显示结果 (针对10题，总分30分的阈值)
             const scoreElement = document.getElementById('scoreDisplay');
             const titleElement = document.getElementById('resultTitle');
             const descElement = document.getElementById('resultDescription');
@@ -221,10 +271,11 @@
             
             scoreElement.textContent = totalScore;
             
-            if (totalScore <= 5) {
+            // 分数判断逻辑（10题版）
+            if (totalScore <= 10) {
                 titleElement.textContent = "✅ 低NPD倾向";
                 descElement.textContent = "您的自恋特质在正常范围内。您可能是一个自信且自我认同感良好的人，能够平衡自我关注和对他人的关心。";
-            } else if (totalScore <= 10) {
+            } else if (totalScore <= 20) {
                 titleElement.textContent = "⚠️ 中等NPD倾向";
                 descElement.textContent = "您在某些情况下可能表现出自恋特质，但总体上仍具有较好的自我调节能力。建议关注人际关系中的平衡。";
             } else {
@@ -237,5 +288,4 @@
         }
     </script>
 </body>
-
 </html>
