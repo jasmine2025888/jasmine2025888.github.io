@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-5">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NPD自恋型人格特质专业评估（他评版·30题）</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 950px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 25px 70px rgba(0,0,0,0.25);
+        }
+        .header { text-align: center; margin-bottom: 35px; padding-bottom: 25px; border-bottom: 2px solid #f0f0f0; }
+        h1 { color: #2d3748; margin-bottom: 10px; font-size: 2.1em; }
+        .subtitle { color: #718096; font-size: 16px; margin-bottom: 15px; }
+        .instructions {
+            background: #f0f9ff;
+            padding: 22px;
+            border-radius: 15px;
+            margin-bottom: 35px;
+            border-left: 6px solid #3b82f6;
+            font-size: 15px;
+        }
+        .dimension {
+            background: #f8fafc;
+            padding: 25px;
+            margin-bottom: 30px;
+            border-radius: 16px;
+            border-left: 5px solid #8b5cf6;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+        .dimension-title {
+            color: #2d3748;
+            margin-bottom: 20px;
+            font-size: 1.3em;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+        }
+        .dimension-title::before {
+            content: '📌';
+            margin-right: 10px;
+        }
+        .question {
+            background: white;
+            padding: 20px;
+            margin-bottom: 18px;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            transition: all 0.2s;
+        }
+        .question:hover { box-shadow: 0 5px 15px rgba(0,0,0,0.07); }
+        .question-text {
+            font-weight: 600;
+            margin-bottom: 18px;
+            color: #4a5568;
+            font-size: 1.05em;
+        }
+        .options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+            gap: 12px;
+        }
+        .options label {
+            padding: 14px;
+            background: #f8fafc;
+            border-radius: 10px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.3s;
+            border: 2px solid transparent;
+            font-size: 0.95em;
+        }
+        .options label:hover {
+            background: #e2e8f0;
+            transform: translateY(-3px);
+        }
+        .options input:checked + .option-content {
+            background: #3b82f6;
+            color: white;
+            border-color: #2563eb;
+            font-weight: 600;
+        }
+        .option-content {
+            display: block;
+            padding: inherit;
+            background: inherit;
+            border-radius: inherit;
+        }
+        button {
+            background: linear-gradient(135deg, #8b5cf6 0%, #3b82f6 100%);
+            color: white;
+            border: none;
+            padding: 20px 70px;
+            font-size: 1.2em;
+            border-radius: 60px;
+            cursor: pointer;
+            display: block;
+            margin: 50px auto;
+            transition: all 0.3s;
+            font-weight: bold;
+            box-shadow: 0 8px 25px rgba(139, 92, 246, 0.4);
+        }
+        button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(139, 92, 246, 0.6);
+        }
+        .result {
+            display: none;
+            background: linear-gradient(135deg, #dbeafe 0%, #f0f9ff 100%);
+            padding: 40px;
+            border-radius: 20px;
+            border: 2px solid #60a5fa;
+            margin-top: 40px;
+        }
+        .result-title {
+            color: #1e40af;
+            margin-bottom: 30px;
+            font-size: 1.9em;
+            text-align: center;
+        }
+        .score-display {
+            font-size: 5em;
+            font-weight: 800;
+            color: #8b5cf6;
+            text-align: center;
+            margin: 25px 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+        .level-display {
+            font-size: 1.8em;
+            text-align: center;
+            margin-bottom: 30px;
+            color: #2d3748;
+            font-weight: 600;
+        }
+        .dimension-scores {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 20px;
+            margin: 40px 0;
+        }
+        .dim-score-item {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        .dim-score-name { font-weight: 600; margin-bottom: 10px; color: #4a5568; font-size: 1.1em;}
+        .dim-score-value { font-size: 2em; font-weight: bold; color: #3b82f6; margin-bottom: 5px;}
+        .dim-score-bar {
+            height: 10px;
+            background: #e2e8f0;
+            border-radius: 5px;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+        .dim-score-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #8b5cf6, #3b82f6);
+            border-radius: 5px;
+        }
+        .interpretation {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-top: 30px;
+            border-left: 6px solid #10b981;
+        }
+        .disclaimer {
+            font-size: 0.9em;
+            color: #64748b;
+            margin-top: 40px;
+            padding-top: 25px;
+            border-top: 1px solid #e2e8f0;
+            text-align: center;
+            line-height: 1.7;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🧐 NPD自恋型人格特质专业评估（他评版）</h1>
+            <p class="subtitle">30题行为观察量表 | 六大维度解析 | 生成深度互动模式报告</p>
+        </div>
+
+        <div class="instructions">
+            <strong>导语与说明：</strong> 本测评旨在帮助您梳理与观察对象的相处经历，通过30道行为观察题评估其可能存在的自恋型人格特质。<strong>测评结果仅作为行为模式参考，不构成专业诊断。</strong>请根据过去半年内的实际相处情况，选择最符合您观察到的行为频率。
+            <br><br>
+            <strong>评分标准：</strong>
+            <span style="color:#3b82f6">A 从无 (0分)</span> |
+            <span style="color:#3b82f6">B 偶尔 (1分)</span> |
+            <span style="color:#3b82f6">C 有时 (2分)</span> |
+            <span style="color:#3b82f6">D 经常 (3分)</span> |
+            <span style="color:#3b82f6">E 总是 (4分)</span>
+        </div>
+
+        <div id="testContainer">
+            <!-- 题目将动态插入 -->
+        </div>
+
+        <button onclick="calculateScore()">🔍 生成专业评估报告</button>
+
+        <div class="result" id="resultSection">
+            <h2 class="result-title">📋 评估结果：关系行为模式分析报告</h2>
+            <div class="score-display" id="totalScoreDisplay">0</div>
+            <div class="level-display" id="levelDisplay"></div>
+            <p style="text-align:center; color:#64748b; margin-bottom: 30px;">总分范围：0 - 120分 | 六大维度详细分析如下</p>
+
+            <h3 style="color:#4a5568; margin-bottom:20px;">📊 各维度得分详解</h3>
+            <div class="dimension-scores" id="dimensionScores">
+                <!-- 维度分数将动态插入 -->
+            </div>
+
+            <div class="interpretation" id="interpretation">
+                <!-- 报告解读将动态插入 -->
+            </div>
+
+            <div class="disclaimer">
+                <strong>重要提示：</strong> 本测评是基于您主观观察的“他评”工具，结果反映的是您在特定关系中体验到的行为模式。自恋型人格障碍（NPD）的诊断需要由精神卫生专业人员在临床面谈中进行。此报告旨在增进理解、明确边界，<strong>不能也不应作为诊断依据</strong>。如果这段关系让您感到持续困扰或痛苦，请务必考虑寻求专业的心理咨询或支持。
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ===================== 题库与维度定义 =====================
+        const dimensions = [
+            { name: "自我夸大与特权感", color: "#8b5cf6", questions: [1, 2, 3, 4, 5] },
+            { name: "共情能力缺乏", color: "#3b82f6", questions: [6, 7, 8, 9, 10] },
+            { name: "人际利用与操控倾向", color: "#ef4444", questions: [11, 12, 13, 14, 15] },
+            { name: "嫉妒与贬低他人", color: "#f59e0b", questions: [16, 17, 18, 19, 20] },
+            { name: "情感反应异常", color: "#10b981", questions: [21, 22, 23, 24, 25] },
+            { name: "关系动态与主观体验", color: "#8b5cf6", questions: [26, 27, 28, 29, 30] }
+        ];
+
+        const questions = [
+            // 维度一：自我夸大与特权感 (1-5)
+            { id: 1, text: "对方是否习惯性夸大自己的成就、能力或重要性，甚至脱离实际情况？", dim: 0 },
+            { id: 2, text: "对方是否认为自己应当获得特殊优待，普通规则或等待不适用于自己？", dim: 0 },
+            { id: 3, text: "对方是否热衷于炫耀自己与“高端人物、品牌、场所”的关联，以提升自我形象？", dim: 0 },
+            { id: 4, text: "对方是否沉浸于对无限成功、权力、才华或理想爱情的幻想中？", dim: 0 },
+            { id: 5, text: "对方是否期望他人自动服从自己的意愿，否则便表现出不满或愤怒？", dim: 0 },
+            // 维度二：共情能力缺乏 (6-10)
+            { id: 6, text: "对方是否难以识别或理解他人的情绪状态和需求？", dim: 1 },
+            { id: 7, text: "当我表达情绪或困扰时，对方是否表现出不耐烦、冷漠或转移话题？", dim: 1 },
+            { id: 8, text: "对方是否很少主动关心我的生活细节、感受或需求？", dim: 1 },
+            { id: 9, text: "当我获得成就或快乐时，对方是否难以真诚地为我高兴，甚至泼冷水？", dim: 1 },
+            { id: 10, text: "对方是否在他人遭遇困难时，倾向于轻描淡写或责怪对方？", dim: 1 },
+            // 维度三：人际利用与操控倾向 (11-15)
+            { id: 11, text: "对方是否倾向于将他人视为工具，用来达成自己的目标？", dim: 2 },
+            { id: 12, text: "对方是否在关系中强调“付出与回报”，常暗示“你应该感激我”？", dim: 2 },
+            { id: 13, text: "当出现问题时，对方是否习惯性推卸责任，归咎于他人或环境？", dim: 2 },
+            { id: 14, text: "对方是否通过忽冷忽热、撤回关注等方式，来影响或控制他人的行为？", dim: 2 },
+            { id: 15, text: "对方是否在关系中实行“双重标准”，对自己宽容，对他人苛刻？", dim: 2 },
+            // 维度四：嫉妒与贬低他人 (16-20)
+            { id: 16, text: "对方是否经常表现出对他人的成功、优势或获得关注的嫉妒？", dim: 3 },
+            { id: 17, text: "对方是否倾向于贬低、嘲讽或轻视他人的能力、外貌或观点？", dim: 3 },
+            { id: 18, text: "对方是否难以接受任何形式的批评或不同意见，并视之为“攻击”？", dim: 3 },
+            { id: 19, text: "对方是否常在背后贬低他人，以凸显自己的优越？", dim: 3 },
+            { id: 20, text: "当他人成为焦点时，对方是否会试图打断、转移话题或抢夺注意力？", dim: 3 },
+            // 维度五：情感反应异常 (21-25)
+            { id: 21, text: "对方是否对他人的评价极为敏感，即使是轻微批评也会引发强烈愤怒或羞耻？", dim: 4 },
+            { id: 22, text: "对方是否在自尊受损时，表现出明显的抑郁、空虚或无力感？", dim: 4 },
+            { id: 23, text: "对方是否对外展现出傲慢、自信的形象，但在私下或失败时表现出脆弱易怒？", dim: 4 },
+            { id: 24, text: "对方是否在压力下容易情绪失控，或表现出与情境不符的强烈情绪？", dim: 4 },
+            { id: 25, text: "对方是否对自己的负面行为缺乏内疚感，甚至将其合理化？", dim: 4 },
+            // 维度六：关系动态与主观体验 (26-30)
+            { id: 26, text: "对方是否在关系初期过度理想化你，随后逐渐转为贬低和挑剔？", dim: 5 },
+            { id: 27, text: "你是否感到在这段关系中如履薄冰，害怕说错话或做错事？", dim: 5 },
+            { id: 28, text: "你是否感到自己在这段关系中的角色主要是“情绪照顾者”或“服务者”？", dim: 5 },
+            { id: 29, text: "对方是否倾向于扭曲事实或重写对话历史，以保持自己永远正确的形象？", dim: 5 },
+            { id: 30, text: "这段关系是否让你感到持续的自我怀疑、焦虑、压抑或心力交瘁？", dim: 5 }
+        ];
+
+        const options = [
+            { text: "A 从无 (从未发生)", value: 0 },
+            { text: "B 偶尔 (极少发生)", value: 1 },
+            { text: "C 有时 (偶尔发生)", value: 2 },
+            { text: "D 经常 (频繁发生)", value: 3 },
+            { text: "E 总是 (几乎每次)", value: 4 }
+        ];
+
+        // ===================== 动态生成题目界面 =====================
+        const testContainer = document.getElementById('testContainer');
+
+        dimensions.forEach((dim, dimIndex) => {
+            const dimDiv = document.createElement('div');
+            dimDiv.className = 'dimension';
+            dimDiv.innerHTML = `<div class="dimension-title">维度 ${dimIndex + 1}：${dim.name}</div>`;
+            testContainer.appendChild(dimDiv);
+
+            const dimQuestions = questions.filter(q => q.dim === dimIndex);
+            dimQuestions.forEach(q => {
+                const qDiv = document.createElement('div');
+                qDiv.className = 'question';
+                qDiv.innerHTML = `
+                    <div class="question-text">${q.id}. ${q.text}</div>
+                    <div class="options">
+                        ${options.map((opt, idx) => `
+                            <label>
+                                <input type="radio" name="q${q.id}" value="${opt.value}" required>
+                                <span class="option-content">${opt.text}</span>
+                            </label>
+                        `).join('')}
+                    </div>
+                `;
+                testContainer.appendChild(qDiv);
+            });
+        });
+
+        // ===================== 计算分数与生成报告 =====================
+        function calculateScore() {
+            let totalScore = 0;
+            let answered = 0;
+            const dimScores = Array(dimensions.length).fill(0);
+            const dimCounts = Array(dimensions.length).fill(0);
+
+            // 计算总分和各维度分
+            questions.forEach(q => {
+                const selected = document.querySelector(`input[name="q${q.id}"]:checked`);
+                if (selected) {
+                    answered++;
+                    const score = parseInt(selected.value);
+                    totalScore += score;
+                    dimScores[q.dim] += score;
+                    dimCounts[q.dim]++;
+                }
+            });
+
+            if (answered < questions.length) {
+                alert(`请完成所有题目。您还有 ${questions.length - answered} 题未作答。`);
+                return;
+            }
+
+            // 计算各维度平均分
+            const dimAverages = dimScores.map((score, idx) => (score / dimCounts[idx]).toFixed(2));
+
+            // ===== 显示报告 =====
+            const totalScoreElement = document.getElementById('totalScoreDisplay');
+            const levelElement = document.getElementById('levelDisplay');
+            const dimScoresElement = document.getElementById('dimensionScores');
+            const interpretationElement = document.getElementById('interpretation');
+            const resultSection = document.getElementById('resultSection');
+
+            // 显示总分
+            totalScoreElement.textContent = totalScore;
+
+            // 总体等级评估 (总分120)
+            let level, levelColor, description;
+            if (totalScore >= 90) {
+                level = "⚠️ 高度警示";
+                levelColor = "#dc2626";
+                description = "观察对象在绝大多数维度表现出强烈且频繁的自恋特质，您描述的关系模式与NPD典型互动高度吻合。这段关系可能对您造成了显著的情感消耗。";
+            } else if (totalScore >= 60) {
+                level = "🔍 明显倾向";
+                levelColor = "#f59e0b";
+                description = "观察对象在多个核心维度存在明显的自恋行为模式，这些模式已对关系产生了实质性影响。值得您高度重视并审视关系边界。";
+            } else if (totalScore >= 30) {
+                level = "📌 部分特征";
+                levelColor = "#3b82f6";
+                description = "观察对象在某些方面表现出自恋特质，但尚未形成全面、稳定的模式。可能是人格倾向或特定情境下的行为。";
+            } else {
+                level = "✅ 倾向较低";
+                levelColor = "#10b981";
+                description = "基于您的评估，观察对象表现出的自恋型人格特质较少。关系中的困扰可能源于其他因素。";
+            }
+            levelElement.textContent = level;
+            levelElement.style.color = levelColor;
+
+            // 显示各维度分数详情
+            dimScoresElement.innerHTML = '';
+            dimensions.forEach((dim, idx) => {
+                const avg = dimAverages[idx];
+                const max = 4; // 单题最高4分
+                const percent = (avg / max) * 100;
+
+                const dimDiv = document.createElement('div');
+                dimDiv.className = 'dim-score-item';
+                dimDiv.innerHTML = `
+                    <div class="dim-score-name">${dim.name}</div>
+                    <div class="dim-score-value">${avg}</div>
+                    <div style="font-size:0.9em; color:#64748b;">(均分/5题)</div>
+                    <div class="dim-score-bar">
+                        <div class="dim-score-fill" style="width: ${percent}%"></div>
+                    </div>
+                    <div style="font-size:0.85em; color:#94a3b8; margin-top:8px;">${getDimDescription(avg)}</div>
+                `;
+                dimScoresElement.appendChild(dimDiv);
+            });
+
+            // 生成综合解读与建议
+            let interpretation = `<strong>🧩 综合行为模式分析</strong><br><br>`;
+            interpretation += `<strong>总体评估：</strong>${description}<br><br>`;
+
+            // 找出得分最高的3个维度
+            const dimsWithAvg = dimensions.map((dim, idx) => ({ name: dim.name, avg: parseFloat(dimAverages[idx]) }));
+            dimsWithAvg.sort((a, b) => b.avg - a.avg);
+            const topDims = dimsWithAvg.slice(0, 3).filter(d => d.avg >= 2.0);
+
+            if (topDims.length > 0) {
+                interpretation += `<strong>🔺 突出特征：</strong> 对方在以下方面特质最为明显：`;
+                topDims.forEach(d => {
+                    interpretation += ` <strong>“${d.name}”</strong> (均分 ${d.avg})；`;
+                });
+                interpretation += ` 这通常是关系中冲突与痛苦的核心来源。<br><br>`;
+            }
+
+            interpretation += `<strong>💡 关系思考与行动建议</strong><br>`;
+            if (totalScore >= 60) {
+                interpretation += `1. <strong>优先自我关怀</strong>：您的感受是重要的信号。请优先照顾自己的情绪和心理健康。<br>`;
+                interpretation += `2. <strong>设立明确边界</strong>：明确什么是您能接受和不能接受的，并坚持执行。对方的反应可能验证其特质。<br>`;
+                interpretation += `3. <strong>寻求外部支持</strong>：考虑与可信赖的朋友、家人或<strong>专业咨询师</strong>讨论这段关系，获取客观视角和支持。<br>`;
+                interpretation += `4. <strong>降低拯救期望</strong>：试图改变或“治愈”一个有深度自恋倾向的人极其困难且耗竭。`;
+            } else if (totalScore >= 30) {
+                interpretation += `1. <strong>观察模式，非孤立事件</strong>：关注行为是否构成重复模式，而非单个事件。<br>`;
+                interpretation += `2. <strong>清晰表达感受</strong>：当不适发生时，尝试用“我感受到...”的方式表达，观察对方反应。<br>`;
+                interpretation += `3. <strong>评估关系价值</strong>：这段关系带给您的滋养与消耗相比如何？是否对等？<br>`;
+                interpretation += `4. <strong>保持现实期待</strong>：对关系的改善速度抱持现实态度，避免过度投入。`;
+            } else {
+                interpretation += `1. <strong>确认其他可能性</strong>：关系中的问题可能源于压力、沟通风格差异或其他因素，可尝试坦诚沟通。<br>`;
+                interpretation += `2. <strong>关注具体问题</strong>：就事论事地解决具体冲突，而非给人格贴标签。<br>`;
+                interpretation += `3. <strong>维持健康互动</strong>：继续实践尊重、平等的沟通方式，这是任何健康关系的基础。`;
+            }
+
+            interpretationElement.innerHTML = interpretation;
+            resultSection.style.display = 'block';
+            window.scrollTo(0, document.body.scrollHeight);
+        }
+
+        // 辅助函数：根据维度均分返回描述
+        function getDimDescription(avg) {
+            if (avg >= 3.5) return '极高频';
+            if (avg >= 2.5) return '高频';
+            if (avg >= 1.5) return '中等频率';
+            if (avg >= 0.5) return '低频';
+            return '极少';
+        }
+    </script>
+</body>
+</html>
