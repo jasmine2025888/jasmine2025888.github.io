@@ -3,289 +3,270 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>专业NPD人格倾向评估 | 科学测评</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
-            color: #333;
-        }
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-        }
-        .header {
-            text-align: center;
-            margin-bottom: 30px;
-            padding-bottom: 20px;
-            border-bottom: 2px solid #f0f0f0;
-        }
-        h1 {
-            color: #4a5568;
-            margin-bottom: 10px;
-        }
-        .subtitle {
-            color: #718096;
-            font-size: 16px;
-        }
-        .question {
-            background: #f8f9fa;
-            padding: 20px;
-            margin-bottom: 15px;
-            border-radius: 10px;
-            border-left: 4px solid #667eea;
-        }
-        .options label {
-            display: block;
-            padding: 12px;
-            margin: 8px 0;
-            background: white;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        .options label:hover {
-            background: #edf2f7;
-            transform: translateX(5px);
-        }
-        button {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            padding: 15px 40px;
-            font-size: 18px;
-            border-radius: 50px;
-            cursor: pointer;
-            display: block;
-            margin: 30px auto;
-            transition: transform 0.3s;
-        }
-        button:hover {
-            transform: translateY(-3px);
-        }
-        .result {
-            display: none;
-            background: #f0fff4;
-            padding: 25px;
-            border-radius: 15px;
-            border: 2px solid #68d391;
-            margin-top: 30px;
-            text-align: center;
-        }
-        .score {
-            font-size: 48px;
-            font-weight: bold;
-            color: #667eea;
-            margin: 20px 0;
-        }
-        .recommendation {
-            background: #fffaf0;
-            padding: 15px;
-            border-radius: 10px;
-            margin-top: 20px;
-            font-size: 14px;
-        }
-    </style>
+    <title>NPD自恋型人格特质专业评估系统</title>
+    <meta name="description" content="专业级NPD行为模式测评工具，30题精准评估，六维度深度分析，生成个性化报告">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🧠</text></svg>">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
+    <!-- 暗色模式切换 -->
+    <div class="theme-toggle">
+        <button id="themeBtn" aria-label="切换主题">
+            <i class="fas fa-moon"></i>
+        </button>
+    </div>
+
     <div class="container">
-        <div class="header">
-            <h1>🧠 专业NPD人格倾向评估（10题版）</h1>
-            <p class="subtitle">基于DSM-5标准 | 科学解析 | 专属报告</p>
+        <!-- 欢迎屏 -->
+        <div class="welcome-screen" id="welcomeScreen">
+            <div class="welcome-content">
+                <div class="logo">
+                    <i class="fas fa-brain"></i>
+                    <h1>NPD行为模式评估系统</h1>
+                </div>
+                <div class="welcome-stats">
+                    <div class="stat">
+                        <i class="fas fa-clipboard-list"></i>
+                        <span>30道专业题目</span>
+                    </div>
+                    <div class="stat">
+                        <i class="fas fa-chart-radar"></i>
+                        <span>六维度分析</span>
+                    </div>
+                    <div class="stat">
+                        <i class="fas fa-file-pdf"></i>
+                        <span>PDF报告下载</span>
+                    </div>
+                    <div class="stat">
+                        <i class="fas fa-shield-alt"></i>
+                        <span>100%隐私保护</span>
+                    </div>
+                </div>
+                
+                <div class="instructions">
+                    <h2><i class="fas fa-info-circle"></i> 使用说明</h2>
+                    <ul>
+                        <li>基于过去6个月的实际相处经历进行评估</li>
+                        <li>每题选择最符合观察到的行为频率</li>
+                        <li>完成所有题目约需5-8分钟</li>
+                        <li>所有数据仅存储在您的设备中</li>
+                        <li>结果仅供参考，不构成专业诊断</li>
+                    </ul>
+                </div>
+                
+                <div class="welcome-actions">
+                    <button class="btn-primary btn-large" id="startBtn">
+                        <i class="fas fa-play"></i> 开始评估
+                    </button>
+                    <button class="btn-secondary" id="continueBtn" style="display:none;">
+                        <i class="fas fa-history"></i> 继续上次测试
+                    </button>
+                    <button class="btn-outline" id="viewSampleBtn">
+                        <i class="fas fa-eye"></i> 查看示例报告
+                    </button>
+                </div>
+                
+                <div class="privacy-notice">
+                    <i class="fas fa-lock"></i>
+                    <span>您的所有答案仅保存在本地浏览器中，不会被上传到任何服务器。</span>
+                </div>
+            </div>
         </div>
 
-        <div id="testContainer">
-            <!-- 题目将动态插入 -->
+        <!-- 测试界面 -->
+        <div class="test-screen" id="testScreen" style="display:none;">
+            <!-- 顶部状态栏 -->
+            <div class="test-header">
+                <div class="test-info">
+                    <div class="timer">
+                        <i class="fas fa-clock"></i>
+                        <span id="timer">00:00</span>
+                    </div>
+                    <div class="question-counter">
+                        <span id="currentQuestionNum">1</span>/<span id="totalQuestionsNum">30</span>
+                    </div>
+                    <button class="btn-icon" id="pauseBtn" title="暂停">
+                        <i class="fas fa-pause"></i>
+                    </button>
+                </div>
+                
+                <!-- 进度条 -->
+                <div class="progress-container">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                    <div class="progress-labels">
+                        <span>0%</span>
+                        <span>100%</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 题目区域 -->
+            <div class="question-container">
+                <div class="question-header">
+                    <span class="question-tag" id="dimensionTag">自我夸大</span>
+                    <span class="question-number">#<span id="questionIndex">1</span></span>
+                </div>
+                
+                <h2 class="question-text" id="questionText"></h2>
+                
+                <div class="options-container" id="optionsContainer">
+                    <!-- 选项由JS动态生成 -->
+                </div>
+                
+                <div class="question-note">
+                    <i class="fas fa-lightbulb"></i>
+                    <span>请根据过去6个月的实际相处情况选择</span>
+                </div>
+            </div>
+
+            <!-- 导航按钮 -->
+            <div class="navigation">
+                <button class="btn-secondary" id="prevBtn" disabled>
+                    <i class="fas fa-arrow-left"></i> 上一题
+                </button>
+                <div class="nav-center">
+                    <button class="btn-icon" id="flagBtn" title="标记此题">
+                        <i class="far fa-flag"></i>
+                    </button>
+                    <button class="btn-outline" id="clearBtn">
+                        清除选择
+                    </button>
+                </div>
+                <button class="btn-primary" id="nextBtn">
+                    下一题 <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+
+            <!-- 题目缩略图 -->
+            <div class="question-thumbnails">
+                <div class="thumbnails-container" id="thumbnailsContainer">
+                    <!-- 缩略图由JS生成 -->
+                </div>
+            </div>
         </div>
 
-        <button onclick="calculateScore()">📊 查看专业分析报告</button>
+        <!-- 结果界面 -->
+        <div class="result-screen" id="resultScreen" style="display:none;">
+            <div class="result-header">
+                <div class="result-badge">
+                    <i class="fas fa-award"></i>
+                    <span>评估完成</span>
+                </div>
+                <h1>您的评估报告</h1>
+                <p class="result-subtitle">生成时间: <span id="reportTime"></span> | 用时: <span id="testDuration"></span></p>
+            </div>
 
-        <div class="result" id="resultSection">
-            <h2>🎯 您的测评结果</h2>
-            <div class="score" id="scoreDisplay">0</div>
-            <h3 id="resultTitle"></h3>
-            <p id="resultDescription"></p>
-            
-            <div class="recommendation">
-                <strong>💡 重要说明：</strong><br>
-                本测试为初步筛查工具，结果仅供参考。<br>
-                如需专业评估，建议咨询心理医生。
+            <div class="result-summary">
+                <!-- 风险等级 -->
+                <div class="risk-card" id="riskCard">
+                    <div class="risk-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <div class="risk-content">
+                        <h3>风险等级</h3>
+                        <div class="risk-level" id="riskLevel">低风险</div>
+                        <p class="risk-desc" id="riskDesc">行为在正常范围内</p>
+                    </div>
+                    <div class="risk-score">
+                        <span class="score-number" id="totalScore">0</span>
+                        <span class="score-label">/120</span>
+                    </div>
+                </div>
+
+                <!-- 雷达图 -->
+                <div class="radar-section">
+                    <h3><i class="fas fa-chart-radar"></i> 六维度行为模式分析</h3>
+                    <div class="chart-container">
+                        <canvas id="radarChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- 维度详情 -->
+                <div class="dimensions-section">
+                    <h3><i class="fas fa-layer-group"></i> 各维度得分详情</h3>
+                    <div class="dimensions-grid" id="dimensionsGrid">
+                        <!-- 维度详情由JS生成 -->
+                    </div>
+                </div>
+
+                <!-- 专业建议 -->
+                <div class="recommendations-section">
+                    <h3><i class="fas fa-hands-helping"></i> 专业建议</h3>
+                    <div class="recommendations-content" id="recommendationsContent">
+                        <!-- 建议由JS生成 -->
+                    </div>
+                </div>
+
+                <!-- 行动按钮 -->
+                <div class="result-actions">
+                    <button class="btn-primary" id="downloadReportBtn">
+                        <i class="fas fa-file-pdf"></i> 下载PDF报告
+                    </button>
+                    <button class="btn-secondary" id="shareReportBtn">
+                        <i class="fas fa-share-alt"></i> 分享结果
+                    </button>
+                    <button class="btn-outline" id="retakeTestBtn">
+                        <i class="fas fa-redo"></i> 重新评估
+                    </button>
+                    <button class="btn-outline" id="viewDetailsBtn">
+                        <i class="fas fa-chart-bar"></i> 查看详细数据
+                    </button>
+                </div>
+
+                <!-- 资源推荐 -->
+                <div class="resources-section">
+                    <h4><i class="fas fa-book-open"></i> 推荐资源</h4>
+                    <div class="resources-grid">
+                        <a href="#" class="resource-card">
+                            <i class="fas fa-book"></i>
+                            <span>《如何设立健康边界》</span>
+                        </a>
+                        <a href="#" class="resource-card">
+                            <i class="fas fa-headset"></i>
+                            <span>心理支持热线</span>
+                        </a>
+                        <a href="#" class="resource-card">
+                            <i class="fas fa-video"></i>
+                            <span>自恋关系应对课程</span>
+                        </a>
+                        <a href="#" class="resource-card">
+                            <i class="fas fa-users"></i>
+                            <span>支持社群</span>
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
-    <script>
-        // 专业NPD测试题目（10题版）
-        const questions = [
-            { 
-                id: 1, 
-                text: "我常常觉得自己应该得到特殊的对待或特权", 
-                options: [
-                    { text: "非常不符合", value: 0 },
-                    { text: "不太符合", value: 1 },
-                    { text: "有点符合", value: 2 },
-                    { text: "非常符合", value: 3 }
-                ]
-            },
-            { 
-                id: 2, 
-                text: "我倾向于利用他人来达到自己的目的", 
-                options: [
-                    { text: "非常不符合", value: 0 },
-                    { text: "不太符合", value: 1 },
-                    { text: "有点符合", value: 2 },
-                    { text: "非常符合", value: 3 }
-                ]
-            },
-            { 
-                id: 3, 
-                text: "我常常幻想自己拥有巨大的成功、权力或美貌", 
-                options: [
-                    { text: "非常不符合", value: 0 },
-                    { text: "不太符合", value: 1 },
-                    { text: "有点符合", value: 2 },
-                    { text: "非常符合", value: 3 }
-                ]
-            },
-            { 
-                id: 4, 
-                text: "我需要他人持续的关注和赞美", 
-                options: [
-                    { text: "非常不符合", value: 0 },
-                    { text: "不太符合", value: 1 },
-                    { text: "有点符合", value: 2 },
-                    { text: "非常符合", value: 3 }
-                ]
-            },
-            { 
-                id: 5, 
-                text: "我缺乏同理心，难以理解他人的感受", 
-                options: [
-                    { text: "非常不符合", value: 0 },
-                    { text: "不太符合", value: 1 },
-                    { text: "有点符合", value: 2 },
-                    { text: "非常符合", value: 3 }
-                ]
-            },
-            { 
-                id: 6, 
-                text: "我很容易因为别人的批评而感到受伤或愤怒", 
-                options: [
-                    { text: "非常不符合", value: 0 },
-                    { text: "不太符合", value: 1 },
-                    { text: "有点符合", value: 2 },
-                    { text: "非常符合", value: 3 }
-                ]
-            },
-            { 
-                id: 7, 
-                text: "我时常期待别人对我的成就表示钦佩", 
-                options: [
-                    { text: "非常不符合", value: 0 },
-                    { text: "不太符合", value: 1 },
-                    { text: "有点符合", value: 2 },
-                    { text: "非常符合", value: 3 }
-                ]
-            },
-            { 
-                id: 8, 
-                text: "在人群中，我通常觉得自己应该成为焦点", 
-                options: [
-                    { text: "非常不符合", value: 0 },
-                    { text: "不太符合", value: 1 },
-                    { text: "有点符合", value: 2 },
-                    { text: "非常符合", value: 3 }
-                ]
-            },
-            { 
-                id: 9, 
-                text: "我有时会夸大自己的才能或成就", 
-                options: [
-                    { text: "非常不符合", value: 0 },
-                    { text: "不太符合", value: 1 },
-                    { text: "有点符合", value: 2 },
-                    { text: "非常符合", value: 3 }
-                ]
-            },
-            { 
-                id: 10, 
-                text: "我认为自己有很多独特的、普通人无法理解的品质", 
-                options: [
-                    { text: "非常不符合", value: 0 },
-                    { text: "不太符合", value: 1 },
-                    { text: "有点符合", value: 2 },
-                    { text: "非常符合", value: 3 }
-                ]
-            }
-        ]; // 数组正确结束
+    <!-- 底部声明 -->
+    <footer class="main-footer">
+        <div class="footer-content">
+            <div class="footer-disclaimer">
+                <h4><i class="fas fa-exclamation-triangle"></i> 重要声明</h4>
+                <p>本工具为行为观察辅助工具，基于您的主观观察和感受。不构成专业心理诊断，不能替代临床评估。如需专业帮助，请咨询持证心理咨询师或精神科医生。</p>
+            </div>
+            <div class="footer-links">
+                <a href="#"><i class="fas fa-question-circle"></i> 使用帮助</a>
+                <a href="#"><i class="fas fa-lock"></i> 隐私政策</a>
+                <a href="#"><i class="fas fa-envelope"></i> 联系我们</a>
+            </div>
+            <div class="footer-copyright">
+                <p>© 2023 NPD专业评估系统 | 版本 2.0 | 仅供教育和自我探索目的使用</p>
+            </div>
+        </div>
+    </footer>
 
-        // 动态生成题目
-        const testContainer = document.getElementById('testContainer');
-        questions.forEach((q, index) => {
-            const questionDiv = document.createElement('div');
-            questionDiv.className = 'question';
-            questionDiv.innerHTML = `
-                <h3>${index + 1}. ${q.text}</h3>
-                <div class="options">
-                    ${q.options.map(opt => `
-                        <label>
-                            <input type="radio" name="q${q.id}" value="${opt.value}">
-                            ${opt.text}
-                        </label>
-                    `).join('')}
-                </div>
-            `;
-            testContainer.appendChild(questionDiv);
-        });
+    <!-- 加载动画 -->
+    <div class="loader" id="loader" style="display:none;">
+        <div class="loader-spinner"></div>
+        <p>生成报告中...</p>
+    </div>
 
-        // 计算分数（已适配10题，总分30分）
-        function calculateScore() {
-            let totalScore = 0;
-            let answered = 0;
-            
-            questions.forEach(q => {
-                const selected = document.querySelector(`input[name="q${q.id}"]:checked`);
-                if (selected) {
-                    totalScore += parseInt(selected.value);
-                    answered++;
-                }
-            });
-            
-            if (answered < questions.length) {
-                alert('请完成所有题目再查看结果');
-                return;
-            }
-            
-            // 显示结果 (针对10题，总分30分的阈值)
-            const scoreElement = document.getElementById('scoreDisplay');
-            const titleElement = document.getElementById('resultTitle');
-            const descElement = document.getElementById('resultDescription');
-            const resultSection = document.getElementById('resultSection');
-            
-            scoreElement.textContent = totalScore;
-            
-            // 分数判断逻辑（10题版）
-            if (totalScore <= 10) {
-                titleElement.textContent = "✅ 低NPD倾向";
-                descElement.textContent = "您的自恋特质在正常范围内。您可能是一个自信且自我认同感良好的人，能够平衡自我关注和对他人的关心。";
-            } else if (totalScore <= 20) {
-                titleElement.textContent = "⚠️ 中等NPD倾向";
-                descElement.textContent = "您在某些情况下可能表现出自恋特质，但总体上仍具有较好的自我调节能力。建议关注人际关系中的平衡。";
-            } else {
-                titleElement.textContent = "🔍 较高NPD倾向";
-                descElement.textContent = "您可能在多个方面表现出明显的自恋特质。建议进行专业评估，并关注这些特质对您人际关系和生活质量的影响。";
-            }
-            
-            resultSection.style.display = 'block';
-            window.scrollTo(0, document.body.scrollHeight);
-        }
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
