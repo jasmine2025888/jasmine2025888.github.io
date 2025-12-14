@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>专业焦虑测评系统 | 48题完整版</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif; }
+        body { background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); color: #333; line-height: 1.6; padding: 20px; min-height: 100vh; }
+        .container { max-width: 1200px; margin: 0 auto; background: white; border-radius: 24px; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.12); overflow: hidden; padding: 40px; }
+        header { text-align: center; padding: 30px 0 40px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; margin: -40px -40px 40px; border-radius: 24px 24px 0 0; }
+        h1 { font-size: 2.8rem; margin-bottom: 15px; font-weight: 700; }
+        .subtitle { font-size: 1.2rem; opacity: 0.95; max-width: 800px; margin: 0 auto; padding: 0 20px; font-weight: 300; }
+        .disclaimer { background: #fff3e0; border-left: 6px solid #ff9800; padding: 22px; margin: 30px 0; border-radius: 12px; animation: pulseWarning 3s infinite; }
+        @keyframes pulseWarning { 0%,100% { border-left-color: #ff9800; } 50% { border-left-color: #ffb74d; } }
+        .rating-instruction { background: #e8f5e9; border-radius: 15px; padding: 25px; margin: 30px 0; border: 2px dashed #4CAF50; }
+        .rating-scale { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 20px; }
+        .rating-item { background: white; padding: 18px; border-radius: 10px; text-align: center; box-shadow: 0 4px 8px rgba(0,0,0,0.05); }
+        .progress-system { background: linear-gradient(135deg, #f8f9fa, #e9ecef); padding: 25px; border-radius: 18px; box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08); margin: 35px 0; border: 2px solid #e3f2fd; position: sticky; top: 20px; z-index: 100; }
+        .progress-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .progress-bar-bg { height: 14px; background: #e0e0e0; border-radius: 7px; overflow: hidden; }
+        .progress-bar-fill { height: 100%; width: 0%; background: linear-gradient(90deg, #4CAF50, #8BC34A, #FFC107, #FF9800, #F44336); border-radius: 7px; transition: width 0.6s; }
+        .progress-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-top: 20px; }
+        .stat-card { background: white; padding: 15px; border-radius: 10px; text-align: center; box-shadow: 0 3px 10px rgba(0,0,0,0.05); border-top: 4px solid; }
+        .scale-section { margin: 50px 0; }
+        .scale-title { background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%); color: white; padding: 20px 30px; border-radius: 15px; margin-bottom: 25px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 6px 20px rgba(106, 17, 203, 0.3); }
+        .question-item { background: #fafafa; padding: 25px; margin: 20px 0; border-radius: 15px; border-left: 5px solid #ddd; transition: all 0.4s; }
+        .question-item:hover { background: #f0f7ff; border-left-color: #2196f3; transform: translateX(8px); box-shadow: 0 5px 15px rgba(33, 150, 243, 0.1); }
+        .question-text { font-size: 1.15rem; margin-bottom: 20px; color: #222; font-weight: 500; }
+        .options-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; }
+        .option-btn { padding: 14px; border: 2px solid #ddd; background: white; border-radius: 10px; cursor: pointer; transition: all 0.3s; font-weight: 500; text-align: center; }
+        .option-btn:hover { background: #e3f2fd; border-color: #2196f3; transform: translateY(-2px); }
+        .option-btn.selected { background: #2196f3; color: white; border-color: #0d8bf2; box-shadow: 0 6px 12px rgba(33, 150, 243, 0.3); }
+        .action-buttons { display: flex; justify-content: center; gap: 25px; margin: 50px 0; flex-wrap: wrap; }
+        .action-btn { padding: 18px 45px; font-size: 1.1rem; border: none; border-radius: 15px; cursor: pointer; transition: all 0.4s; font-weight: 600; display: flex; align-items: center; justify-content: center; gap: 15px; min-width: 220px; }
+        .btn-primary { background: linear-gradient(135deg, #4CAF50, #2E7D32); color: white; box-shadow: 0 8px 20px rgba(76, 175, 80, 0.3); }
+        .btn-primary:hover { background: linear-gradient(135deg, #43A047, #1B5E20); transform: translateY(-5px); }
+        .btn-secondary { background: linear-gradient(135deg, #2196F3, #0D47A1); color: white; box-shadow: 0 8px 20px rgba(33, 150, 243, 0.3); }
+        .btn-secondary:hover { background: linear-gradient(135deg, #1E88E5, #0D3C82); transform: translateY(-5px); }
+        .result-panel { background: linear-gradient(135deg, #f8fdff 0%, #e3f2fd 100%); border: 2px solid #bbdefb; border-radius: 20px; padding: 40px; margin-top: 40px; display: none; }
+        .scores-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; margin: 30px 0; }
+        .score-card { background: white; padding: 25px; border-radius: 15px; box-shadow: 0 8px 20px rgba(0,0,0,0.08); border-top: 6px solid; }
+        .score-value { font-size: 3.2rem; font-weight: 800; text-align: center; margin: 15px 0; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .interpretation-box { background: #e8f5e9; padding: 25px; border-radius: 15px; margin-top: 35px; border-left: 6px solid #4CAF50; }
+        @media (max-width: 768px) {
+            .container { padding: 25px; } header { margin: -25px -25px 30px; padding: 25px 20px; } h1 { font-size: 2.2rem; }
+            .options-grid { grid-template-columns: 1fr; } .action-buttons { flex-direction: column; align-items: center; }
+            .action-btn { width: 100%; max-width: 300px; } .progress-stats, .rating-scale { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-brain"></i> 专业焦虑测评系统</h1>
+            <p class="subtitle">GAD-7 + SAS + BAI 三合一完整版 | 48题精准评估</p>
+        </header>
+        <div class="disclaimer">
+            <h3><i class="fas fa-exclamation-triangle"></i> 重要声明</h3>
+            <p><strong>本测评结果仅供参考，不能替代专业医疗诊断。</strong></p>
+        </div>
+        <div class="rating-instruction">
+            <h3><i class="fas fa-clipboard-check"></i> 评分说明</h3>
+            <p>根据<strong>最近两周</strong>情况选择：</p>
+            <div class="rating-scale">
+                <div class="rating-item" style="border-top-color: #4CAF50;"><strong>1分 - 没有或很少时间</strong><p>基本不影响</p></div>
+                <div class="rating-item" style="border-top-color: #FFC107;"><strong>2分 - 小部分时间</strong><p>轻度影响</p></div>
+                <div class="rating-item" style="border-top-color: #FF9800;"><strong>3分 - 相当多时间</strong><p>明显影响</p></div>
+                <div class="rating-item" style="border-top-color: #F44336;"><strong>4分 - 绝大部分时间</strong><p>严重影响</p></div>
+            </div>
+        </div>
+        <div class="progress-system">
+            <div class="progress-header">
+                <h3><i class="fas fa-tasks"></i> 答题进度</h3>
+                <div id="progressPercent" style="font-size: 1.3rem; font-weight: 700; color: #2196F3;">0% (0/48)</div>
+            </div>
+            <div class="progress-bar-bg"><div id="progressBar" class="progress-bar-fill"></div></div>
+            <div class="progress-stats">
+                <div class="stat-card" style="border-top-color: #4CAF50;"><div><i class="fas fa-check-circle"></i> 已完成</div><div id="progressCount" style="font-size: 1.8rem; font-weight: 700; color: #4CAF50;">0</div><div>题</div></div>
+                <div class="stat-card" style="border-top-color: #2196F3;"><div><i class="fas fa-clock"></i> 剩余</div><div id="remainingCount" style="font-size: 1.8rem; font-weight: 700; color: #2196F3;">48</div><div>题</div></div>
+                <div class="stat-card" style="border-top-color: #9C27B0;"><div><i class="fas fa-chart-line"></i> 完成率</div><div id="completionRate" style="font-size: 1.8rem; font-weight: 700; color: #9C27B0;">0%</div><div>预计10-15分钟</div></div>
+            </div>
+        </div>
+        <div id="questionnaire"></div>
+        <div class="action-buttons">
+            <button class="action-btn btn-secondary" onclick="checkCompletion()"><i class="fas fa-chart-bar"></i> 检查进度</button>
+            <button class="action-btn btn-primary" onclick="calculateScore()"><i class="fas fa-calculator"></i> 提交并查看结果</button>
+            <button class="action-btn btn-secondary" onclick="resetAll()"><i class="fas fa-redo"></i> 重新开始</button>
+        </div>
+        <div id="resultPanel" class="result-panel">
+            <h2 class="result-header"><i class="fas fa-chart-line"></i> 测评结果分析报告</h2>
+            <div class="scores-container" id="scoresContainer"></div>
+            <div id="interpretationBox" class="interpretation-box">
+                <h3><i class="fas fa-comment-medical"></i> 综合解读与建议</h3>
+                <p id="interpretationText">请提交后查看...</p>
+            </div>
+        </div>
+        <footer style="text-align: center; margin-top: 60px; padding-top: 25px; border-top: 1px solid #e0e0e0; color: #666;">
+            <p><i class="fas fa-heartbeat"></i> <strong>心理健康提示：</strong>定期测评，关注心理健康。</p>
+        </footer>
+    </div>    <script>
+        const anxietyQuestions = [
+            { scale: "GAD-7广泛性焦虑量表", description: "7题，国际通用", items: ["1. 感到紧张、焦虑或急切","2. 不能停止或控制担忧","3. 对各种各样的事情担忧过多","4. 很难放松下来","5. 由于不安而无法静坐","6. 变得容易烦恼或急躁","7. 感到似乎将有可怕的事情发生而害怕"] },
+            { scale: "SAS焦虑自评量表", description: "20题，中国常用", items: ["8. 我觉得比平时容易紧张和着急","9. 我无缘无故地感到害怕","10. 我容易心里烦乱或觉得惊恐","11. 我觉得我可能将要发疯","12. 我觉得一切都很好，也不会发生什么不幸","13. 我手脚发抖打颤","14. 我因为头痛、颈痛和背痛而苦恼","15. 我感觉容易衰弱和疲乏","16. 我觉得心平气和，并且容易安静坐着","17. 我觉得心跳很快","18. 我因为一阵阵头晕而苦恼","19. 我有晕倒发作或觉得要晕倒似的","20. 我呼气吸气都感到很容易","21. 我手脚麻木和刺痛","22. 我因为胃痛和消化不良而苦恼","23. 我常常要小便","24. 我的手常常是干燥温暖的","25. 我脸红发热","26. 我容易入睡并且一夜睡得很好","27. 我做恶梦"] },
+            { scale: "BAI贝克焦虑量表", description: "21题，侧重躯体", items: ["28. 麻木或刺痛感","29. 感到发热","30. 腿部颤抖","31. 不能放松","32. 害怕发生不好的事情","33. 头晕","34. 心悸或心率加快","35. 心神不定","36. 惊吓","37. 紧张","38. 窒息感","39. 手发抖","40. 身体摇晃感","41. 害怕失控","42. 呼吸困难","43. 害怕快要死去","44. 恐慌","45. 消化不良或腹部不适","46. 昏厥感","47. 脸发红","48. 出汗（不是因暑热出汗）"] }
+        ];
+        let userAnswers = {};
+        function initializeQuestions() {
+            const container = document.getElementById('questionnaire');
+            container.innerHTML = '';
+            let questionIndex = 0;
+            anxietyQuestions.forEach((scaleData, scaleIndex) => {
+                const scaleTitle = document.createElement('div');
+                scaleTitle.className = 'scale-title';
+                scaleTitle.innerHTML = `<div><h3 style="margin:0; font-size:1.4rem;">${scaleData.scale}</h3><p style="margin:5px 0 0; opacity:0.9; font-size:0.95rem;">${scaleData.description}</p></div><div id="scale${scaleIndex}Score" style="background:rgba(255,255,255,0.2); padding:8px 15px; border-radius:20px;">未完成</div>`;
+                container.appendChild(scaleTitle);
+                scaleData.items.forEach((itemText) => {
+                    questionIndex++;
+                    const questionId = `q${questionIndex}`;
+                    const questionDiv = document.createElement('div');
+                    questionDiv.className = 'question-item';
+                    questionDiv.id = questionId;
+                    questionDiv.innerHTML = `<div class="question-text">${itemText}</div><div class="options-grid">
+                        <div class="option-btn" data-value="1" onclick="selectOption('${questionId}', 1)"><div style="font-weight:600; color:#4CAF50;">1分</div><div style="font-size:0.9rem; margin-top:4px;">没有或很少</div></div>
+                        <div class="option-btn" data-value="2" onclick="selectOption('${questionId}', 2)"><div style="font-weight:600; color:#FFC107;">2分</div><div style="font-size:0.9rem; margin-top:4px;">小部分时间</div></div>
+                        <div class="option-btn" data-value="3" onclick="selectOption('${questionId}', 3)"><div style="font-weight:600; color:#FF9800;">3分</div><div style="font-size:0.9rem; margin-top:4px;">相当多时间</div></div>
+                        <div class="option-btn" data-value="4" onclick="selectOption('${questionId}', 4)"><div style="font-weight:600; color:#F44336;">4分</div><div style="font-size:0.9rem; margin-top:4px;">绝大部分时间</div></div>
+                    </div>`;
+                    container.appendChild(questionDiv);
+                });
+            });
+            updateProgress(); updateScaleCompletion();
+        }
+        function selectOption(questionId, value) {
+            const questionDiv = document.getElementById(questionId);
+            const buttons = questionDiv.querySelectorAll('.option-btn');
+            buttons.forEach(btn => {
+                btn.classList.remove('selected');
+                if (parseInt(btn.getAttribute('data-value')) === value) btn.classList.add('selected');
+            });
+            userAnswers[questionId] = value;
+            updateProgress(); updateScaleCompletion();
+        }
+        function updateProgress() {
+            const totalQuestions = 48;
+            const answered = Object.keys(userAnswers).length;
+            const percent = Math.round((answered / totalQuestions) * 100);
+            const progressBar = document.getElementById('progressBar');
+            const progressPercent = document.getElementById('progressPercent');
+            const progressCount = document.getElementById('progressCount');
+            const remainingCount = document.getElementById('remainingCount');
+            const completionRate = document.getElementById('completionRate');
+            if (progressBar) {
+                progressBar.style.width = percent + '%';
+                progressPercent.textContent = percent + '% (' + answered + '/48)';
+                progressCount.textContent = answered;
+                remainingCount.textContent = totalQuestions - answered;
+                completionRate.textContent = percent + '%';
+                if (percent >= 100) progressBar.style.background = 'linear-gradient(90deg, #4CAF50, #2E7D32)';
+            }
+        }
+        function updateScaleCompletion() {
+            anxietyQuestions.forEach((scaleData, scaleIndex) => {
+                const startIdx = scaleIndex === 0 ? 1 : (scaleIndex === 1 ? 8 : 29);
+                const endIdx = scaleIndex === 0 ? 7 : (scaleIndex === 1 ? 27 : 48);
+                let completed = 0, totalScore = 0;
+                for (let i = startIdx; i <= endIdx; i++) {
+                    const qId = `q${i}`;
+                    if (userAnswers[qId] !== undefined) { completed++; totalScore += userAnswers[qId]; }
+                }
+                const totalInScale = endIdx - startIdx + 1;
+                const scaleScoreElement = document.getElementById(`scale${scaleIndex}Score`);
+                if (completed === totalInScale) {
+                    const avgScore = (totalScore / totalInScale).toFixed(2);
+                    scaleScoreElement.innerHTML = `已完成 | 均分: ${avgScore}`;
+                    scaleScoreElement.style.background = 'rgba(76, 175, 80, 0.3)';
+                } else {
+                    scaleScoreElement.innerHTML = `已完成 ${completed}/${totalInScale}`;
+                    scaleScoreElement.style.background = completed > 0 ? 'rgba(255, 152, 0, 0.3)' : 'rgba(255, 255, 255, 0.2)';
+                }
+            });
+        }
+        function checkCompletion() {
+            const answered = Object.keys(userAnswers).length;
+            alert(answered === 48 ? `✅ 已完成所有48题，可以提交！` : `📊 完成进度：${answered}/48题`);
+        }
+        function calculateScore() {
+            const answered = Object.keys(userAnswers).length;
+            if (answered < 48) { alert(`请完成所有48题！当前：${answered}/48`); checkCompletion(); return; }
+            let gad7Score = 0; for (let i = 1; i <= 7; i++) gad7Score += userAnswers[`q${i}`] || 0;
+            const gad7Level = gad7Score <= 4 ? "正常" : gad7Score <= 9 ? "轻度焦虑" : gad7Score <= 14 ? "中度焦虑" : "重度焦虑";
+            let sasRawScore = 0; const sasReverseItems = [12, 16, 19, 23, 26];
+            for (let i = 8; i <= 27; i++) {
+                let score = userAnswers[`q${i}`] || 0;
+                if (sasReverseItems.includes(i)) score = 5 - score;
+                sasRawScore += score;
+            }
+            const sasStandardScore = Math.round(sasRawScore * 1.25);
+            const sasLevel = sasStandardScore < 50 ? "正常" : sasStandardScore <= 59 ? "轻度焦虑" : sasStandardScore <= 69 ? "中度焦虑" : "重度焦虑";
+            let baiScore = 0; for (let i = 28; i <= 48; i++) baiScore += userAnswers[`q${i}`] || 0;
+            const baiLevel = baiScore <= 21 ? "正常" : baiScore <= 35 ? "轻度焦虑" : baiScore <= 53 ? "中度焦虑" : "重度焦虑";
+            const resultPanel = document.getElementById('resultPanel');
+            resultPanel.style.display = 'block';
+            const scoresContainer = document.getElementById('scoresContainer');
+            scoresContainer.innerHTML = '';
+            const scoreCards = [
+                { title: "GAD-7广泛性焦虑", rawScore: gad7Score, standardScore: gad7Score, level: gad7Level, color: "#2196F3", desc: "7题总分，≥5分提示焦虑" },
+                { title: "SAS焦虑自评", rawScore: sasRawScore, standardScore: sasStandardScore, level: sasLevel, color: "#4CAF50", desc: "标准分≥50分提示焦虑" },
+                { title: "BAI贝克焦虑", rawScore: baiScore, standardScore: baiScore, level: baiLevel, color: "#9C27B0", desc: "侧重躯体焦虑症状" }
+            ];
+            scoreCards.forEach(card => {
+                const cardDiv = document.createElement('div');
+                cardDiv.className = 'score-card';
+                cardDiv.style.borderTopColor = card.color;
+                cardDiv.innerHTML = `<h3 style="color:${card.color}; margin-bottom:15px;"><i class="fas fa-chart-bar"></i> ${card.title}</h3>
+                    <div class="score-value" style="color:${card.color};">${card.standardScore}</div>
+                    <div style="text-align:center; margin-bottom:15px;"><span style="background:${card.color}; color:white; padding:6px 15px; border-radius:20px; font-weight:600;">${card.level}</span></div>
+                    <div style="color:#666; font-size:0.9rem;"><div>原始分: ${card.rawScore}</div><div>${card.desc}</div></div>`;
+                scoresContainer.appendChild(cardDiv);
+            });
+            const interpretationText = document.getElementById('interpretationText');
+            const levels = [gad7Level, sasLevel, baiLevel];
+            const hasSevere = levels.includes("重度焦虑");
+            const hasModerate = levels.includes("中度焦虑");
+            if (hasSevere) {
+                interpretationText.innerHTML = `<p><strong>评估显示：您的焦虑水平较高。</strong>多个量表结果提示明显的焦虑症状，可能已对日常生活造成显著影响。</p><p style="margin-top:15px;"><strong>建议：</strong>强烈建议寻求专业心理医生或精神科医师的评估和帮助。</p>`;
+            } else if (hasModerate) {
+                interpretationText.innerHTML = `<p><strong>评估显示：您处于中度焦虑水平。</strong>部分量表提示焦虑症状较明显，可能对工作生活产生一定影响。</p><p style="margin-top:15px;"><strong>建议：</strong>建议咨询心理专业人士，学习压力管理和放松技巧。</p>`;
+            } else if (gad7Score > 4 || sasStandardScore >= 50 || baiScore > 21) {
+                interpretationText.innerHTML = `<p><strong>评估显示：您处于轻度焦虑水平。</strong>这是常见的压力反应。</p><p style="margin-top:15px;"><strong>建议：</strong>学习放松技巧，保持健康生活方式，观察症状变化。</p>`;
+            } else {
+                interpretationText.innerHTML = `<p><strong>评估显示：您的焦虑水平在正常范围内。</strong>三个量表结果均未提示明显的焦虑症状。</p><p style="margin-top:15px;"><strong>建议：</strong>继续保持健康的生活习惯。</p>`;
+            }
+            resultPanel.scrollIntoView({ behavior: 'smooth' });
+        }
+        function resetAll() {
+            if (confirm('确定要重置所有答案吗？')) { userAnswers = {}; initializeQuestions(); document.getElementById('resultPanel').style.display = 'none'; }
+        }
+        window.onload = initializeQuestions;
+    </script>
+</body>
+</html>
