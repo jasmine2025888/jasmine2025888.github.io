@@ -836,56 +836,59 @@
             }
             scoreCardsContainer.innerHTML = scoreCardsHTML;
 
-            // 生成解读文本
-            const totalRisk = result.total.severity;
-            let interpretationText = '';
+// 生成解读文本
+const totalRisk = result.total.severity;
+let interpretationText = '';
 
-            if (totalRisk.includes("重度") || totalRisk.includes("中度")) {
-                interpretationText = `
-                    <h3><i class="fas fa-exclamation-circle"></i> 筛查结果提示：存在明显心理症状</h3>
-                    <p>根据SCL-90评估，您的总症状指数为 <strong>${result.total.avg}</strong>，阳性项目数为 <strong>${result.total.positiveItems}/90</strong>，提示存在${totalRisk.includes("重度") ? "重度" : "中度"}心理困扰。</p>
-                    
-                    <p><strong>主要症状维度：</strong></p>
-                    <ul>
-                        ${Object.entries(result.factors)
-                            .  .filter(([_, data]) => parseFloat(data.avg) >= 2.0)
-                            .map(([name, data]) => `<li><strong>${name}</strong>：${data.avg}分（${data.severity}）</li>`)
-                            .join('')}
-                    </ul>
-                    
-                    <p><strong>建议：</strong></p>
-                    <ol>
-                        <li><strong>寻求专业评估</strong>：建议预约心理科、精神科医生或心理咨询师进行详细评估。</li>
-                        <li><strong>关注高危维度</strong>：针对得分较高的症状维度，进行针对性的心理调节。</li>
-                        <li><strong>建立支持系统</strong>：与家人朋友沟通，寻求社会支持。</li>
-                        <li><strong>考虑心理咨询</strong>：如有需要，可寻求专业心理咨询帮助。</li>
+if (totalRisk.includes("重度") || totalRisk.includes("中度")) {
+    interpretationText = `
+        <h3><i class="fas fa-exclamation-circle"></i> 筛查结果提示：存在明显心理症状</h3>
+        <p>根据SCL-90评估，您的总症状指数为 <strong>${result.total.avg}</strong>，阳性项目数为 <strong>${result.total.positiveItems}/90</strong>，提示存在${totalRisk.includes("重度") ? "重度" : "中度"}心理困扰。</p>
+        
+        <p><strong>主要症状维度：</strong></p>
+        <ul>
+            ${Object.entries(result.factors)
+                .filter(([_, data]) => parseFloat(data.avg) >= 2.0)
+                .map(([name, data]) => `<li><strong>${name}</strong>：${data.avg}分（${data.severity}）</li>`)
+                .join('')}
+        </ul>
+        
+        <p><strong>建议：</strong></p>
+        <ol>
+            <li><strong>寻求专业评估</strong>：建议预约心理科、精神科医生或心理咨询师进行详细评估。</li>
+            <li><strong>关注高危维度</strong>：针对得分较高的症状维度，进行针对性的心理调节。</li>
+            <li><strong>建立支持系统</strong>：与家人朋友沟通，寻求社会支持。</li>
+            <li><strong>考虑心理咨询</strong>：如有需要，可寻求专业心理咨询帮助。</li>
+        </ol>
+    `;
                     </ol>
                 `;
-            } else if (totalRisk.includes("轻度")) {
-                interpretationText = `
-                    <h3><i class="fas fa-info-circle"></i> 筛查结果提示：轻度心理困扰</h3>
-                    <p>您的总症状指数为 <strong>${result.total.avg}</strong>，阳性项目数为 <strong>${result.total.positiveItems}/90</strong>，提示存在轻度心理困扰，但仍在可接受范围。</p>
-                    
-                    <p><strong>建议：</strong></p>
-                    <ul>
-                        <li><strong>自我调节</strong>：通过运动、冥想、规律作息等方式缓解压力。</li>
-                        <li><strong>关注变化</strong>：如症状持续或加重，建议咨询专业人士。</li>
-                        <li><strong>定期评估</strong>：建议1-3个月后重新评估，追踪变化。</li>
-                    </ul>
+         } else if (totalRisk.includes("轻度")) {
+    interpretationText = `
+        <h3><i class="fas fa-info-circle"></i> 筛查结果提示：轻度心理困扰</h3>
+        <p>您的总症状指数为 <strong>${result.total.avg}</strong>，阳性项目数为 <strong>${result.total.positiveItems}/90</strong>，提示存在轻度心理困扰，但仍在可接受范围。</p>
+        
+        <p><strong>建议：</strong></p>
+        <ul>
+            <li><strong>自我调节</strong>：通过运动、冥想、规律作息等方式缓解压力。</li>
+            <li><strong>关注变化</strong>：如症状持续或加重，建议咨询专业人士。</li>
+            <li><strong>定期评估</strong>：建议1-3个月后重新评估，追踪变化。</li>
+        </ul>
+    `;
                 `;
-            } else {
-                interpretationText = `
-                    <h3><i class="fas fa-check-circle"></i> 筛查结果提示：正常范围内</h3>
-                    <p>您的总症状指数为 <strong>${result.total.avg}</strong>，阳性项目数为 <strong>${result.total.positiveItems}/90</strong>，各项心理症状均在正常范围内。</p>
-                    
-                    <p><strong>说明：</strong></p>
-                    <ul>
-                        <li>本结果为近期（一周内）的心理状态评估。</li>
-                        <li>继续保持健康的生活方式和良好的心理状态。</li>
-                        <li>如遇重大生活事件或持续压力，建议定期评估。</li>
-                    </ul>
-                `;
-            }
+} else {
+    interpretationText = `
+        <h3><i class="fas fa-check-circle"></i> 筛查结果提示：正常范围内</h3>
+        <p>您的总症状指数为 <strong>${result.total.avg}</strong>，阳性项目数为 <strong>${result.total.positiveItems}/90</strong>，各项心理症状均在正常范围内。</p>
+        
+        <p><strong>说明：</strong></p>
+        <ul>
+            <li>本结果为近期（一周内）的心理状态评估。</li>
+            <li>继续保持健康的生活方式和良好的心理状态。</li>
+            <li>如遇重大生活事件或持续压力，建议定期评估。</li>
+        </ul>
+    `;
+}
 
             interpretationContainer.innerHTML = interpretationText;
         }
