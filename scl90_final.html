@@ -629,7 +629,7 @@
 
         // 下一题
         function nextQuestion() {
-            if (currentQuestion < adhdQuestions.items.length - 1) {
+            if (currentQuestion < sc190Questions.items.length - 1) {
                 document.getElementById(`q${currentQuestion}`).classList.remove('active');
                 currentQuestion++;
                 document.getElementById(`q${currentQuestion}`).classList.add('active');
@@ -638,7 +638,7 @@
         }
 
         // ========== 核心修改区：计算分数和生成结果的逻辑 ==========
-        function calculateScore() function calculateScore() {
+        function calculateScore() {
     let totalScore = 0;
     let positiveItems = 0;
     const answers = userAnswers;
