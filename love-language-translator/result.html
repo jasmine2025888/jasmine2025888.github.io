@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>爱的方言报告 - 猪八吉</title>
+    <title>结果报告 - 猪八吉</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -11,7 +11,6 @@
             --soft-cream: #FFFBF5;
             --cocoa-text: #5D4B40;
             --white: #FFFFFF;
-            --border-warm: #E8D5C4;
         }
 
         body {
@@ -23,8 +22,8 @@
             justify-content: center;
         }
 
-        .result-container {
-            max-width: 800px;
+        .container {
+            max-width: 600px;
             width: 100%;
             background: var(--white);
             border-radius: 30px;
@@ -33,126 +32,91 @@
             text-align: center;
         }
 
-        h1 { color: #FF8E8E; margin-bottom: 10px; font-size: 28px; }
-        
-        .main-result-box {
+        h1 { color: #FF8E8E; margin-bottom: 20px; font-size: 24px; }
+
+        .result-box {
             background: #FFFBFA;
             padding: 30px;
             border-radius: 24px;
-            margin: 30px 0;
+            margin: 20px 0;
             border: 2px solid #FFF0F0;
         }
 
-        .main-type-name { font-size: 36px; font-weight: 800; color: #FF8E8E; }
-        .match-score { font-size: 20px; margin: 10px 0; font-weight: bold; }
+        .type-name { font-size: 32px; font-weight: 800; color: #FF8E8E; margin-bottom: 10px; }
+        .score { font-size: 18px; font-weight: bold; color: var(--cocoa-text); margin-bottom: 15px; }
 
-        .breakdown-bar {
-            height: 12px;
-            background: #F2E9E1;
-            border-radius: 10px;
-            margin: 10px 0 20px 0;
-            overflow: hidden;
-        }
-        .breakdown-fill { height: 100%; background: var(--primary-pink); border-radius: 10px; }
+        .bar-bg { height: 10px; background: #F2E9E1; border-radius: 10px; margin: 10px 0; overflow: hidden; }
+        .bar-fill { height: 100%; background: var(--primary-pink); transition: 1s; }
 
-        .pig-message {
-            background: #FFF9E3;
-            padding: 25px;
-            border-radius: 20px;
-            border: 2px dashed #E8D5C4;
-            margin: 30px 0;
-            text-align: left;
-        }
-
-        .action-btn {
-            padding: 16px 30px;
-            border: none;
-            border-radius: 16px;
-            font-size: 17px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: 0.3s;
-            width: 100%;
-            margin-bottom: 15px;
-        }
-
-        .btn-share { background: linear-gradient(to right, #FFB1B1, #FF8E8E); color: white; }
-        .btn-retake { background: white; color: var(--cocoa-text); border: 2px solid var(--border-warm); }
-
-        .wechat-box { background: #f9f9f9; padding: 25px; border-radius: 20px; margin-top: 40px; }
+        .msg-box { background: #FFF9E3; padding: 20px; border-radius: 20px; border: 2px dashed #E8D5C4; text-align: left; margin: 20px 0; }
         
-        .type-item { text-align: left; margin-bottom: 10px; }
+        .btn {
+            width: 100%; padding: 15px; border: none; border-radius: 15px; 
+            font-size: 16px; font-weight: bold; cursor: pointer; margin-bottom: 10px; transition: 0.3s;
+        }
+        .btn-pink { background: var(--primary-pink); color: white; }
+        .btn-white { background: white; border: 2px solid var(--border-warm); color: var(--cocoa-text); }
     </style>
 </head>
 <body>
 
-    <div class="result-container">
-        <div class="result-header">
-            <h1>❤️ 猪八吉·爱的方言翻译报告</h1>
-            <p id="testDate" style="font-size: 14px; color: #999;"></p>
-        </div>
+<div class="container">
+    <h1>❤️ 爱的方言翻译报告</h1>
+    <p id="date" style="font-size:12px; color:#999;"></p>
 
-        <div class="main-result-box" id="mainResult"></div>
-
-        <div id="detailsBox"></div>
-
-        <div class="pig-message" id="pigMessage"></div>
-
-        <button class="action-btn btn-share" onclick="copyShare()">分享到小红书（复制文案）</button>
-        <button class="action-btn btn-retake" onclick="location.href='index.html'">重新测试</button>
-
-        <div class="wechat-box">
-            <p>💌 获取更多猪八吉夫妻干货</p>
-            <p style="font-weight: bold; margin-top: 10px; font-size: 18px;">微信号：zhubaji2025</p>
-            <p style="font-size: 14px; color: #999; margin-top: 5px;">备注"小红书"优先通过</p>
-        </div>
+    <div class="result-box">
+        <div id="typeName" class="type-name"></div>
+        <div id="scoreVal" class="score"></div>
+        <p id="typeDesc" style="font-size:14px; line-height:1.6;"></p>
     </div>
 
-    <script>
-        const loveInfo = {
-            words: { name: "💬 言值派", desc: "你渴望听到对方的肯定，一句‘你真棒’能让你开心很久。", msg: "猪八吉：俺以前不懂，原来好话一句三冬暖！以后俺天天夸媳妇！" },
-            acts: { name: "🤗 行动派", desc: "你相信爱是做出来的。对方为你分担家务、为你倒杯水，你最能感到被爱。", msg: "猪八吉：地俺扫了，碗俺刷了，媳妇你歇着，看俺干活就行！" },
-            gifts: { name: "🎁 仪式派", desc: "礼物代表心意，不在乎贵重。你最在乎的是：TA是否时刻把你记挂在心上。", msg: "猪八吉：给媳妇带了她最爱吃的果子，看她拆开时那个笑，俺心都化了。" },
-            time: { name: "🕰️ 陪伴派", desc: "对你来说，最奢侈的礼物是TA的专注时间。人在，心也要在。", msg: "猪八吉：手机放下，俺陪媳妇散步去。啥也不干，就咱俩待着。" },
-            touch: { name: "👫 接触派", desc: "拥抱、牵手、依偎。身体接触让你感受到最直接、最踏实的爱意。", msg: "猪八吉：媳妇心情不好？俺抱抱她，啥烦恼都没啦！" }
-        };
+    <div id="details" style="text-align: left; margin: 20px 0;"></div>
 
-        const data = JSON.parse(localStorage.getItem('loveLanguageResults'));
-        if(data) {
-            document.getElementById('testDate').innerText = "测试时间：" + data.testDate;
-            const main = loveInfo[data.mainType];
-            
-            document.getElementById('mainResult').innerHTML = `
-                <div class="main-type-name">${main.name}</div>
-                <div class="match-score">主导爱语匹配度：${data.percent}%</div>
-                <p style="line-height:1.6;">${main.desc}</p>
-            `;
+    <div class="msg-box">
+        <p style="font-weight:bold; margin-bottom:8px;">🐷 猪八吉寄语：</p>
+        <p id="pigMsg" style="font-size:14px; line-height:1.6;"></p>
+    </div>
 
-            document.getElementById('pigMessage').innerHTML = `
-                <p style="font-weight: bold; margin-bottom: 10px;">🐷 猪八吉夫妻寄语：</p>
-                <p style="line-height:1.6;">${main.msg}</p>
-            `;
+    <button class="btn btn-pink" onclick="copy()">分享到小红书（复制文案）</button>
+    <button class="btn btn-white" onclick="location.href='index.html'">重新测试</button>
 
-            let detailHtml = "";
-            const sortedCounts = Object.entries(data.allCounts).sort((a,b) => b[1] - a[1]);
-            sortedCounts.forEach(([type, count]) => {
-                const info = loveInfo[type];
-                const p = Math.round((count/12)*100);
-                detailHtml += `
-                    <div class="type-item">
-                        <span>${info.name} (${p}%)</span>
-                        <div class="breakdown-bar"><div class="breakdown-fill" style="width:${p}%"></div></div>
-                    </div>
-                `;
-            });
-            document.getElementById('detailsBox').innerHTML = detailHtml;
-        }
+    <div style="background:#f9f9f9; padding:20px; border-radius:20px; margin-top:30px;">
+        <p style="font-size:14px;">💌 勾搭猪八吉：<b>zhubaji2025</b></p>
+    </div>
+</div>
 
-        function copyShare() {
-            const txt = "我刚测了猪八吉家的「爱的方言翻译器」，我是典型的" + loveInfo[data.mainType].name + "！情人节快到了，快来测测你和TA的相处密码吧~ #猪八吉 #情感测试";
-            navigator.clipboard.writeText(txt);
-            alert("分享文案已复制！去发小红书吧~");
-        }
-    </script>
+<script>
+    const info = {
+        words: { name: "💬 言值派", desc: "你渴望肯定。一句‘辛苦了’、‘有你真好’能让你满血复活。", msg: "媳妇喜欢听好话，俺以后每天夸她三遍！" },
+        acts: { name: "🤗 行动派", desc: "你相信爱是做出来的。对方帮你分担家务时，你最能感到被爱。", msg: "地俺扫了，碗俺刷了，媳妇你歇着！" },
+        gifts: { name: "🎁 仪式派", desc: "礼物代表心意。不在乎贵重，而是在乎你被TA记挂在心上。", msg: "给媳妇带了她爱吃的果子，看她笑俺心都化了。" },
+        time: { name: "🕰️ 陪伴派", desc: "你最想要的是专注。人在，心也要在。", msg: "手机放下，俺陪媳妇散步去，咱俩静静待着。" },
+        touch: { name: "👫 接触派", desc: "拥抱、牵手、依偎。身体接触让你感到最直接的爱。", msg: "媳妇不开心？俺抱抱她，啥烦恼都没啦！" }
+    };
+
+    const data = JSON.parse(localStorage.getItem('love_result'));
+    if (data) {
+        document.getElementById('date').innerText = "测试时间：" + data.date;
+        const main = info[data.main];
+        document.getElementById('typeName').innerText = main.name;
+        document.getElementById('scoreVal').innerText = "主导爱语匹配度：" + data.percent + "%";
+        document.getElementById('typeDesc').innerText = main.desc;
+        document.getElementById('pigMsg').innerText = main.msg;
+
+        let html = "";
+        Object.entries(data.all).sort((a,b)=>b[1]-a[1]).forEach(([k,v])=>{
+            const p = Math.round(v/12*100);
+            html += `<div style="font-size:13px; margin-bottom:5px;">${info[k].name} (${p}%)</div>
+                     <div class="bar-bg"><div class="bar-fill" style="width:${p}%"></div></div>`;
+        });
+        document.getElementById('details').innerHTML = html;
+    }
+
+    function copy() {
+        const txt = `我的爱的方言是${info[data.main].name}，匹配度${data.percent}%！情人节快到了，快来测测你的相处密码 #猪八吉 #情感测试`;
+        navigator.clipboard.writeText(txt);
+        alert("文案已复制，快去发小红书吧！");
+    }
+</script>
 </body>
 </html>
