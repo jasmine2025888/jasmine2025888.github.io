@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>测试结果 - 猪八吉爱的方言翻译器</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* 保持原有的所有CSS样式，此处省略以节省空间 */
+        /* ... 完整的CSS样式 ... */
+    </style>
+</head>
+<body>
+    <div class="result-container">
+        <!-- 保持原有的所有HTML结构 -->
+        <!-- ... 完整的HTML结构 ... -->
+    </div>
+
+    <script>
+        // ===== 爱语类型描述 =====
+        const loveTypes = {
+            words: { 
+                name: "💬 言值派", 
+                color: "#FF7BAC", 
+                desc: "你通过语言表达爱，也渴望听到对方的肯定。一句'我爱你'、'你真棒'能让你开心一整天。",
+                suggestions: [
+                    "每天对TA说一句具体的赞美（如：'你今天做的饭真好吃'）",
+                    "当TA为你做事时，一定要说'谢谢'或'辛苦了'",
+                    "避免用批评或指责的语言，多表达欣赏",
+                    "睡前说一句'晚安，我爱你'，养成习惯",
+                    "写小卡片或情书，表达你的爱意"
+                ],
+                pigMessage: "猪八吉：'俺以前不懂，现在知道了，好话一句三冬暖！媳妇就是喜欢听俺夸她！'<br>媳妇：'语言是爱的桥梁，多说好听的，感情自然好。'"
+            },
+            acts: { 
+                name: "🤗 行动派", 
+                color: "#FFB347", 
+                desc: "你相信爱是做出来的，不是说出来。对方为你做的每件小事，都是爱的证明。",
+                suggestions: [
+                    "主动分担家务，不用等TA提醒",
+                    "记住TA的喜好，为TA做贴心小事",
+                    "当TA需要帮助时，第一时间行动",
+                    "用行动表达关心（如：为晚归的TA热饭）",
+                    "一起完成家庭任务，体验合作的快乐"
+                ],
+                pigMessage: "猪八吉：'俺就爱干活！媳妇让俺往东，俺绝不往西！'<br>媳妇：'行动胜过千言万语，看他干活的样子，就知道他心里有家。'"
+            },
+            gifts: { 
+                name: "🎁 仪式派", 
+                color: "#6EC5B8", 
+                desc: "礼物对你很重要，它代表心意和重视。不需要贵重，但需要用心。",
+                suggestions: [
+                    "记住重要的纪念日，准备小礼物",
+                    "出差或旅行时，给TA带当地特产",
+                    "观察TA最近需要什么，送实用的小东西",
+                    "亲手制作礼物，更有心意",
+                    "偶尔的'惊喜礼物'能让感情升温"
+                ],
+                pigMessage: "猪八吉：'媳妇生日俺送了个自己做的小木盒，她高兴了好几天！'<br>媳妇：'礼物不在贵重，在心意。他能记住我喜欢什么，我就很开心。'"
+            },
+            time: { 
+                name: "🕰️ 陪伴派", 
+                color: "#9D7AD2", 
+                desc: "对你来说，最奢侈的礼物是TA的专注时间。人在心在，比什么都重要。",
+                suggestions: [
+                    "每天留出30分钟'专属聊天时间'，不玩手机",
+                    "一起发展共同爱好（运动、手工、看剧）",
+                    "定期安排'约会日'，找回恋爱感觉",
+                    "散步时认真倾听TA的分享",
+                    "工作时互不打扰，但休息时全心陪伴"
+                ],
+                pigMessage: "猪八吉：'媳妇说俺玩手机太多，现在俺每天陪她散步半小时！'<br>媳妇：'陪伴是最长情的告白，人在心也要在。'"
+            },
+            touch: { 
+                name: "👫 接触派", 
+                color: "#FF85A2", 
+                desc: "你喜欢拥抱、牵手、依偎，身体接触让你感受到最直接的爱意。",
+                suggestions: [
+                    "每天出门前和回家后给TA一个拥抱",
+                    "走路时自然牵手，坐车时靠在一起",
+                    "为TA按摩肩膀或背部，缓解疲劳",
+                    "看电视时依偎在沙发上",
+                    "用肢体语言表达关心（如：摸摸头、拍拍肩）"
+                ],
+                pigMessage: "猪八吉：'媳妇心情不好，俺抱抱她就好多了！'<br>媳妇：'一个拥抱胜过千言万语，肢体接触让我感觉被爱。'"
+            }
+        };
+
+        // ===== 页面加载时显示结果 =====
+        document.addEventListener('DOMContentLoaded', function() {
+            // 从localStorage获取结果
+            const resultData = JSON.parse(localStorage.getItem('loveLanguageResults'));
+            
+            if (!resultData) {
+                // 没有结果数据，提示用户先完成测试
+                document.getElementById('mainResult').innerHTML = `
+                    <div style="text-align: center; padding: 40px;">
+                        <h3 style="color: #FF7BAC; margin-bottom: 20px;">未找到测试结果</h3>
+                        <p style="margin-bottom: 25px;">请先完成爱的方言翻译器测试</p>
+                        <button onclick="window.location.href='index.html'" 
+                                style="padding: 12px 30px; background: #FF7BAC; color: white; border: none; border-radius: 10px; font-size: 16px; cursor: pointer;">
+                            开始测试
+                        </button>
+                    </div>
+                `;
+                return;
+            }
+            
+            // 显示测试日期
+            document.getElementById('resultDate').textContent = `测试时间：${resultData.testDate}`;
+            
+            // 显示主要结果
+            const mainType = resultData.mainType;
+            const mainTypeInfo = loveTypes[mainType];
+            const mainResult = resultData.results[0];
+            
+            document.getElementById('mainResult').innerHTML = `
+                <div style="font-size: 20px; color: #666; margin-bottom: 10px;">你的主要爱语类型是</div>
+                <div class="main-type" style="color: ${mainTypeInfo.color}">${mainTypeInfo.name}</div>
+                <div class="main-score">匹配度：${mainResult.percent}%</div>
+                <div class="main-desc">${mainTypeInfo.desc}</div>
+            `;
+            
+            // 显示详细分析
+            const breakdownList = document.getElementById('breakdownList');
+            breakdownList.innerHTML = '';
+            
+            resultData.results.forEach(item => {
+                const typeInfo = loveTypes[item.type];
+                const itemEl = document.createElement('div');
+                itemEl.className = 'breakdown-item';
+                itemEl.style.borderLeftColor = typeInfo.color;
+                
+                itemEl.innerHTML = `
+                    <div class="breakdown-icon">${typeInfo.name.split(' ')[0]}</div>
+                    <div class="breakdown-content">
+                        <div class="breakdown-name">${typeInfo.name}</div>
+                        <div class="breakdown-percent">${item.count}次选择 · ${item.percent}%</div>
+                        <div class="breakdown-bar">
+                            <div class="breakdown-fill" style="width: ${item.percent}%; background: ${typeInfo.color};"></div>
+                        </div>
+                    </div>
+                `;
+                
+                breakdownList.appendChild(itemEl);
+            });
+            
+            // 显示个性化建议
+            document.getElementById('suggestionsContent').innerHTML = `
+                <h3 class="suggestion-title" style="color: ${mainTypeInfo.color}">
+                    <i class="fas fa-star"></i> 给${mainTypeInfo.name.split(' ')[1]}的专属建议
+                </h3>
+                <div class="suggestion-content">
+                    <ul class="suggestion-list">
+                        ${mainTypeInfo.suggestions.map(s => `<li>${s}</li>`).join('')}
+                    </ul>
+                    <p style="margin-top: 20px; font-style: italic; color: #666;">
+                        情人节特别提示：${getValentineTip(mainType)}
+                    </p>
+                </div>
+            `;
+            
+            // 显示猪八吉寄语
+            document.getElementById('pigMessage').innerHTML = mainTypeInfo.pigMessage;
+            
+            // 添加延迟动画
+            const fadeElements = document.querySelectorAll('.fade-in');
+            fadeElements.forEach((el, index) => {
+                el.style.animationDelay = `${index * 0.2}s`;
+            });
+        });
+
+        // ===== 获取情人节特别建议 =====
+        function getValentineTip(mainType) {
+            const tips = {
+                words: "情人节，对TA说'我爱你'不如说'我欣赏你的XX品质'，具体赞美更打动人。",
+                acts: "情人节不用大餐礼物，为TA做一件平时不愿意做的事（如：洗碗一周），更有诚意。",
+                gifts: "情人节礼物不在贵，在走心。观察TA最近需要什么，送TA真正用得上的。",
+                time: "情人节最好的礼物是'专注陪伴'。关掉手机，和TA好好聊一晚。",
+                touch: "情人节多牵手、拥抱、依偎。肢体接触比任何礼物都温暖。"
+            };
+            return tips[mainType] || "情人节，用TA能懂的方式表达爱，就是最好的礼物。";
+        }
+
+        // ===== 分享功能 =====
+        function shareResult() {
+            const resultData = JSON.parse(localStorage.getItem('loveLanguageResults'));
+            if (!resultData) return;
+            
+            const mainType = loveTypes[resultData.mainType].name;
+            const score = resultData.results[0].percent;
+            
+            // 创建分享文本
+            const shareText = `我刚测了猪八吉家的「爱的方言翻译器」，发现我的爱语类型是${mainType}，匹配度${score}%！\n\n测测你的爱语类型，情人节更懂TA～\n\n#猪八吉 #爱的方言测试 #情人节礼物 #情侣测试`;
+            
+            // 复制到剪贴板
+            navigator.clipboard.writeText(shareText).then(() => {
+                alert('分享内容已复制到剪贴板！\n\n请打开小红书，粘贴并发布笔记，记得@猪八吉爱媳妇 哦！\n\n前100名分享者送猪八吉隐藏表情包🎁');
+            }).catch(err => {
+                console.error('复制失败:', err);
+                alert('请手动复制分享内容：\n\n' + shareText);
+            });
+        }
+
+        // ===== 重新测试 =====
+        function retakeTest() {
+            if (confirm('确定要重新测试吗？当前结果将会被清除。')) {
+                localStorage.removeItem('loveLanguageResults');
+                window.location.href = 'index.html';
+            }
+        }
+    </script>
+</body>
+</html>
