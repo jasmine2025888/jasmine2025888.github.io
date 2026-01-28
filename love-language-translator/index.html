@@ -6,27 +6,25 @@
     <title>猪八吉家传·爱的方言翻译器</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* ===== 奶油治愈系 UI 全量重构 ===== */
         :root {
-            --primary-pink: #FFB1B1;      
-            --soft-cream: #FFFBF5;       
-            --cocoa-text: #5D4B40;       
-            --border-warm: #E8D5C4;      
+            --primary-pink: #FFB1B1;      /* 樱花粉 */
+            --soft-cream: #FFFBF5;       /* 奶油背景 */
+            --cocoa-text: #5D4B40;       /* 深可可色 */
             --white: #FFFFFF;
-            --shadow-soft: rgba(93, 75, 64, 0.06);
+            --border-warm: #E8D5C4;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            font-family: 'PingFang SC', sans-serif;
             background-color: var(--soft-cream);
             color: var(--cocoa-text);
             min-height: 100vh;
-            padding: 15px;
             display: flex;
             align-items: center;
             justify-content: center;
+            padding: 15px;
         }
 
         .test-container {
@@ -34,12 +32,13 @@
             max-width: 1000px;
             width: 100%;
             background: var(--white);
-            border-radius: 30px;
-            box-shadow: 0 15px 45px var(--shadow-soft);
+            border-radius: 32px;
+            box-shadow: 0 20px 60px rgba(93, 75, 64, 0.08);
             overflow: hidden;
-            min-height: 75vh;
+            min-height: 600px;
         }
 
+        /* 左侧侧边栏 */
         .pig-sidebar {
             flex: 1;
             background: #FFF9F3;
@@ -56,9 +55,6 @@
             border: 6px solid var(--white);
             box-shadow: 0 8px 20px rgba(0,0,0,0.05);
             aspect-ratio: 1/1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
             overflow: hidden;
             margin-bottom: 20px;
             background: #fff;
@@ -68,20 +64,21 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
         .pig-speech-bubble {
             background: var(--cocoa-text);
             color: white;
-            padding: 15px 18px;
+            padding: 15px;
             border-radius: 18px;
-            font-size: 15px;
-            width: 100%;
-            transition: all 0.3s;
+            font-size: 14px;
             line-height: 1.5;
+            width: 100%;
+            transition: 0.3s;
         }
 
+        /* 右侧题目区 */
         .question-sidebar {
             flex: 1.4;
             padding: 40px;
@@ -93,7 +90,7 @@
             height: 8px;
             background: #F2E9E1;
             border-radius: 10px;
-            margin-bottom: 25px;
+            margin-bottom: 30px;
         }
 
         .progress-fill {
@@ -104,17 +101,16 @@
         }
 
         .question-text {
-            font-size: 22px;
+            font-size: 24px;
             font-weight: 600;
             margin-bottom: 25px;
-            line-height: 1.4;
         }
 
-        .option-content {
-            padding: 14px 18px;
+        .option-item {
+            padding: 16px 20px;
             background: var(--white);
             border: 2px solid #F2E9E1;
-            border-radius: 14px;
+            border-radius: 16px;
             margin-bottom: 12px;
             cursor: pointer;
             transition: all 0.2s;
@@ -123,26 +119,26 @@
             gap: 12px;
         }
 
-        .option-content:hover {
+        .option-item:hover {
             border-color: var(--primary-pink);
             background: #FFF9F9;
         }
 
-        .option.selected .option-content {
+        .option-item.active {
             background: var(--primary-pink);
             border-color: var(--primary-pink);
             color: white;
         }
 
         .option-icon {
-            font-size: 22px;
+            font-size: 20px;
             background: #fdf2f2;
-            width: 40px;
-            height: 40px;
+            width: 36px;
+            height: 36px;
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: 10px;
+            border-radius: 8px;
         }
 
         @media (max-width: 768px) {
@@ -153,205 +149,163 @@
 </head>
 <body>
 
-    <div class="test-container">
-        <div class="pig-sidebar">
-            <div class="pig-image-container">
-                <img src="images/scene_01.jpg" alt="八吉" class="pig-image" id="pigImage">
-            </div>
-            <div class="pig-speech-bubble" id="pigSpeech">加载中...</div>
+<div class="test-container">
+    <div class="pig-sidebar">
+        <div class="pig-image-container">
+            <img src="images/scene_01.jpg" alt="场景" class="pig-image" id="pigImage">
         </div>
-
-        <div class="question-sidebar">
-            <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width: 8%;"></div></div>
-            <div id="questionText" class="question-text"></div>
-            <div id="optionsContainer"></div>
-        </div>
+        <div class="pig-speech-bubble" id="pigSpeech">媳妇让俺陪你完成测试～</div>
     </div>
 
-    <script>
-        // 最终 12 道完整题目
-        const questions = [
-            { text: "媳妇过生日，猪八吉怎么做你最暖心？", options: [
-                { text: "写张小卡片说爱她", type: "words", icon: "💬" },
-                { text: "承包一个月家务", type: "acts", icon: "🤗" },
-                { text: "准备一份惊喜礼物", type: "gifts", icon: "🎁" },
-                { text: "专心陪她逛街聊天", type: "time", icon: "🕰️" },
-                { text: "一个大大的拥抱", type: "touch", icon: "👫" }
-            ], pigSpeech: "媳妇生日！俺得好好表现～你希望伴侣怎么为你庆祝？" },
-            { text: "猪八吉加班晚归，你希望他？", options: [
-                { text: "发消息说：媳妇俺想你马上回", type: "words", icon: "💬" },
-                { text: "带热腾腾的宵夜回来", type: "acts", icon: "🤗" },
-                { text: "顺手买枝花或小零食", type: "gifts", icon: "🎁" },
-                { text: "回家放下手机认真陪你", type: "time", icon: "🕰️" },
-                { text: "进门先给你一个吻", type: "touch", icon: "👫" }
-            ], pigSpeech: "加班晚了，媳妇在家等俺...怎么做才能让她不生气？" },
-            { text: "你们吵架后，哪种和好方式最有效？", options: [
-                { text: "对方真诚道歉：是俺不对", type: "words", icon: "💬" },
-                { text: "默默帮你把活儿干了", type: "acts", icon: "🤗" },
-                { text: "送你个小礼物示好", type: "gifts", icon: "🎁" },
-                { text: "拉你坐下耐心沟通", type: "time", icon: "🕰️" },
-                { text: "一把抱住你，不松手", type: "touch", icon: "👫" }
-            ], pigSpeech: "吵架了，媳妇不理俺，咋办？哪种方式最能让她消气？" },
-            { text: "日常生活中，你最喜欢怎样表达爱意？", options: [
-                { text: "经常说：爱你，想你", type: "words", icon: "💬" },
-                { text: "帮对方挤牙膏、倒水等", type: "acts", icon: "🤗" },
-                { text: "看到适合TA的就买下来", type: "gifts", icon: "🎁" },
-                { text: "每天抽时间专门深度聊天", type: "time", icon: "🕰️" },
-                { text: "走路牵手，坐车靠肩", type: "touch", icon: "👫" }
-            ], pigSpeech: "媳妇说俺不懂浪漫，俺觉得爱要做出来，你说呢？" },
-            { text: "你心情低落时，最希望TA怎么做？", options: [
-                { text: "鼓励你：你是最棒的", type: "words", icon: "💬" },
-                { text: "为你泡杯茶，做点实际的", type: "acts", icon: "🤗" },
-                { text: "送你一个小玩偶或零食", type: "gifts", icon: "🎁" },
-                { text: "陪你散步，安静倾听", type: "time", icon: "🕰️" },
-                { text: "搂着你，轻轻拍背", type: "touch", icon: "👫" }
-            ], pigSpeech: "媳妇心情不好，俺该怎么做？在线等，挺急的！" },
-            { text: "纪念日到了，你更期待怎样庆祝？", options: [
-                { text: "写一封情书念给你听", type: "words", icon: "💬" },
-                { text: "两人分工完成家务大扫除", type: "acts", icon: "🤗" },
-                { text: "准备一份惊喜大礼", type: "gifts", icon: "🎁" },
-                { text: "只有你们两人的短途旅行", type: "time", icon: "🕰️" },
-                { text: "一起去SPA，身体放松", type: "touch", icon: "👫" }
-            ], pigSpeech: "纪念日到了，俺想给媳妇惊喜，你觉得哪种好？" },
-            { text: "关于家务分工，你最看重什么？", options: [
-                { text: "TA常说：辛苦了，谢谢", type: "words", icon: "💬" },
-                { text: "TA主动分担，不用提醒", type: "acts", icon: "🤗" },
-                { text: "买智能家电减轻负担", type: "gifts", icon: "🎁" },
-                { text: "一起干活，边干边聊", type: "time", icon: "🕰️" },
-                { text: "干活时给个鼓励的亲吻", type: "touch", icon: "👫" }
-            ], pigSpeech: "活这么多，媳妇嫌俺不干活，咋表现才好？" },
-            { text: "异地时，什么最能让你感受到爱？", options: [
-                { text: "每天视频说：晚安", type: "words", icon: "💬" },
-                { text: "远程为你点外卖/叫车", type: "acts", icon: "🤗" },
-                { text: "寄心意满满的包裹", type: "gifts", icon: "🎁" },
-                { text: "视频连线一起看剧", type: "time", icon: "🕰️" },
-                { text: "期待重逢时的那个长抱", type: "touch", icon: "👫" }
-            ], pigSpeech: "出差在外想媳妇了，怎么让她感受到俺的爱？" },
-            { text: "当你工作压力大时，最需要TA？", options: [
-                { text: "说：你已经很优秀了", type: "words", icon: "💬" },
-                { text: "帮你处理掉生活琐事", type: "acts", icon: "🤗" },
-                { text: "送减压小礼物（香薰等）", type: "gifts", icon: "🎁" },
-                { text: "当情绪垃圾桶陪你吐槽", type: "time", icon: "🕰️" },
-                { text: "给你捏捏肩膀按按手", type: "touch", icon: "👫" }
-            ], pigSpeech: "媳妇压力大，俺想帮她分担，该怎么做？" },
-            { text: "理想的周末时光，你希望？", options: [
-                { text: "互相分享这一周的感受", type: "words", icon: "💬" },
-                { text: "一起做顿大餐共同完成", type: "acts", icon: "🤗" },
-                { text: "去逛商场买喜欢的东西", type: "gifts", icon: "🎁" },
-                { text: "发展共同爱好（运动等）", type: "time", icon: "🕰️" },
-                { text: "窝在沙发靠在一起看电影", type: "touch", icon: "👫" }
-            ], pigSpeech: "周末了，和媳妇一起做点啥感情能升温？" },
-            { text: "教育孩子有分歧时，如何化解？", options: [
-                { text: "TA说：你的出发点也是为TA好", type: "words", icon: "💬" },
-                { text: "TA主动去辅导孩子作业", type: "acts", icon: "🤗" },
-                { text: "买新玩具转移孩子注意力", type: "gifts", icon: "🎁" },
-                { text: "等孩子睡了坐下来认真聊", type: "time", icon: "🕰️" },
-                { text: "拍拍你的肩说：咱们一起努力", type: "touch", icon: "👫" }
-            ], pigSpeech: "教育理念不同吵架了，咋和好？" },
-            { text: "大额支出意见不一时，TA表现？", options: [
-                { text: "说：钱再赚，你开心最重要", type: "words", icon: "💬" },
-                { text: "认真做预算表列方案", type: "acts", icon: "🤗" },
-                { text: "准备小惊喜让你觉得花得值", type: "gifts", icon: "🎁" },
-                { text: "专门留时间一起研究选择", type: "time", icon: "🕰️" },
-                { text: "握着你的手说：我们一起面对", type: "touch", icon: "👫" }
-            ], pigSpeech: "想换车媳妇想存钱，咋沟通才好？" }
-        ];
+    <div class="question-sidebar">
+        <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width: 8%;"></div></div>
+        <div id="questionText" class="question-text">正在加载题目...</div>
+        <div id="optionsContainer"></div>
+    </div>
+</div>
 
-        let currentQuestionIndex = 0;
-        let userAnswers = new Array(12).fill(null);
+<script>
+    const questions = [
+        { text: "媳妇过生日，猪八吉怎么做你最暖心？", options: [
+            { text: "写张小卡片说爱她", type: "words", icon: "💬" },
+            { text: "承包一个月家务", type: "acts", icon: "🤗" },
+            { text: "准备一份惊喜礼物", type: "gifts", icon: "🎁" },
+            { text: "专心陪她逛街聊天", type: "time", icon: "🕰️" },
+            { text: "一个大大的拥抱", type: "touch", icon: "👫" }
+        ], speech: "媳妇生日！俺得好好表现～你希望伴侣怎么为你庆祝？" },
+        { text: "猪八吉加班晚归，你希望他？", options: [
+            { text: "发消息说：媳妇俺想你马上回", type: "words", icon: "💬" },
+            { text: "带热腾腾的宵夜回来", type: "acts", icon: "🤗" },
+            { text: "顺手买枝花或小零食", type: "gifts", icon: "🎁" },
+            { text: "回家放下手机认真陪你", type: "time", icon: "🕰️" },
+            { text: "进门先给你一个吻", type: "touch", icon: "👫" }
+        ], speech: "加班晚了，媳妇在家等俺...怎么做不让她生气？" },
+        { text: "吵架后，哪种和好方式最有效？", options: [
+            { text: "真诚道歉：是俺不对", type: "words", icon: "💬" },
+            { text: "默默帮你把活儿干了", type: "acts", icon: "🤗" },
+            { text: "送个小礼物示好", type: "gifts", icon: "🎁" },
+            { text: "坐下来耐心沟通", type: "time", icon: "🕰️" },
+            { text: "一把抱住你不松手", type: "touch", icon: "👫" }
+        ], speech: "吵架了，咋办？哪种方式最能让她消气？" },
+        { text: "日常生活中，你最喜欢怎样表达爱意？", options: [
+            { text: "经常说：爱你，想你", type: "words", icon: "💬" },
+            { text: "帮对方挤牙膏、倒水等", type: "acts", icon: "🤗" },
+            { text: "看到适合TA的就买下来", type: "gifts", icon: "🎁" },
+            { text: "抽时间专门深度聊天", type: "time", icon: "🕰️" },
+            { text: "走路牵手，坐车靠肩", type: "touch", icon: "👫" }
+        ], speech: "媳妇说俺不浪漫，俺觉得爱要做出来。" },
+        { text: "心情低落时，最希望TA怎么做？", options: [
+            { text: "鼓励你：你是最棒的", type: "words", icon: "💬" },
+            { text: "为你泡杯茶，做点实际的", type: "acts", icon: "🤗" },
+            { text: "送个小玩偶或零食", type: "gifts", icon: "🎁" },
+            { text: "陪你散步，安静倾听", type: "time", icon: "🕰️" },
+            { text: "搂着你，轻轻拍背", type: "touch", icon: "👫" }
+        ], speech: "媳妇心情不好，俺该怎么做？" },
+        { text: "纪念日到了，你更期待怎样庆祝？", options: [
+            { text: "写封情书念给你听", type: "words", icon: "💬" },
+            { text: "分工完成家务大扫除", type: "acts", icon: "🤗" },
+            { text: "准备一份惊喜大礼", type: "gifts", icon: "🎁" },
+            { text: "两人的短途旅行", type: "time", icon: "🕰️" },
+            { text: "一起去SPA放松", type: "touch", icon: "👫" }
+        ], speech: "纪念日到了，俺想给媳妇惊喜。" },
+        { text: "关于家务分工，你最看重什么？", options: [
+            { text: "常说：辛苦了，谢谢", type: "words", icon: "💬" },
+            { text: "主动分担，不用提醒", type: "acts", icon: "🤗" },
+            { text: "买智能家电减轻负担", type: "gifts", icon: "🎁" },
+            { text: "一起干活，边干边聊", type: "time", icon: "🕰️" },
+            { text: "干活时给个鼓励的吻", type: "touch", icon: "👫" }
+        ], speech: "活这么多，咋表现才好？" },
+        { text: "异地时，什么最让你感受到爱？", options: [
+            { text: "每天视频说：晚安", type: "words", icon: "💬" },
+            { text: "远程为你点外卖/叫车", type: "acts", icon: "🤗" },
+            { text: "寄心意满满的包裹", type: "gifts", icon: "🎁" },
+            { text: "视频连线一起看剧", type: "time", icon: "🕰️" },
+            { text: "期待重逢时的长抱", type: "touch", icon: "👫" }
+        ], speech: "出差在外，怎么让她感受到俺的爱？" },
+        { text: "工作压力大时，最需要TA？", options: [
+            { text: "说：你已经很优秀了", type: "words", icon: "💬" },
+            { text: "帮处理掉生活琐事", type: "acts", icon: "🤗" },
+            { text: "送减压小礼物", type: "gifts", icon: "🎁" },
+            { text: "当情绪垃圾桶陪吐槽", type: "time", icon: "🕰️" },
+            { text: "给你捏捏肩按按手", type: "touch", icon: "👫" }
+        ], speech: "媳妇压力大，俺想帮她分担。" },
+        { text: "理想的周末时光，你希望？", options: [
+            { text: "分享这一周的感受", type: "words", icon: "💬" },
+            { text: "一起做顿大餐共同完成", type: "acts", icon: "🤗" },
+            { text: "去逛商场买喜欢的东西", type: "gifts", icon: "🎁" },
+            { text: "发展共同爱好", type: "time", icon: "🕰️" },
+            { text: "靠在一起看电影", type: "touch", icon: "👫" }
+        ], speech: "周末和媳妇一起做点啥感情能升温？" },
+        { text: "教育孩子有分歧时，如何化解？", options: [
+            { text: "说：出发点也是为TA好", type: "words", icon: "💬" },
+            { text: "主动辅导孩子作业", type: "acts", icon: "🤗" },
+            { text: "买新玩具转移注意力", type: "gifts", icon: "🎁" },
+            { text: "等孩子睡了认真聊", type: "time", icon: "🕰️" },
+            { text: "说：咱们一起努力", type: "touch", icon: "👫" }
+        ], speech: "吵架了，咋和好？" },
+        { text: "大额支出意见不一时，TA表现？", options: [
+            { text: "说：你开心最重要", type: "words", icon: "💬" },
+            { text: "认真做预算列方案", type: "acts", icon: "🤗" },
+            { text: "准备小惊喜让你觉得值", type: "gifts", icon: "🎁" },
+            { text: "留时间一起研究选择", type: "time", icon: "🕰️" },
+            { text: "握着手说：一起面对", type: "touch", icon: "👫" }
+        ], speech: "想换车媳妇想存钱，咋沟通？" }
+    ];
 
-        function init() {
-            loadQuestion(0);
-        }
+    let currentIdx = 0;
+    let scores = { words: 0, acts: 0, gifts: 0, time: 0, touch: 0 };
 
-        function loadQuestion(index) {
-            const q = questions[index];
-            document.getElementById('questionText').innerText = q.text;
-            
-            // 核心逻辑：自动根据题目序号换 scene 图
-            const sceneNum = (index + 1).toString().padStart(2, '0');
-            document.getElementById('pigImage').src = `images/scene_${sceneNum}.jpg`;
-            document.getElementById('pigSpeech').innerText = q.pigSpeech;
+    function render() {
+        const q = questions[currentIdx];
+        document.getElementById('questionText').innerText = q.text;
+        document.getElementById('pigSpeech').innerText = q.speech;
+        document.getElementById('pigImage').src = `images/scene_${(currentIdx + 1).toString().padStart(2, '0')}.jpg`;
+        document.getElementById('progressFill').style.width = ((currentIdx + 1) / 12 * 100) + '%';
 
-            renderOptions();
-        }
+        const container = document.getElementById('optionsContainer');
+        container.innerHTML = '';
+        q.options.forEach(opt => {
+            const div = document.createElement('div');
+            div.className = 'option-item';
+            div.innerHTML = `<div class="option-icon">${opt.icon}</div><div>${opt.text}</div>`;
+            div.onclick = () => select(opt.type, div);
+            container.appendChild(div);
+        });
+    }
 
-        function renderOptions() {
-            const container = document.getElementById('optionsContainer');
-            container.innerHTML = '';
-            questions[currentQuestionIndex].options.forEach((opt, idx) => {
-                const div = document.createElement('div');
-                div.className = `option ${userAnswers[currentQuestionIndex] === idx ? 'selected' : ''}`;
-                div.innerHTML = `
-                    <div class="option-content" onclick="selectOption(${idx}, '${opt.type}')">
-                        <div class="option-icon">${opt.icon}</div>
-                        <div class="option-text">${opt.text}</div>
-                    </div>
-                `;
-                container.appendChild(div);
-            });
-        }
+    function select(type, el) {
+        // 瞬间反馈
+        el.className = 'option-item active';
+        document.getElementById('pigImage').style.transform = 'scale(1.1)';
+        document.getElementById('pigSpeech').style.backgroundColor = '#FFB1B1';
+        
+        scores[type]++;
 
-        function selectOption(index, type) {
-            const baji = document.getElementById('pigImage');
-            const speech = document.getElementById('pigSpeech');
+        setTimeout(() => {
+            document.getElementById('pigImage').style.transform = 'scale(1)';
+            document.getElementById('pigSpeech').style.backgroundColor = '#5D4B40';
+            if (currentIdx < 11) {
+                currentIdx++;
+                render();
+            } else {
+                complete();
+            }
+        }, 700);
+    }
 
-            // 即时反馈交互效果
-            baji.style.transform = "scale(1.05)";
-            speech.style.backgroundColor = "#FFB1B1"; 
+    function complete() {
+        const sorted = Object.entries(scores).sort((a,b) => b[1] - a[1]);
+        const result = {
+            main: sorted[0][0],
+            percent: Math.round(sorted[0][1] / 12 * 100),
+            all: scores,
+            date: new Date().toLocaleString()
+        };
+        localStorage.setItem('love_result', JSON.stringify(result));
+        window.location.href = 'result.html';
+    }
 
-            const feedbacks = {
-                words: "好听的话八吉也爱听~",
-                acts: "行动起来，八吉最勤快！",
-                gifts: "礼物代表俺的心意~",
-                time: "这一刻，八吉眼里只有你。",
-                touch: "抱抱真暖和，嘿嘿~"
-            };
-            speech.innerText = feedbacks[type] || "记下啦！";
-
-            userAnswers[currentQuestionIndex] = index;
-            renderOptions();
-
-            // 停顿0.8秒后翻页
-            setTimeout(() => {
-                baji.style.transform = "scale(1)";
-                speech.style.backgroundColor = "#5D4B40";
-                
-                if (currentQuestionIndex < 11) {
-                    currentQuestionIndex++;
-                    loadQuestion(currentQuestionIndex);
-                    updateProgress();
-                } else {
-                    calculateAndRedirect();
-                }
-            }, 800);
-        }
-
-        function updateProgress() {
-            const percent = ((currentQuestionIndex + 1) / 12) * 100;
-            document.getElementById('progressFill').style.width = percent + '%';
-        }
-
-        function calculateAndRedirect() {
-            const counts = { words: 0, acts: 0, gifts: 0, time: 0, touch: 0 };
-            userAnswers.forEach((ans, idx) => {
-                const type = questions[idx].options[ans].type;
-                counts[type]++;
-            });
-
-            const sorted = Object.entries(counts).sort((a,b) => b[1] - a[1]);
-            const resultData = {
-                mainType: sorted[0][0],
-                allCounts: counts,
-                percent: Math.round((sorted[0][1] / 12) * 100),
-                testDate: new Date().toLocaleString()
-            };
-
-            localStorage.setItem('loveLanguageResults', JSON.stringify(resultData));
-            window.location.href = 'result.html';
-        }
-
-        window.onload = init;
-    </script>
+    render();
+</script>
 </body>
 </html>
