@@ -50,7 +50,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: flex-start;
-            padding: 30px 15px 20px; /* 调整padding，顶部多一些 */
+            padding: 30px 15px 10px; /* 减少底部padding，让内容更紧凑 */
             background: linear-gradient(135deg, #FFF9F3, #FFF5ED);
             position: relative;
             overflow: hidden;
@@ -90,7 +90,7 @@
             overflow: hidden;
             position: relative;
             z-index: 1;
-            margin-bottom: 20px;
+            margin-bottom: 15px; /* 减少底部间距 */
             margin-top: 10px; /* 增加顶部间距，避免太靠上 */
             transition: all 0.4s ease;
         }
@@ -112,15 +112,15 @@
             max-width: 550px;
             position: relative;
             z-index: 1;
-            margin-bottom: 15px; /* 减少底部间距 */
+            margin-bottom: 10px; /* 减少底部间距 */
         }
 
         .pig-speech-bubble {
             background: var(--cocoa-text);
             color: white;
-            padding: 20px 25px;
+            padding: 18px 22px;
             border-radius: 22px;
-            font-size: 17px;
+            font-size: 16px;
             line-height: 1.6;
             box-shadow: 0 10px 30px rgba(93, 75, 64, 0.2);
             position: relative;
@@ -142,17 +142,18 @@
             border-bottom: 12px solid var(--cocoa-text);
         }
 
-        /* 向下滑动继续 */
+        /* 向下滑动继续 - 重要调整 */
         .scroll-hint {
             position: absolute;
-            bottom: 15px; /* 向上移动一些 */
+            bottom: 5px; /* 向上移动，减少空白 */
             left: 50%;
             transform: translateX(-50%);
             display: flex;
             flex-direction: column;
             align-items: center;
             color: var(--accent-coral);
-            font-size: 13px;
+            font-size: 15px; /* 加大字号，原来13px，增加2号 */
+            font-weight: 500; /* 增加字体粗细 */
             animation: bounce 2s infinite;
             z-index: 2;
         }
@@ -164,8 +165,8 @@
         }
 
         .scroll-hint i {
-            font-size: 22px;
-            margin-bottom: 5px;
+            font-size: 26px; /* 加大图标大小 */
+            margin-bottom: 3px;
         }
 
         /* ===== 第二屏：题目互动区 ===== */
@@ -431,23 +432,23 @@
                 height: 50vh;  /* 手机端图片高度 */
                 max-width: 90%;
                 border-width: 8px;
-                margin-bottom: 15px;
-            }
-            
-            .pig-speech-bubble {
-                padding: 18px 22px;
-                font-size: 16px;
-                max-width: 90%;
                 margin-bottom: 12px;
             }
             
+            .pig-speech-bubble {
+                padding: 16px 20px;
+                font-size: 15px;
+                max-width: 90%;
+                margin-bottom: 8px;
+            }
+            
             .scroll-hint {
-                bottom: 12px;
-                font-size: 12px;
+                bottom: 3px; /* 手机端也向上移动 */
+                font-size: 14px; /* 手机端也加大 */
             }
             
             .scroll-hint i {
-                font-size: 20px;
+                font-size: 24px;
             }
             
             .progress-title {
@@ -489,7 +490,7 @@
 
         @media (max-width: 480px) {
             .scene-section {
-                padding: 20px 15px 15px; /* 进一步减少顶部padding */
+                padding: 20px 15px 5px; /* 进一步减少底部padding */
             }
             
             .scene-image-container {
@@ -501,18 +502,18 @@
             }
             
             .pig-speech-bubble {
-                padding: 16px 20px;
-                font-size: 15px;
-                margin-bottom: 10px;
+                padding: 14px 18px;
+                font-size: 14px;
+                margin-bottom: 5px;
             }
             
             .scroll-hint {
-                bottom: 10px;
-                font-size: 11px;
+                bottom: 2px;
+                font-size: 13px;
             }
             
             .scroll-hint i {
-                font-size: 18px;
+                font-size: 22px;
             }
             
             .question-text {
@@ -557,13 +558,22 @@
         /* 非常小的手机 */
         @media (max-width: 360px) {
             .scene-section {
-                padding: 15px 12px 12px;
+                padding: 15px 12px 3px;
             }
             
             .scene-image-container {
                 height: 40vh;
                 margin-top: 5px;
                 margin-bottom: 8px;
+            }
+            
+            .scroll-hint {
+                bottom: 1px;
+                font-size: 12px;
+            }
+            
+            .scroll-hint i {
+                font-size: 20px;
             }
             
             .question-text {
