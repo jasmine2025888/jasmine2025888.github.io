@@ -7,75 +7,131 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --primary-pink: #FFB1B1;      /* 樱花粉 */
-            --soft-cream: #FFFBF5;       /* 奶油背景 */
-            --cocoa-text: #5D4B40;       /* 深可可色 */
+            --primary-pink: #FF9494;        /* 更温暖的主粉色 */
+            --secondary-pink: #FFC4C4;      /* 辅助粉色 */
+            --accent-coral: #FF7A7A;        /* 珊瑚色点缀 */
+            --accent-gold: #E8B054;         /* 金色点缀 */
+            --warm-cream: #FFF9F0;          /* 温暖奶油色 */
+            --cocoa-text: #5A4235;          /* 加深的可可色文字 */
             --white: #FFFFFF;
-            --border-warm: #E8D5C4;
+            --border-warm: #FFD0C9;         /* 温暖的边框色 */
+            --soft-shadow: rgba(93, 75, 64, 0.08);
+            --medium-shadow: rgba(93, 75, 64, 0.12);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+        }
 
         body {
-            font-family: 'PingFang SC', sans-serif;
-            background-color: var(--soft-cream);
+            font-family: 'PingFang SC', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #FFF9F0 0%, #FFEFDF 100%);
             color: var(--cocoa-text);
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 15px;
+            padding: 20px;
         }
 
         .test-container {
             display: flex;
             max-width: 1000px;
             width: 100%;
-            background: var(--white);
+            background: linear-gradient(to bottom, var(--white), #FFFCF8);
             border-radius: 32px;
-            box-shadow: 0 20px 60px rgba(93, 75, 64, 0.08);
+            box-shadow: 0 20px 60px var(--medium-shadow);
             overflow: hidden;
-            min-height: 600px;
+            min-height: 640px;
+            position: relative;
+        }
+
+        .test-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(to right, var(--accent-coral), var(--accent-gold));
+            z-index: 10;
         }
 
         /* 左侧侧边栏 */
         .pig-sidebar {
             flex: 1;
-            background: #FFF9F3;
+            background: linear-gradient(135deg, #FFF9F3, #FFF5ED);
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 30px;
-            border-right: 2px solid var(--soft-cream);
+            padding: 35px 25px;
+            border-right: 2px solid var(--border-warm);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .pig-sidebar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: -2px;
+            height: 100%;
+            width: 2px;
+            background: linear-gradient(to bottom, transparent, var(--accent-coral), transparent);
         }
 
         .pig-image-container {
             width: 100%;
-            border-radius: 20px;
-            border: 6px solid var(--white);
-            box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+            border-radius: 22px;
+            border: 8px solid var(--white);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.08);
             aspect-ratio: 1/1;
             overflow: hidden;
-            margin-bottom: 20px;
-            background: #fff;
+            margin-bottom: 25px;
+            background: var(--white);
+            position: relative;
+            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
         .pig-image {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
         .pig-speech-bubble {
             background: var(--cocoa-text);
             color: white;
-            padding: 15px;
-            border-radius: 18px;
-            font-size: 14px;
-            line-height: 1.5;
+            padding: 18px;
+            border-radius: 20px;
+            font-size: 15px;
+            line-height: 1.6;
             width: 100%;
-            transition: 0.3s;
+            transition: all 0.4s ease;
+            position: relative;
+            box-shadow: 0 5px 15px rgba(93, 75, 64, 0.15);
+        }
+
+        .pig-speech-bubble::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-top: 10px solid var(--cocoa-text);
+        }
+
+        .question-counter {
+            margin-top: 25px;
+            font-size: 13px;
+            color: var(--cocoa-text);
+            opacity: 0.7;
+            text-align: center;
         }
 
         /* 右侧题目区 */
@@ -84,66 +140,276 @@
             padding: 40px;
             display: flex;
             flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .progress-container {
+            margin-bottom: 30px;
+        }
+
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            margin-bottom: 10px;
+            color: var(--cocoa-text);
+            font-weight: 500;
         }
 
         .progress-bar {
-            height: 8px;
+            height: 10px;
             background: #F2E9E1;
             border-radius: 10px;
-            margin-bottom: 30px;
+            overflow: hidden;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
         }
 
         .progress-fill {
             height: 100%;
-            background: var(--primary-pink);
+            background: linear-gradient(to right, var(--accent-coral), var(--accent-gold));
             border-radius: 10px;
-            transition: width 0.5s ease;
+            transition: width 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .question-header {
+            margin-bottom: 30px;
+        }
+
+        .question-number {
+            font-size: 14px;
+            color: var(--accent-coral);
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .question-number i {
+            font-size: 16px;
         }
 
         .question-text {
-            font-size: 24px;
-            font-weight: 600;
-            margin-bottom: 25px;
+            font-size: 26px;
+            font-weight: 700;
+            line-height: 1.4;
+            margin-bottom: 15px;
+            color: var(--cocoa-text);
+        }
+
+        .question-hint {
+            font-size: 14px;
+            color: #8A7565;
+            font-style: italic;
+            padding-left: 5px;
+        }
+
+        .options-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            margin-bottom: 30px;
         }
 
         .option-item {
-            padding: 16px 20px;
+            padding: 18px 22px;
             background: var(--white);
             border: 2px solid #F2E9E1;
-            border-radius: 16px;
-            margin-bottom: 12px;
+            border-radius: 18px;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: all 0.3s ease;
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 16px;
+            position: relative;
+            overflow: hidden;
         }
 
         .option-item:hover {
-            border-color: var(--primary-pink);
-            background: #FFF9F9;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(255, 148, 148, 0.15);
+            border-color: var(--secondary-pink);
         }
 
         .option-item.active {
-            background: var(--primary-pink);
-            border-color: var(--primary-pink);
+            background: linear-gradient(135deg, #FFF9F9, white);
+            border-color: var(--accent-coral);
+            box-shadow: 0 8px 25px rgba(255, 122, 122, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .option-item.active .option-icon {
+            background: linear-gradient(135deg, var(--accent-coral), var(--accent-gold));
             color: white;
+            transform: scale(1.1);
+        }
+
+        .option-item.active::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(to right, var(--accent-coral), var(--accent-gold));
         }
 
         .option-icon {
-            font-size: 20px;
+            font-size: 22px;
             background: #fdf2f2;
-            width: 36px;
-            height: 36px;
+            width: 44px;
+            height: 44px;
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: 8px;
+            border-radius: 12px;
+            flex-shrink: 0;
+            transition: all 0.3s ease;
         }
 
+        .option-text {
+            font-size: 16px;
+            line-height: 1.5;
+            font-weight: 500;
+        }
+
+        /* 爱语类型指示器 */
+        .love-type-indicator {
+            background: linear-gradient(135deg, #FFF9F0, #FFF5E1);
+            padding: 15px;
+            border-radius: 15px;
+            border: 2px solid var(--border-warm);
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .indicator-label {
+            font-size: 12px;
+            color: #8A7565;
+            margin-bottom: 5px;
+        }
+
+        .indicator-value {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--accent-coral);
+        }
+
+        /* 响应式设计 */
         @media (max-width: 768px) {
-            .test-container { flex-direction: column; }
-            .pig-sidebar { border-right: none; border-bottom: 2px solid var(--soft-cream); }
+            .test-container { 
+                flex-direction: column; 
+                min-height: auto;
+            }
+            
+            .pig-sidebar { 
+                border-right: none; 
+                border-bottom: 2px solid var(--border-warm);
+                padding: 25px 20px;
+            }
+            
+            .question-sidebar {
+                padding: 30px 25px;
+            }
+            
+            .question-text {
+                font-size: 22px;
+            }
+            
+            .option-item {
+                padding: 16px 18px;
+            }
+            
+            .pig-image-container {
+                max-width: 300px;
+                margin-left: auto;
+                margin-right: auto;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 15px;
+            }
+            
+            .test-container {
+                border-radius: 25px;
+            }
+            
+            .question-text {
+                font-size: 20px;
+            }
+            
+            .option-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+            
+            .option-icon {
+                align-self: flex-start;
+            }
+        }
+
+        /* 音效指示器 */
+        .sound-toggle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: var(--white);
+            border: 2px solid var(--border-warm);
+            color: var(--accent-coral);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            z-index: 100;
+        }
+
+        .sound-toggle:hover {
+            transform: scale(1.1);
+            border-color: var(--accent-coral);
+        }
+
+        /* 页面过渡动画 */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .test-container {
+            animation: fadeInUp 0.6s ease;
         }
     </style>
 </head>
@@ -152,160 +418,424 @@
 <div class="test-container">
     <div class="pig-sidebar">
         <div class="pig-image-container">
-            <img src="images/scene_01.jpg" alt="场景" class="pig-image" id="pigImage">
+            <img src="images/scene_01.jpg" alt="猪八吉与媳妇的温馨场景" class="pig-image" id="pigImage">
         </div>
-        <div class="pig-speech-bubble" id="pigSpeech">媳妇让俺陪你完成测试～</div>
+        <div class="pig-speech-bubble" id="pigSpeech">媳妇让俺陪你完成这个爱的测试～</div>
+        <div class="question-counter" id="questionCounter">第 1/12 题</div>
+        <div class="love-type-indicator" id="loveTypeIndicator">
+            <div class="indicator-label">当前爱语倾向</div>
+            <div class="indicator-value">正在检测中...</div>
+        </div>
     </div>
 
     <div class="question-sidebar">
-        <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width: 8%;"></div></div>
-        <div id="questionText" class="question-text">正在加载题目...</div>
-        <div id="optionsContainer"></div>
+        <div class="progress-container">
+            <div class="progress-label">
+                <span>❤️ 爱的方言翻译器 · 完整版</span>
+                <span id="progressText">第 1 题 / 共 12 题</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill" style="width: 8.33%;"></div>
+            </div>
+        </div>
+
+        <div class="question-header">
+            <div class="question-number">
+                <i class="far fa-question-circle"></i> 问题 #<span id="questionNum">1</span>
+            </div>
+            <div class="question-text" id="questionText">正在加载题目...</div>
+            <div class="question-hint">选择最能触动你的选项</div>
+        </div>
+
+        <div class="options-container" id="optionsContainer">
+            <!-- 选项将通过JavaScript动态生成 -->
+        </div>
     </div>
 </div>
 
+<!-- 音效开关 -->
+<div class="sound-toggle" id="soundToggle" title="音效开关">
+    <i class="fas fa-volume-up"></i>
+</div>
+
 <script>
+    // 题目数据
     const questions = [
-        { text: "媳妇过生日，猪八吉怎么做你最暖心？", options: [
-            { text: "写张小卡片说爱她", type: "words", icon: "💬" },
-            { text: "承包一个月家务", type: "acts", icon: "🤗" },
-            { text: "准备一份惊喜礼物", type: "gifts", icon: "🎁" },
-            { text: "专心陪她逛街聊天", type: "time", icon: "🕰️" },
-            { text: "一个大大的拥抱", type: "touch", icon: "👫" }
-        ], speech: "媳妇生日！俺得好好表现～你希望伴侣怎么为你庆祝？" },
-        { text: "猪八吉加班晚归，你希望他？", options: [
-            { text: "发消息说：媳妇俺想你马上回", type: "words", icon: "💬" },
-            { text: "带热腾腾的宵夜回来", type: "acts", icon: "🤗" },
-            { text: "顺手买枝花或小零食", type: "gifts", icon: "🎁" },
-            { text: "回家放下手机认真陪你", type: "time", icon: "🕰️" },
-            { text: "进门先给你一个吻", type: "touch", icon: "👫" }
-        ], speech: "加班晚了，媳妇在家等俺...怎么做不让她生气？" },
-        { text: "吵架后，哪种和好方式最有效？", options: [
-            { text: "真诚道歉：是俺不对", type: "words", icon: "💬" },
-            { text: "默默帮你把活儿干了", type: "acts", icon: "🤗" },
-            { text: "送个小礼物示好", type: "gifts", icon: "🎁" },
-            { text: "坐下来耐心沟通", type: "time", icon: "🕰️" },
-            { text: "一把抱住你不松手", type: "touch", icon: "👫" }
-        ], speech: "吵架了，咋办？哪种方式最能让她消气？" },
-        { text: "日常生活中，你最喜欢怎样表达爱意？", options: [
-            { text: "经常说：爱你，想你", type: "words", icon: "💬" },
-            { text: "帮对方挤牙膏、倒水等", type: "acts", icon: "🤗" },
-            { text: "看到适合TA的就买下来", type: "gifts", icon: "🎁" },
-            { text: "抽时间专门深度聊天", type: "time", icon: "🕰️" },
-            { text: "走路牵手，坐车靠肩", type: "touch", icon: "👫" }
-        ], speech: "媳妇说俺不浪漫，俺觉得爱要做出来。" },
-        { text: "心情低落时，最希望TA怎么做？", options: [
-            { text: "鼓励你：你是最棒的", type: "words", icon: "💬" },
-            { text: "为你泡杯茶，做点实际的", type: "acts", icon: "🤗" },
-            { text: "送个小玩偶或零食", type: "gifts", icon: "🎁" },
-            { text: "陪你散步，安静倾听", type: "time", icon: "🕰️" },
-            { text: "搂着你，轻轻拍背", type: "touch", icon: "👫" }
-        ], speech: "媳妇心情不好，俺该怎么做？" },
-        { text: "纪念日到了，你更期待怎样庆祝？", options: [
-            { text: "写封情书念给你听", type: "words", icon: "💬" },
-            { text: "分工完成家务大扫除", type: "acts", icon: "🤗" },
-            { text: "准备一份惊喜大礼", type: "gifts", icon: "🎁" },
-            { text: "两人的短途旅行", type: "time", icon: "🕰️" },
-            { text: "一起去SPA放松", type: "touch", icon: "👫" }
-        ], speech: "纪念日到了，俺想给媳妇惊喜。" },
-        { text: "关于家务分工，你最看重什么？", options: [
-            { text: "常说：辛苦了，谢谢", type: "words", icon: "💬" },
-            { text: "主动分担，不用提醒", type: "acts", icon: "🤗" },
-            { text: "买智能家电减轻负担", type: "gifts", icon: "🎁" },
-            { text: "一起干活，边干边聊", type: "time", icon: "🕰️" },
-            { text: "干活时给个鼓励的吻", type: "touch", icon: "👫" }
-        ], speech: "活这么多，咋表现才好？" },
-        { text: "异地时，什么最让你感受到爱？", options: [
-            { text: "每天视频说：晚安", type: "words", icon: "💬" },
-            { text: "远程为你点外卖/叫车", type: "acts", icon: "🤗" },
-            { text: "寄心意满满的包裹", type: "gifts", icon: "🎁" },
-            { text: "视频连线一起看剧", type: "time", icon: "🕰️" },
-            { text: "期待重逢时的长抱", type: "touch", icon: "👫" }
-        ], speech: "出差在外，怎么让她感受到俺的爱？" },
-        { text: "工作压力大时，最需要TA？", options: [
-            { text: "说：你已经很优秀了", type: "words", icon: "💬" },
-            { text: "帮处理掉生活琐事", type: "acts", icon: "🤗" },
-            { text: "送减压小礼物", type: "gifts", icon: "🎁" },
-            { text: "当情绪垃圾桶陪吐槽", type: "time", icon: "🕰️" },
-            { text: "给你捏捏肩按按手", type: "touch", icon: "👫" }
-        ], speech: "媳妇压力大，俺想帮她分担。" },
-        { text: "理想的周末时光，你希望？", options: [
-            { text: "分享这一周的感受", type: "words", icon: "💬" },
-            { text: "一起做顿大餐共同完成", type: "acts", icon: "🤗" },
-            { text: "去逛商场买喜欢的东西", type: "gifts", icon: "🎁" },
-            { text: "发展共同爱好", type: "time", icon: "🕰️" },
-            { text: "靠在一起看电影", type: "touch", icon: "👫" }
-        ], speech: "周末和媳妇一起做点啥感情能升温？" },
-        { text: "教育孩子有分歧时，如何化解？", options: [
-            { text: "说：出发点也是为TA好", type: "words", icon: "💬" },
-            { text: "主动辅导孩子作业", type: "acts", icon: "🤗" },
-            { text: "买新玩具转移注意力", type: "gifts", icon: "🎁" },
-            { text: "等孩子睡了认真聊", type: "time", icon: "🕰️" },
-            { text: "说：咱们一起努力", type: "touch", icon: "👫" }
-        ], speech: "吵架了，咋和好？" },
-        { text: "大额支出意见不一时，TA表现？", options: [
-            { text: "说：你开心最重要", type: "words", icon: "💬" },
-            { text: "认真做预算列方案", type: "acts", icon: "🤗" },
-            { text: "准备小惊喜让你觉得值", type: "gifts", icon: "🎁" },
-            { text: "留时间一起研究选择", type: "time", icon: "🕰️" },
-            { text: "握着手说：一起面对", type: "touch", icon: "👫" }
-        ], speech: "想换车媳妇想存钱，咋沟通？" }
+        { 
+            text: "媳妇过生日，猪八吉怎么做你最暖心？", 
+            options: [
+                { text: "写张小卡片说'媳妇辛苦了，俺永远爱你'", type: "words", icon: "💬" },
+                { text: "承包一个月家务，让媳妇当皇后", type: "acts", icon: "🤗" },
+                { text: "精心准备一份礼物，哪怕不贵重", type: "gifts", icon: "🎁" },
+                { text: "请一天假，专心陪媳妇逛街聊天", type: "time", icon: "🕰️" },
+                { text: "给媳妇一个大大拥抱，说'有你在真好'", type: "touch", icon: "👫" }
+            ], 
+            speech: "媳妇生日！俺得好好表现～你希望伴侣怎么为你庆祝？" 
+        },
+        { 
+            text: "猪八吉加班晚归，你希望他？", 
+            options: [
+                { text: "发条消息：'媳妇，俺想你，马上回'", type: "words", icon: "💬" },
+                { text: "带宵夜回来，热好了端给你", type: "acts", icon: "🤗" },
+                { text: "顺手带枝花或小零食", type: "gifts", icon: "🎁" },
+                { text: "回家后放下手机，认真听你说话", type: "time", icon: "🕰️" },
+                { text: "进门先抱抱你，亲一下额头", type: "touch", icon: "👫" }
+            ], 
+            speech: "加班晚了，媳妇在家等俺...怎么做才能让她不生气？" 
+        },
+        { 
+            text: "你们吵架后，哪种和好方式最有效？", 
+            options: [
+                { text: "对方真诚道歉：'是俺不对'", type: "words", icon: "💬" },
+                { text: "默默帮你把活儿干了", type: "acts", icon: "🤗" },
+                { text: "送你个小礼物示好", type: "gifts", icon: "🎁" },
+                { text: "拉你坐下，耐心沟通", type: "time", icon: "🕰️" },
+                { text: "一把抱住你，不松手", type: "touch", icon: "👫" }
+            ], 
+            speech: "吵架了，媳妇不理俺，咋办？哪种方式最能让她消气？" 
+        },
+        { 
+            text: "日常生活中，你最喜欢怎样表达爱意？", 
+            options: [
+                { text: "经常说'爱你''想你'", type: "words", icon: "💬" },
+                { text: "帮TA挤牙膏、倒水等小事", type: "acts", icon: "🤗" },
+                { text: "看到适合TA的东西就买下来", type: "gifts", icon: "🎁" },
+                { text: "每天抽时间专门聊天", type: "time", icon: "🕰️" },
+                { text: "走路牵手，坐车靠肩", type: "touch", icon: "👫" }
+            ], 
+            speech: "媳妇说俺不懂浪漫，俺觉得爱要做出来，你说呢？" 
+        },
+        { 
+            text: "心情低落时，最希望TA怎么做？", 
+            options: [
+                { text: "鼓励你：'你是最棒的'", type: "words", icon: "💬" },
+                { text: "为你泡杯茶，做点实际的", type: "acts", icon: "🤗" },
+                { text: "送个小玩偶或零食", type: "gifts", icon: "🎁" },
+                { text: "陪你散步，安静倾听", type: "time", icon: "🕰️" },
+                { text: "搂着你，轻轻拍背", type: "touch", icon: "👫" }
+            ], 
+            speech: "媳妇心情不好，俺该怎么做？在线等，挺急的！" 
+        },
+        { 
+            text: "纪念日（结婚/恋爱纪念），你更期待怎样庆祝？", 
+            options: [
+                { text: "写一封情书，当面念给你听", type: "words", icon: "💬" },
+                { text: "策划一次家务大扫除，两人一起完成", type: "acts", icon: "🤗" },
+                { text: "准备一份惊喜礼物", type: "gifts", icon: "🎁" },
+                { text: "安排一次短途旅行，只有你们俩", type: "time", icon: "🕰️" },
+                { text: "安排按摩、SPA等身体放松活动", type: "touch", icon: "👫" }
+            ], 
+            speech: "结婚纪念日到了，俺想给媳妇一个惊喜，你觉得哪种方式好？" 
+        },
+        { 
+            text: "关于家务分工，你最看重什么？", 
+            options: [
+                { text: "TA常说'辛苦了''谢谢'", type: "words", icon: "💬" },
+                { text: "TA主动分担，不用提醒", type: "acts", icon: "🤗" },
+                { text: "买智能家电减轻负担", type: "gifts", icon: "🎁" },
+                { text: "一起做家务，边做边聊天", type: "time", icon: "🕰️" },
+                { text: "干活时给个鼓励的亲吻", type: "touch", icon: "👫" }
+            ], 
+            speech: "家务活这么多，媳妇嫌俺不干活，咋表现才好？" 
+        },
+        { 
+            text: "异地时（出差/分居），什么最能让你感受到爱？", 
+            options: [
+                { text: "每天视频说'晚安'", type: "words", icon: "💬" },
+                { text: "远程为你点外卖", type: "acts", icon: "🤗" },
+                { text: "寄礼物包裹", type: "gifts", icon: "🎁" },
+                { text: "长时间视频，一起看剧", type: "time", icon: "🕰️" },
+                { text: "期待重逢时的拥抱", type: "touch", icon: "👫" }
+            ], 
+            speech: "出差在外，想媳妇了，怎么让她感受到俺的爱？" 
+        },
+        { 
+            text: "当你工作压力大时，最需要TA？", 
+            options: [
+                { text: "说'你已经很优秀了'", type: "words", icon: "💬" },
+                { text: "帮你处理生活琐事", type: "acts", icon: "🤗" },
+                { text: "送减压小礼物（香薰、按摩仪等）", type: "gifts", icon: "🎁" },
+                { text: "陪你吐槽，当情绪垃圾桶", type: "time", icon: "🕰️" },
+                { text: "给你按摩肩膀", type: "touch", icon: "👫" }
+            ], 
+            speech: "媳妇工作压力大，俺想帮她分担，该怎么做？" 
+        },
+        { 
+            text: "理想的周末时光，你希望怎样度过？", 
+            options: [
+                { text: "互相分享一周的感受", type: "words", icon: "💬" },
+                { text: "一起做大餐，合作完成", type: "acts", icon: "🤗" },
+                { text: "去逛商场/超市，买喜欢的东西", type: "gifts", icon: "🎁" },
+                { text: "发展共同爱好（运动、手工等）", type: "time", icon: "🕰️" },
+                { text: "窝在沙发上看电影，靠在一起", type: "touch", icon: "👫" }
+            ], 
+            speech: "周末了，和媳妇一起做点啥，才能让感情升温？" 
+        },
+        { 
+            text: "关于教育孩子的方式，你们有分歧时，什么最能化解矛盾？", 
+            options: [
+                { text: "TA说：'你的出发点也是为孩子好'", type: "words", icon: "💬" },
+                { text: "TA主动去辅导孩子作业", type: "acts", icon: "🤗" },
+                { text: "给孩子买套新玩具/书，转移注意力", type: "gifts", icon: "🎁" },
+                { text: "等孩子睡了，坐下来好好讨论教育理念", type: "time", icon: "🕰️" },
+                { text: "拍拍你的肩说：'我们都是第一次当父母'", type: "touch", icon: "👫" }
+            ], 
+            speech: "俺想让孩子多玩，媳妇想让他多学习…吵架了，咋和好？" 
+        },
+        { 
+            text: "关于家庭大额开支（买房/买车/投资），你最看重TA的什么表现？", 
+            options: [
+                { text: "TA说：'钱可以再赚，你的开心最重要'", type: "words", icon: "💬" },
+                { text: "TA认真做预算表，列出各种方案", type: "acts", icon: "🤗" },
+                { text: "TA准备一个小惊喜，让你觉得'钱花得值'", type: "gifts", icon: "🎁" },
+                { text: "安排专门时间，一起研究各种选择", type: "time", icon: "🕰️" },
+                { text: "握着你的手说：'不管怎么决定，我们一起承担'", type: "touch", icon: "👫" }
+            ], 
+            speech: "想换辆车，媳妇觉得该存钱，俺该咋办才能让她同意？" 
+        }
     ];
 
+    // 爱语类型定义
+    const loveTypes = {
+        words: { name: "💬 言值派", color: "#FF9494", emoji: "💬" },
+        acts: { name: "🤗 行动派", color: "#FF7A7A", emoji: "🤗" },
+        gifts: { name: "🎁 仪式派", color: "#E8B054", emoji: "🎁" },
+        time: { name: "🕰️ 陪伴派", color: "#FFA07A", emoji: "🕰️" },
+        touch: { name: "👫 接触派", color: "#FF8A65", emoji: "👫" }
+    };
+
+    // 全局状态
     let currentIdx = 0;
     let scores = { words: 0, acts: 0, gifts: 0, time: 0, touch: 0 };
+    let soundEnabled = true;
 
-    function render() {
+    // DOM元素
+    const questionTextEl = document.getElementById('questionText');
+    const questionNumEl = document.getElementById('questionNum');
+    const progressTextEl = document.getElementById('progressText');
+    const progressFillEl = document.getElementById('progressFill');
+    const pigSpeechEl = document.getElementById('pigSpeech');
+    const pigImageEl = document.getElementById('pigImage');
+    const optionsContainerEl = document.getElementById('optionsContainer');
+    const questionCounterEl = document.getElementById('questionCounter');
+    const loveTypeIndicatorEl = document.getElementById('loveTypeIndicator');
+    const soundToggleEl = document.getElementById('soundToggle');
+
+    // 渲染题目
+    function renderQuestion() {
         const q = questions[currentIdx];
-        document.getElementById('questionText').innerText = q.text;
-        document.getElementById('pigSpeech').innerText = q.speech;
-        document.getElementById('pigImage').src = `images/scene_${(currentIdx + 1).toString().padStart(2, '0')}.jpg`;
-        document.getElementById('progressFill').style.width = ((currentIdx + 1) / 12 * 100) + '%';
-
-        const container = document.getElementById('optionsContainer');
-        container.innerHTML = '';
-        q.options.forEach(opt => {
-            const div = document.createElement('div');
-            div.className = 'option-item';
-            div.innerHTML = `<div class="option-icon">${opt.icon}</div><div>${opt.text}</div>`;
-            div.onclick = () => select(opt.type, div);
-            container.appendChild(div);
+        
+        // 更新题目信息
+        questionTextEl.textContent = q.text;
+        questionNumEl.textContent = currentIdx + 1;
+        
+        // 更新猪八吉区域
+        pigSpeechEl.textContent = q.speech;
+        pigImageEl.src = `images/scene_${(currentIdx + 1).toString().padStart(2, '0')}.jpg`;
+        
+        // 更新进度
+        const progressPercent = ((currentIdx + 1) / questions.length * 100).toFixed(2);
+        progressFillEl.style.width = `${progressPercent}%`;
+        progressTextEl.textContent = `第 ${currentIdx + 1} 题 / 共 ${questions.length} 题`;
+        questionCounterEl.textContent = `第 ${currentIdx + 1}/${questions.length} 题`;
+        
+        // 清空并生成选项
+        optionsContainerEl.innerHTML = '';
+        
+        q.options.forEach((option, index) => {
+            const optionItem = document.createElement('div');
+            optionItem.className = 'option-item';
+            optionItem.dataset.index = index;
+            optionItem.dataset.type = option.type;
+            
+            const typeColor = loveTypes[option.type].color;
+            
+            optionItem.innerHTML = `
+                <div class="option-icon" style="color: ${typeColor}">${option.icon}</div>
+                <div class="option-text">${option.text}</div>
+            `;
+            
+            optionItem.addEventListener('click', () => selectOption(option.type, optionItem));
+            optionsContainerEl.appendChild(optionItem);
         });
+        
+        // 更新爱语倾向指示器
+        updateLoveTypeIndicator();
     }
 
-    function select(type, el) {
-        // 瞬间反馈
-        el.className = 'option-item active';
-        document.getElementById('pigImage').style.transform = 'scale(1.1)';
-        document.getElementById('pigSpeech').style.backgroundColor = '#FFB1B1';
+    // 选择选项
+    function selectOption(type, element) {
+        // 播放音效（如果有）
+        if (soundEnabled) {
+            // 这里可以添加点击音效
+            const audio = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-select-click-1109.mp3');
+            audio.volume = 0.3;
+            audio.play().catch(e => console.log("音效播放被阻止"));
+        }
         
+        // 动画效果：选中状态
+        element.classList.add('active');
+        
+        // 动画效果：猪八吉反应
+        pigImageEl.style.transform = 'scale(1.08)';
+        pigSpeechEl.style.backgroundColor = loveTypes[type].color;
+        pigSpeechEl.style.transform = 'translateY(-3px)';
+        
+        // 增加分数
         scores[type]++;
-
+        
+        // 添加点击效果
+        createRippleEffect(element);
+        
+        // 延迟后进入下一题或完成测试
         setTimeout(() => {
-            document.getElementById('pigImage').style.transform = 'scale(1)';
-            document.getElementById('pigSpeech').style.backgroundColor = '#5D4B40';
-            if (currentIdx < 11) {
+            // 恢复猪八吉状态
+            pigImageEl.style.transform = 'scale(1)';
+            pigSpeechEl.style.backgroundColor = '';
+            pigSpeechEl.style.transform = '';
+            
+            if (currentIdx < questions.length - 1) {
+                // 还有下一题
                 currentIdx++;
-                render();
+                renderQuestion();
             } else {
-                complete();
+                // 完成测试，跳转到结果页
+                completeTest();
             }
         }, 700);
     }
 
-    function complete() {
-        const sorted = Object.entries(scores).sort((a,b) => b[1] - a[1]);
+    // 创建涟漪效果
+    function createRippleEffect(element) {
+        const ripple = document.createElement('span');
+        const rect = element.getBoundingClientRect();
+        const size = Math.max(rect.width, rect.height);
+        const x = rect.width / 2;
+        const y = rect.height / 2;
+        
+        ripple.style.cssText = `
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 122, 122, 0.3);
+            width: ${size}px;
+            height: ${size}px;
+            left: ${x - size/2}px;
+            top: ${y - size/2}px;
+            transform: scale(0);
+            animation: ripple 0.6s linear;
+        `;
+        
+        element.style.position = 'relative';
+        element.appendChild(ripple);
+        
+        setTimeout(() => ripple.remove(), 600);
+        
+        // 添加CSS动画
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes ripple {
+                to { transform: scale(4); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+        setTimeout(() => style.remove(), 600);
+    }
+
+    // 更新爱语倾向指示器
+    function updateLoveTypeIndicator() {
+        // 计算当前最频繁的爱语类型
+        const types = Object.entries(scores);
+        if (types.every(([_, count]) => count === 0)) {
+            loveTypeIndicatorEl.querySelector('.indicator-value').textContent = '正在检测中...';
+            return;
+        }
+        
+        const sorted = types.sort((a, b) => b[1] - a[1]);
+        const [mainType, count] = sorted[0];
+        const typeInfo = loveTypes[mainType];
+        
+        const percent = Math.round((count / (currentIdx + 1)) * 100);
+        loveTypeIndicatorEl.querySelector('.indicator-value').innerHTML = `
+            <span style="color: ${typeInfo.color}">${typeInfo.emoji} ${typeInfo.name} (${percent}%)</span>
+        `;
+        
+        // 更新指示器边框颜色
+        loveTypeIndicatorEl.style.borderColor = typeInfo.color;
+    }
+
+    // 完成测试
+    function completeTest() {
+        // 计算最终结果
+        const sorted = Object.entries(scores).sort((a, b) => b[1] - a[1]);
+        const mainType = sorted[0][0];
+        const mainCount = sorted[0][1];
+        
         const result = {
-            main: sorted[0][0],
-            percent: Math.round(sorted[0][1] / 12 * 100),
+            main: mainType,
+            percent: Math.round(mainCount / questions.length * 100),
             all: scores,
-            date: new Date().toLocaleString()
+            date: new Date().toLocaleString('zh-CN')
         };
+        
+        // 保存到localStorage
         localStorage.setItem('love_result', JSON.stringify(result));
+        
+        // 跳转到结果页
         window.location.href = 'result.html';
     }
 
-    render();
+    // 音效控制
+    function toggleSound() {
+        soundEnabled = !soundEnabled;
+        const icon = soundToggleEl.querySelector('i');
+        
+        if (soundEnabled) {
+            icon.className = 'fas fa-volume-up';
+            soundToggleEl.style.color = 'var(--accent-coral)';
+            soundToggleEl.style.borderColor = 'var(--accent-coral)';
+        } else {
+            icon.className = 'fas fa-volume-mute';
+            soundToggleEl.style.color = '#999';
+            soundToggleEl.style.borderColor = '#999';
+        }
+        
+        // 保存设置
+        localStorage.setItem('love_test_sound', soundEnabled);
+    }
+
+    // 初始化
+    function init() {
+        // 渲染第一题
+        renderQuestion();
+        
+        // 绑定音效切换
+        soundToggleEl.addEventListener('click', toggleSound);
+        
+        // 恢复音效设置
+        const savedSound = localStorage.getItem('love_test_sound');
+        if (savedSound !== null) {
+            soundEnabled = savedSound === 'true';
+            toggleSound(); // 更新按钮状态
+        }
+        
+        // 键盘支持
+        document.addEventListener('keydown', (e) => {
+            if (e.key >= '1' && e.key <= '5') {
+                const index = parseInt(e.key) - 1;
+                const options = optionsContainerEl.children;
+                if (index < options.length) {
+                    options[index].click();
+                }
+            } else if (e.key === 'Enter') {
+                // Enter键可以快速进入下一题（如果有下一题）
+            }
+        });
+        
+        console.log('猪八吉爱的方言翻译器已加载！');
+    }
+
+    // 页面加载完成后初始化
+    document.addEventListener('DOMContentLoaded', init);
 </script>
 </body>
 </html>
