@@ -49,8 +49,8 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: flex-start;
-            padding: 30px 15px 10px; /* 减少底部padding，让内容更紧凑 */
+            justify-content: center; /* 改为居中，但通过padding调整 */
+            padding: 40px 15px 30px; /* 增加顶部padding，减少底部 */
             background: linear-gradient(135deg, #FFF9F3, #FFF5ED);
             position: relative;
             overflow: hidden;
@@ -83,15 +83,15 @@
         .scene-image-container {
             width: 100%;
             max-width: 600px;
-            height: 55vh;  /* 减少高度，减少空白 */
+            height: 45vh;  /* 显著减少高度 */
             border-radius: 25px;
             border: 10px solid var(--white);
             box-shadow: 0 20px 50px var(--shadow-medium);
             overflow: hidden;
             position: relative;
             z-index: 1;
-            margin-bottom: 15px; /* 减少底部间距 */
-            margin-top: 10px; /* 增加顶部间距，避免太靠上 */
+            margin-bottom: 10px; /* 减少底部间距 */
+            margin-top: 0;
             transition: all 0.4s ease;
         }
 
@@ -112,16 +112,16 @@
             max-width: 550px;
             position: relative;
             z-index: 1;
-            margin-bottom: 10px; /* 减少底部间距 */
+            margin-bottom: 5px; /* 显著减少底部间距 */
         }
 
         .pig-speech-bubble {
             background: var(--cocoa-text);
             color: white;
-            padding: 18px 22px;
+            padding: 15px 20px;
             border-radius: 22px;
             font-size: 16px;
-            line-height: 1.6;
+            line-height: 1.5;
             box-shadow: 0 10px 30px rgba(93, 75, 64, 0.2);
             position: relative;
             animation: float 3s ease-in-out infinite;
@@ -142,31 +142,32 @@
             border-bottom: 12px solid var(--cocoa-text);
         }
 
-        /* 向下滑动继续 - 重要调整 */
+        /* 向下滑动继续 - 大幅调整 */
         .scroll-hint {
             position: absolute;
-            bottom: 5px; /* 向上移动，减少空白 */
+            bottom: 5px; /* 大幅向上移动 */
             left: 50%;
             transform: translateX(-50%);
             display: flex;
             flex-direction: column;
             align-items: center;
             color: var(--accent-coral);
-            font-size: 15px; /* 加大字号，原来13px，增加2号 */
-            font-weight: 500; /* 增加字体粗细 */
+            font-size: 18px; /* 显著加大字号，原来13px，现在18px */
+            font-weight: 600; /* 增加字体粗细 */
             animation: bounce 2s infinite;
             z-index: 2;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
         @keyframes bounce {
             0%, 20%, 50%, 80%, 100% { transform: translateY(0) translateX(-50%); }
-            40% { transform: translateY(-10px) translateX(-50%); }
-            60% { transform: translateY(-5px) translateX(-50%); }
+            40% { transform: translateY(-8px) translateX(-50%); }
+            60% { transform: translateY(-4px) translateX(-50%); }
         }
 
         .scroll-hint i {
-            font-size: 26px; /* 加大图标大小 */
-            margin-bottom: 3px;
+            font-size: 28px; /* 加大图标大小 */
+            margin-bottom: 2px;
         }
 
         /* ===== 第二屏：题目互动区 ===== */
@@ -428,23 +429,27 @@
 
         /* 响应式调整 */
         @media (max-width: 768px) {
+            .scene-section {
+                padding: 30px 15px 25px;
+            }
+            
             .scene-image-container {
-                height: 50vh;  /* 手机端图片高度 */
+                height: 40vh;  /* 手机端图片高度也减少 */
                 max-width: 90%;
                 border-width: 8px;
-                margin-bottom: 12px;
+                margin-bottom: 8px;
             }
             
             .pig-speech-bubble {
-                padding: 16px 20px;
+                padding: 14px 18px;
                 font-size: 15px;
                 max-width: 90%;
-                margin-bottom: 8px;
+                margin-bottom: 3px;
             }
             
             .scroll-hint {
                 bottom: 3px; /* 手机端也向上移动 */
-                font-size: 14px; /* 手机端也加大 */
+                font-size: 16px; /* 手机端也加大 */
             }
             
             .scroll-hint i {
@@ -490,26 +495,25 @@
 
         @media (max-width: 480px) {
             .scene-section {
-                padding: 20px 15px 5px; /* 进一步减少底部padding */
+                padding: 25px 15px 20px; /* 进一步减少底部padding */
             }
             
             .scene-image-container {
-                height: 45vh;
+                height: 35vh;
                 border-width: 6px;
                 border-radius: 20px;
-                margin-top: 5px;
-                margin-bottom: 10px;
+                margin-bottom: 6px;
             }
             
             .pig-speech-bubble {
-                padding: 14px 18px;
+                padding: 12px 16px;
                 font-size: 14px;
-                margin-bottom: 5px;
+                margin-bottom: 2px;
             }
             
             .scroll-hint {
                 bottom: 2px;
-                font-size: 13px;
+                font-size: 15px;
             }
             
             .scroll-hint i {
@@ -558,18 +562,17 @@
         /* 非常小的手机 */
         @media (max-width: 360px) {
             .scene-section {
-                padding: 15px 12px 3px;
+                padding: 20px 12px 15px;
             }
             
             .scene-image-container {
-                height: 40vh;
-                margin-top: 5px;
-                margin-bottom: 8px;
+                height: 32vh;
+                margin-bottom: 5px;
             }
             
             .scroll-hint {
                 bottom: 1px;
-                font-size: 12px;
+                font-size: 14px;
             }
             
             .scroll-hint i {
