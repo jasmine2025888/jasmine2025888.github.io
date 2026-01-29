@@ -825,7 +825,12 @@
         
         updateLoveTypeIndicator();
         checkScrollNeeded();
-        scrollToTop();
+        
+        // 每次渲染新题目时，确保滚动到顶部
+        questionScreenEl.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
     }
 
     function selectOption(type, element) {
@@ -840,6 +845,12 @@
         scores[type]++;
         
         createRippleEffect(element, loveTypes[type].color);
+        
+        // 立即开始平滑滚动到顶部（场景图位置）
+        questionScreenEl.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
         
         setTimeout(() => {
             sceneImageEl.style.transform = '';
@@ -924,14 +935,6 @@
                 scrollHintBottomEl.style.display = 'none';
             }
         }, 100);
-    }
-
-    function scrollToTop() {
-        // 滚动到屏幕顶部
-        questionScreenEl.scrollTo({
-            top: 0,
-            behavior: 'smooth'
-        });
     }
 
     function completeTest() {
