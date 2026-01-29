@@ -37,10 +37,174 @@
             overflow-x: hidden;
         }
 
+        /* ===== 说明页样式 ===== */
+        .intro-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--warm-cream) 0%, #FFEFDF 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            padding: 20px;
+            transition: opacity 0.5s ease;
+        }
+
+        .intro-screen.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .intro-card {
+            background: var(--white);
+            padding: 40px 30px;
+            border-radius: 24px;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 20px 50px var(--shadow-medium);
+            border: 3px solid var(--border-warm);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* 装饰性背景元素 */
+        .intro-card::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            right: -50px;
+            width: 150px;
+            height: 150px;
+            background: radial-gradient(circle, rgba(255, 148, 148, 0.1) 0%, transparent 70%);
+            z-index: 0;
+        }
+
+        .intro-card::after {
+            content: '';
+            position: absolute;
+            bottom: -50px;
+            left: -50px;
+            width: 150px;
+            height: 150px;
+            background: radial-gradient(circle, rgba(232, 176, 84, 0.08) 0%, transparent 70%);
+            z-index: 0;
+        }
+
+        .intro-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .intro-title {
+            color: var(--cocoa-text);
+            font-size: 24px;
+            margin-bottom: 10px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        .intro-title i {
+            color: var(--accent-coral);
+        }
+
+        .intro-subtitle {
+            color: var(--cocoa-text);
+            font-size: 17px;
+            line-height: 1.5;
+            margin-bottom: 25px;
+            opacity: 0.9;
+        }
+
+        .pig-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            border: 4px solid var(--white);
+            box-shadow: 0 10px 25px rgba(93, 75, 64, 0.2);
+            margin: 0 auto 20px;
+            background: #FFE6E6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+        }
+
+        .intro-features {
+            background: #FFF9F0;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 30px;
+            border: 2px dashed var(--border-warm);
+        }
+
+        .feature {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            gap: 12px;
+            margin-bottom: 15px;
+            font-size: 15px;
+            color: var(--cocoa-text);
+            text-align: left;
+        }
+
+        .feature:last-child {
+            margin-bottom: 0;
+        }
+
+        .feature i {
+            color: var(--accent-coral);
+            font-size: 18px;
+            min-width: 24px;
+        }
+
+        .start-button {
+            background: linear-gradient(to right, var(--accent-coral), var(--accent-gold));
+            color: white;
+            border: none;
+            padding: 18px 40px;
+            font-size: 18px;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(255, 122, 122, 0.4);
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .start-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(255, 122, 122, 0.5);
+        }
+
+        .start-button:active {
+            transform: translateY(0);
+        }
+
+        .intro-note {
+            font-size: 13px;
+            color: #8A7565;
+            margin-top: 25px;
+            font-style: italic;
+        }
+
         /* ===== 测试容器 ===== */
         .test-container {
             min-height: 200vh;
             position: relative;
+            display: none; /* 初始隐藏，点击开始后显示 */
         }
 
         /* ===== 第一屏：场景展示区 ===== */
@@ -418,6 +582,7 @@
             box-shadow: 0 5px 20px rgba(0,0,0,0.1);
             transition: all 0.3s ease;
             z-index: 1000;
+            display: none; /* 初始隐藏，开始测试后显示 */
         }
 
         .sound-toggle:hover {
@@ -427,6 +592,18 @@
 
         /* 响应式调整 */
         @media (max-width: 768px) {
+            .intro-card {
+                padding: 35px 25px;
+            }
+            
+            .intro-title {
+                font-size: 22px;
+            }
+            
+            .intro-subtitle {
+                font-size: 16px;
+            }
+            
             .scene-section {
                 padding: 12px 15px 8px;
             }
@@ -482,6 +659,35 @@
         }
 
         @media (max-width: 480px) {
+            .intro-card {
+                padding: 30px 20px;
+            }
+            
+            .pig-avatar {
+                width: 70px;
+                height: 70px;
+                font-size: 35px;
+            }
+            
+            .intro-title {
+                font-size: 20px;
+                flex-direction: column;
+                gap: 8px;
+            }
+            
+            .intro-subtitle {
+                font-size: 15px;
+            }
+            
+            .feature {
+                font-size: 14px;
+            }
+            
+            .start-button {
+                padding: 16px 35px;
+                font-size: 17px;
+            }
+            
             .scene-image-container {
                 width: 90%;
                 max-width: 320px;
@@ -543,6 +749,14 @@
         }
 
         @media (max-width: 360px) {
+            .intro-card {
+                padding: 25px 18px;
+            }
+            
+            .intro-title {
+                font-size: 18px;
+            }
+            
             .scene-image-container {
                 max-width: 280px;
                 border-width: 5px;
@@ -594,7 +808,48 @@
 </head>
 <body>
 
-<div class="test-container">
+<!-- 说明页 -->
+<div class="intro-screen" id="introScreen">
+    <div class="intro-card">
+        <div class="intro-content">
+            <div class="pig-avatar">
+                🐷
+            </div>
+            <h1 class="intro-title">
+                <i class="fas fa-heart"></i> 猪八吉家传·爱的语言翻译器
+            </h1>
+            <p class="intro-subtitle">
+                嘿，朋友！俺是猪八吉。<br>
+                用了12道俺和媳妇的"生活送命题"，<br>
+                帮你翻译翻译，你心里头最吃哪套"爱的方言"！
+            </p>
+            
+            <div class="intro-features">
+                <div class="feature">
+                    <i class="far fa-clock"></i>
+                    <span>只需3分钟，12道轻松场景题</span>
+                </div>
+                <div class="feature">
+                    <i class="far fa-lightbulb"></i>
+                    <span>发现你的专属"爱语类型"</span>
+                </div>
+                <div class="feature">
+                    <i class="fas fa-user-friends"></i>
+                    <span>让TA也测测，两张结果对比更懂彼此</span>
+                </div>
+            </div>
+            
+            <button class="start-button" id="startButton">
+                <i class="fas fa-play-circle"></i> 开始翻译！
+            </button>
+            
+            <p class="intro-note">放心，你的所有选择都只留在你的手机里。</p>
+        </div>
+    </div>
+</div>
+
+<!-- 原测试容器 (初始隐藏) -->
+<div class="test-container" id="testContainer">
     <!-- 第一屏：场景展示区 -->
     <section class="scene-section" id="sceneSection">
         <div class="scene-image-container">
@@ -807,6 +1062,9 @@
     const optionsContainerEl = document.getElementById('optionsContainer');
     const loveTypeIndicatorEl = document.getElementById('loveTypeIndicator');
     const soundToggleEl = document.getElementById('soundToggle');
+    const introScreenEl = document.getElementById('introScreen');
+    const testContainerEl = document.getElementById('testContainer');
+    const startButtonEl = document.getElementById('startButton');
 
     function renderQuestion() {
         const q = questions[currentIdx];
@@ -980,11 +1238,43 @@
         localStorage.setItem('love_test_sound', soundEnabled);
     }
 
+    // 开始测试函数
+    function startTest() {
+        // 1. 隐藏说明页
+        introScreenEl.classList.add('hidden');
+        
+        // 2. 显示测试容器
+        testContainerEl.style.display = 'block';
+        
+        // 3. 显示音效开关
+        soundToggleEl.style.display = 'flex';
+        
+        // 4. 播放开始音效（可选）
+        if (soundEnabled) {
+            const audio = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-unlock-game-notification-253.mp3');
+            audio.volume = 0.2;
+            audio.play().catch(e => console.log("音效播放被阻止"));
+        }
+        
+        // 5. 确保第一题正确显示
+        setTimeout(() => {
+            document.getElementById('sceneSection').scrollIntoView({ 
+                behavior: 'smooth' 
+            });
+        }, 100);
+    }
+
     function init() {
+        // 初始渲染第一题（但测试容器是隐藏的）
         renderQuestion();
         
+        // 添加开始按钮事件
+        startButtonEl.addEventListener('click', startTest);
+        
+        // 音效开关事件
         soundToggleEl.addEventListener('click', toggleSound);
         
+        // 恢复音效设置
         const savedSound = localStorage.getItem('love_test_sound');
         if (savedSound !== null) {
             soundEnabled = savedSound === 'true';
@@ -992,11 +1282,14 @@
         }
         
         document.addEventListener('keydown', (e) => {
-            if (e.key >= '1' && e.key <= '5') {
-                const index = parseInt(e.key) - 1;
-                const options = optionsContainerEl.children;
-                if (index < options.length) {
-                    options[index].click();
+            // 只在测试容器显示时启用键盘快捷键
+            if (testContainerEl.style.display === 'block') {
+                if (e.key >= '1' && e.key <= '5') {
+                    const index = parseInt(e.key) - 1;
+                    const options = optionsContainerEl.children;
+                    if (index < options.length) {
+                        options[index].click();
+                    }
                 }
             }
         });
