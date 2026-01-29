@@ -51,7 +51,7 @@
 
         /* 标题部分分为两行 */
         .title-container {
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
 
         .main-title {
@@ -85,7 +85,7 @@
 
         .result-box {
             background: linear-gradient(135deg, #FFF9F8, #FFF0F0);
-            padding: 30px;
+            padding: 35px 30px;
             border-radius: 24px;
             margin: 25px 0;
             border: 2px solid var(--secondary-pink);
@@ -93,6 +93,7 @@
             overflow: hidden;
             transition: transform 0.3s ease;
             width: 100%; /* 确保宽度与容器一致 */
+            box-sizing: border-box;
         }
 
         .result-box:hover {
@@ -114,12 +115,12 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 12px;
-            margin-bottom: 20px;
+            gap: 15px;
+            margin-bottom: 25px;
         }
 
         .type-name { 
-            font-size: 36px; 
+            font-size: 38px; 
             font-weight: 800; 
             background: linear-gradient(135deg, var(--accent-coral), #FF8A65);
             -webkit-background-clip: text;
@@ -127,6 +128,7 @@
             background-clip: text;
             letter-spacing: -0.5px;
             white-space: nowrap; /* 确保类型名称不换行 */
+            text-align: center;
         }
         
         .score { 
@@ -134,11 +136,18 @@
             font-weight: bold; 
             color: var(--cocoa-text); 
             background: rgba(255, 255, 255, 0.9);
-            padding: 8px 25px;
+            padding: 10px 25px;
             border-radius: 20px;
             display: inline-block;
             border: 2px solid var(--border-warm);
             white-space: nowrap; /* 确保匹配度不换行 */
+        }
+
+        .type-desc {
+            font-size: 16px;
+            line-height: 1.7;
+            color: var(--cocoa-text);
+            padding: 0 10px;
         }
 
         .bar-bg { 
@@ -325,7 +334,7 @@
             }
             
             .result-box {
-                padding: 25px 20px;
+                padding: 30px 20px;
             }
             
             .type-name {
@@ -334,7 +343,11 @@
             
             .score {
                 font-size: 18px;
-                padding: 6px 20px;
+                padding: 8px 20px;
+            }
+            
+            .type-desc {
+                font-size: 15px;
             }
         }
 
@@ -353,7 +366,7 @@
             }
             
             .result-box {
-                padding: 20px 15px;
+                padding: 25px 15px;
                 border-radius: 20px;
             }
             
@@ -363,7 +376,11 @@
             
             .score {
                 font-size: 16px;
-                padding: 5px 18px;
+                padding: 6px 18px;
+            }
+            
+            .type-desc {
+                font-size: 14px;
             }
             
             .msg-box {
@@ -379,7 +396,11 @@
             
             .score {
                 font-size: 15px;
-                padding: 4px 15px;
+                padding: 5px 15px;
+            }
+            
+            .type-desc {
+                font-size: 13px;
             }
         }
     </style>
@@ -401,7 +422,7 @@
             <div id="typeName" class="type-name"></div>
             <div id="scoreVal" class="score"></div>
         </div>
-        <p id="typeDesc" style="font-size:15px; line-height:1.6; margin-top:10px;"></p>
+        <p id="typeDesc" class="type-desc"></p>
     </div>
 
     <div id="details" style="text-align: left; margin: 25px 0;"></div>
@@ -427,7 +448,7 @@
 <script>
     const info = {
         words: { 
-            name: "💬 言值派", 
+            name: "💬 言语派", 
             desc: "你渴望肯定。一句'辛苦了'、'有你真好'能让你满血复活。", 
             msg: "媳妇喜欢听好话，俺以后每天夸她三遍！有她在，家就是暖的。"
         },
@@ -447,7 +468,7 @@
             msg: "手机放下，俺陪媳妇散步去，咱俩静静待着。时间，是最好的礼物。"
         },
         touch: { 
-            name: "👫 接触派", 
+            name: "👫 情感派", 
             desc: "拥抱、牵手、依偎。身体接触让你感到最直接的爱。", 
             msg: "媳妇不开心？俺抱抱她，啥烦恼都没啦！一个拥抱，胜过千言万语。"
         }
