@@ -7,14 +7,14 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --primary-pink: #FF9494;        /* 温暖主粉色 */
-            --secondary-pink: #FFC4C4;      /* 辅助粉色 */
-            --accent-coral: #FF7A7A;        /* 珊瑚色点缀 */
-            --accent-gold: #E8B054;         /* 金色点缀 */
-            --warm-cream: #FFF9F0;          /* 温暖奶油色 */
-            --cocoa-text: #5A4235;          /* 可可色文字 */
+            --primary-pink: #FF9494;
+            --secondary-pink: #FFC4C4;
+            --accent-coral: #FF7A7A;
+            --accent-gold: #E8B054;
+            --warm-cream: #FFF9F0;
+            --cocoa-text: #5A4235;
             --white: #FFFFFF;
-            --border-warm: #FFD0C9;         /* 温暖边框色 */
+            --border-warm: #FFD0C9;
             --shadow-light: rgba(93, 75, 64, 0.1);
             --shadow-medium: rgba(93, 75, 64, 0.15);
         }
@@ -26,7 +26,7 @@
         }
 
         html {
-            scroll-behavior: smooth;  /* 平滑滚动 */
+            scroll-behavior: smooth;
         }
 
         body {
@@ -39,18 +39,18 @@
 
         /* ===== 测试容器 ===== */
         .test-container {
-            min-height: 200vh;  /* 两屏高度 */
+            min-height: 200vh;
             position: relative;
         }
 
         /* ===== 第一屏：场景展示区 ===== */
         .scene-section {
-            height: 100vh;  /* 占据整个视口高度 */
+            height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center; /* 改为居中，但通过padding调整 */
-            padding: 40px 15px 30px; /* 增加顶部padding，减少底部 */
+            justify-content: center;
+            padding: 15px 15px 10px;
             background: linear-gradient(135deg, #FFF9F3, #FFF5ED);
             position: relative;
             overflow: hidden;
@@ -79,26 +79,26 @@
             z-index: 0;
         }
 
-        /* 场景图片容器 */
+        /* 场景图片容器 - 竖图优化 */
         .scene-image-container {
-            width: 100%;
-            max-width: 600px;
-            height: 45vh;  /* 显著减少高度 */
-            border-radius: 25px;
-            border: 10px solid var(--white);
-            box-shadow: 0 20px 50px var(--shadow-medium);
+            width: 90%;
+            max-width: 400px;
+            height: auto;
+            aspect-ratio: 3/4; /* 800×1067的比例约3:4 */
+            border-radius: 20px;
+            border: 8px solid var(--white);
+            box-shadow: 0 15px 40px var(--shadow-medium);
             overflow: hidden;
             position: relative;
             z-index: 1;
-            margin-bottom: 10px; /* 减少底部间距 */
-            margin-top: 0;
+            margin-bottom: 15px;
             transition: all 0.4s ease;
         }
 
         .scene-image {
             width: 100%;
             height: 100%;
-            object-fit: cover;  /* 保持比例，填满容器 */
+            object-fit: cover;
             transition: transform 0.5s ease;
         }
 
@@ -108,23 +108,24 @@
 
         /* 猪八吉对话气泡 */
         .pig-speech-container {
-            width: 100%;
-            max-width: 550px;
+            width: 90%;
+            max-width: 400px;
             position: relative;
             z-index: 1;
-            margin-bottom: 5px; /* 显著减少底部间距 */
+            margin-bottom: 8px; /* 减小底部间距，让向下滑动继续更近 */
         }
 
         .pig-speech-bubble {
             background: var(--cocoa-text);
             color: white;
-            padding: 15px 20px;
-            border-radius: 22px;
+            padding: 15px 18px;
+            border-radius: 20px;
             font-size: 16px;
             line-height: 1.5;
-            box-shadow: 0 10px 30px rgba(93, 75, 64, 0.2);
+            box-shadow: 0 8px 25px rgba(93, 75, 64, 0.2);
             position: relative;
             animation: float 3s ease-in-out infinite;
+            text-align: center;
         }
 
         @keyframes float {
@@ -136,44 +137,41 @@
             content: '';
             position: absolute;
             top: -10px;
-            left: 50px;
+            left: 50%;
+            transform: translateX(-50%);
             border-left: 12px solid transparent;
             border-right: 12px solid transparent;
             border-bottom: 12px solid var(--cocoa-text);
         }
 
-        /* 向下滑动继续 - 大幅调整 */
+        /* 向下滑动继续 - 紧挨着气泡 */
         .scroll-hint {
-            position: absolute;
-            bottom: 5px; /* 大幅向上移动 */
-            left: 50%;
-            transform: translateX(-50%);
             display: flex;
             flex-direction: column;
             align-items: center;
             color: var(--accent-coral);
-            font-size: 18px; /* 显著加大字号，原来13px，现在18px */
-            font-weight: 600; /* 增加字体粗细 */
+            font-size: 18px;
+            font-weight: 600;
             animation: bounce 2s infinite;
             z-index: 2;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin-top: 5px; /* 减小与气泡的距离 */
         }
 
         @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% { transform: translateY(0) translateX(-50%); }
-            40% { transform: translateY(-8px) translateX(-50%); }
-            60% { transform: translateY(-4px) translateX(-50%); }
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-8px); }
+            60% { transform: translateY(-4px); }
         }
 
         .scroll-hint i {
-            font-size: 28px; /* 加大图标大小 */
-            margin-bottom: 2px;
+            font-size: 26px;
+            margin-bottom: 3px;
         }
 
         /* ===== 第二屏：题目互动区 ===== */
         .question-section {
             min-height: 100vh;
-            padding: 40px 20px;
+            padding: 30px 20px 40px;
             background: linear-gradient(to bottom, var(--white), #FFFCF8);
             display: flex;
             flex-direction: column;
@@ -193,15 +191,15 @@
 
         /* 进度条 */
         .progress-container {
-            margin-bottom: 30px;
+            margin-bottom: 25px;
             position: relative;
             z-index: 2;
         }
 
         .progress-label {
             display: flex;
-            flex-direction: column; /* 改为垂直布局 */
-            gap: 5px; /* 两行之间的间距 */
+            flex-direction: column;
+            gap: 5px;
             font-size: 14px;
             margin-bottom: 15px;
             color: var(--cocoa-text);
@@ -263,7 +261,7 @@
 
         /* 题目内容 */
         .question-header {
-            margin-bottom: 35px;
+            margin-bottom: 30px;
             position: relative;
             z-index: 2;
         }
@@ -283,7 +281,7 @@
         }
 
         .question-text {
-            font-size: 24px;
+            font-size: 22px;
             font-weight: 700;
             line-height: 1.4;
             margin-bottom: 15px;
@@ -291,7 +289,7 @@
         }
 
         .question-hint {
-            font-size: 15px;
+            font-size: 14px;
             color: #8A7565;
             font-style: italic;
         }
@@ -301,22 +299,22 @@
             flex: 1;
             display: flex;
             flex-direction: column;
-            gap: 15px;
-            margin-bottom: 30px;
+            gap: 12px;
+            margin-bottom: 25px;
             position: relative;
             z-index: 2;
         }
 
         .option-item {
-            padding: 20px 25px;
+            padding: 18px 22px;
             background: var(--white);
             border: 3px solid #F2E9E1;
-            border-radius: 18px;
+            border-radius: 16px;
             cursor: pointer;
             transition: all 0.3s ease;
             display: flex;
             align-items: center;
-            gap: 18px;
+            gap: 16px;
             position: relative;
             overflow: hidden;
         }
@@ -324,13 +322,13 @@
         .option-item:hover {
             border-color: var(--secondary-pink);
             transform: translateY(-3px);
-            box-shadow: 0 10px 25px var(--shadow-light);
+            box-shadow: 0 8px 20px var(--shadow-light);
         }
 
         .option-item.active {
             background: linear-gradient(135deg, rgba(255, 249, 249, 0.9), white);
             border-color: var(--accent-coral);
-            box-shadow: 0 10px 30px rgba(255, 122, 122, 0.2);
+            box-shadow: 0 8px 25px rgba(255, 122, 122, 0.2);
             transform: translateY(-3px);
         }
 
@@ -351,11 +349,11 @@
         }
 
         .option-icon {
-            font-size: 24px;
+            font-size: 22px;
             background: #fdf2f2;
-            width: 50px;
-            height: 50px;
-            min-width: 50px;
+            width: 46px;
+            height: 46px;
+            min-width: 46px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -365,7 +363,7 @@
         }
 
         .option-text {
-            font-size: 17px;
+            font-size: 16px;
             line-height: 1.5;
             font-weight: 500;
             flex: 1;
@@ -374,15 +372,15 @@
         /* 爱语倾向指示器 */
         .love-type-indicator {
             background: linear-gradient(135deg, #FFF9F0, #FFF5E1);
-            padding: 20px;
+            padding: 18px;
             border-radius: 16px;
             border: 3px solid var(--border-warm);
-            margin-top: 25px;
+            margin-top: 20px;
             text-align: center;
             position: relative;
             z-index: 2;
             box-shadow: 0 8px 25px rgba(0,0,0,0.05);
-            min-width: 0; /* 添加最小宽度限制 */
+            min-width: 0;
         }
 
         .indicator-label {
@@ -392,13 +390,13 @@
         }
 
         .indicator-value {
-            font-size: 18px;
+            font-size: 16px;
             font-weight: 600;
             color: var(--accent-coral);
-            white-space: nowrap; /* 防止文字换行 */
-            overflow: hidden; /* 隐藏溢出内容 */
-            text-overflow: ellipsis; /* 超出时显示省略号 */
-            padding: 0 5px; /* 添加内边距 */
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            padding: 0 5px;
         }
 
         /* 音效开关 */
@@ -430,94 +428,36 @@
         /* 响应式调整 */
         @media (max-width: 768px) {
             .scene-section {
-                padding: 30px 15px 25px;
+                padding: 12px 15px 8px;
             }
             
             .scene-image-container {
-                height: 40vh;  /* 手机端图片高度也减少 */
-                max-width: 90%;
-                border-width: 8px;
-                margin-bottom: 8px;
-            }
-            
-            .pig-speech-bubble {
-                padding: 14px 18px;
-                font-size: 15px;
-                max-width: 90%;
-                margin-bottom: 3px;
-            }
-            
-            .scroll-hint {
-                bottom: 3px; /* 手机端也向上移动 */
-                font-size: 16px; /* 手机端也加大 */
-            }
-            
-            .scroll-hint i {
-                font-size: 24px;
-            }
-            
-            .progress-title {
-                font-size: 15px;
-            }
-            
-            .progress-text {
-                font-size: 13px;
-            }
-            
-            .question-text {
-                font-size: 22px;
-            }
-            
-            .option-item {
-                padding: 18px 22px;
-            }
-            
-            .option-icon {
-                width: 46px;
-                height: 46px;
-                min-width: 46px;
-                font-size: 22px;
-            }
-            
-            .option-text {
-                font-size: 16px;
-            }
-            
-            /* 手机端爱语指示器调整 */
-            .love-type-indicator {
-                padding: 18px 15px;
-            }
-            
-            .indicator-value {
-                font-size: 16px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .scene-section {
-                padding: 25px 15px 20px; /* 进一步减少底部padding */
-            }
-            
-            .scene-image-container {
-                height: 35vh;
+                width: 85%;
+                max-width: 350px;
                 border-width: 6px;
-                border-radius: 20px;
+                border-radius: 18px;
+                margin-bottom: 12px;
+            }
+            
+            .pig-speech-container {
+                width: 85%;
+                max-width: 350px;
                 margin-bottom: 6px;
             }
             
             .pig-speech-bubble {
-                padding: 12px 16px;
-                font-size: 14px;
-                margin-bottom: 2px;
+                padding: 14px 16px;
+                font-size: 15px;
+                border-radius: 18px;
             }
             
             .scroll-hint {
-                bottom: 2px;
-                font-size: 15px;
+                font-size: 16px;
+                margin-top: 4px;
             }
             
             .scroll-hint i {
-                font-size: 22px;
+                font-size: 24px;
             }
             
             .question-text {
@@ -526,7 +466,7 @@
             
             .option-item {
                 padding: 16px 20px;
-                gap: 15px;
+                gap: 14px;
             }
             
             .option-icon {
@@ -539,15 +479,58 @@
             .option-text {
                 font-size: 15px;
             }
-            
-            /* 小屏幕爱语指示器进一步调整 */
-            .love-type-indicator {
-                padding: 16px 12px;
-                margin-top: 20px;
+        }
+
+        @media (max-width: 480px) {
+            .scene-image-container {
+                width: 90%;
+                max-width: 320px;
+                aspect-ratio: 3/4;
             }
             
-            .indicator-value {
+            .pig-speech-container {
+                width: 90%;
+                max-width: 320px;
+                margin-bottom: 5px;
+            }
+            
+            .pig-speech-bubble {
+                padding: 12px 15px;
+                font-size: 14px;
+                line-height: 1.4;
+            }
+            
+            .scroll-hint {
                 font-size: 15px;
+                margin-top: 3px;
+            }
+            
+            .scroll-hint i {
+                font-size: 22px;
+            }
+            
+            .question-section {
+                padding: 25px 15px 35px;
+            }
+            
+            .question-text {
+                font-size: 19px;
+            }
+            
+            .option-item {
+                padding: 14px 18px;
+                gap: 12px;
+            }
+            
+            .option-icon {
+                width: 40px;
+                height: 40px;
+                min-width: 40px;
+                font-size: 18px;
+            }
+            
+            .option-text {
+                font-size: 14px;
             }
             
             .sound-toggle {
@@ -559,20 +542,22 @@
             }
         }
 
-        /* 非常小的手机 */
         @media (max-width: 360px) {
-            .scene-section {
-                padding: 20px 12px 15px;
+            .scene-image-container {
+                max-width: 280px;
+                border-width: 5px;
+                border-radius: 16px;
             }
             
-            .scene-image-container {
-                height: 32vh;
-                margin-bottom: 5px;
+            .pig-speech-bubble {
+                padding: 10px 14px;
+                font-size: 13px;
+                border-radius: 16px;
             }
             
             .scroll-hint {
-                bottom: 1px;
                 font-size: 14px;
+                margin-top: 2px;
             }
             
             .scroll-hint i {
@@ -580,19 +565,11 @@
             }
             
             .question-text {
-                font-size: 19px;
+                font-size: 18px;
             }
             
             .option-text {
-                font-size: 14px;
-            }
-            
-            .love-type-indicator {
-                padding: 14px 10px;
-            }
-            
-            .indicator-value {
-                font-size: 14px;
+                font-size: 13px;
             }
         }
 
@@ -673,7 +650,7 @@
 </div>
 
 <script>
-    // 题目数据 - 根据图片中选项显示的文字调整
+    // 题目数据
     const questions = [
         { 
             text: "媳妇过生日，猪八吉怎么做你最暖心？", 
@@ -809,7 +786,6 @@
         }
     ];
 
-    // 爱语类型定义 - 根据图片中的类型名称调整
     const loveTypes = {
         words: { name: "言语派", color: "#FF9494", emoji: "💬" },
         acts: { name: "行动派", color: "#FF7A7A", emoji: "🤗" },
@@ -818,12 +794,10 @@
         touch: { name: "情感派", color: "#FF8A65", emoji: "👫" }
     };
 
-    // 全局状态
     let currentIdx = 0;
     let scores = { words: 0, acts: 0, gifts: 0, time: 0, touch: 0 };
     let soundEnabled = true;
 
-    // DOM元素
     const sceneImageEl = document.getElementById('sceneImage');
     const pigSpeechEl = document.getElementById('pigSpeech');
     const questionTextEl = document.getElementById('questionText');
@@ -834,24 +808,19 @@
     const loveTypeIndicatorEl = document.getElementById('loveTypeIndicator');
     const soundToggleEl = document.getElementById('soundToggle');
 
-    // 渲染题目
     function renderQuestion() {
         const q = questions[currentIdx];
         
-        // 更新场景图片和对话
         sceneImageEl.src = `images/scene_${(currentIdx + 1).toString().padStart(2, '0')}.jpg`;
         pigSpeechEl.textContent = q.speech;
         
-        // 更新题目信息
         questionTextEl.textContent = q.text;
         questionNumEl.textContent = currentIdx + 1;
         
-        // 更新进度
         const progressPercent = ((currentIdx + 1) / questions.length * 100).toFixed(2);
         progressFillEl.style.width = `${progressPercent}%`;
         progressTextEl.textContent = `第 ${currentIdx + 1} 题 / 共 ${questions.length} 题`;
         
-        // 清空并生成选项
         optionsContainerEl.innerHTML = '';
         
         q.options.forEach((option, index) => {
@@ -871,53 +840,37 @@
             optionsContainerEl.appendChild(optionItem);
         });
         
-        // 更新爱语倾向指示器
         updateLoveTypeIndicator();
     }
 
-    // 选择选项
     function selectOption(type, element) {
-        // 播放音效
         if (soundEnabled) {
             const audio = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-select-click-1109.mp3');
             audio.volume = 0.3;
             audio.play().catch(e => console.log("音效播放被阻止"));
         }
         
-        // 动画效果：选中状态
         element.classList.add('active');
-        
-        // 场景图片动画反馈
         sceneImageEl.style.transform = 'scale(1.05) rotate(1deg)';
-        
-        // 增加分数
         scores[type]++;
         
-        // 创建点击涟漪效果
         createRippleEffect(element, loveTypes[type].color);
         
-        // 延迟后进入下一题或完成测试
         setTimeout(() => {
-            // 恢复场景图片状态
             sceneImageEl.style.transform = '';
             
             if (currentIdx < questions.length - 1) {
-                // 还有下一题
                 currentIdx++;
                 renderQuestion();
-                
-                // 自动滚动到顶部（第一屏）
                 document.getElementById('sceneSection').scrollIntoView({ 
                     behavior: 'smooth' 
                 });
             } else {
-                // 完成测试，跳转到结果页
                 completeTest();
             }
         }, 800);
     }
 
-    // 创建涟漪效果
     function createRippleEffect(element, color) {
         const ripple = document.createElement('span');
         const rect = element.getBoundingClientRect();
@@ -941,7 +894,6 @@
         element.style.position = 'relative';
         element.appendChild(ripple);
         
-        // 添加CSS动画
         if (!document.getElementById('ripple-animation')) {
             const style = document.createElement('style');
             style.id = 'ripple-animation';
@@ -956,9 +908,7 @@
         setTimeout(() => ripple.remove(), 600);
     }
 
-    // 更新爱语倾向指示器
     function updateLoveTypeIndicator() {
-        // 计算当前最频繁的爱语类型
         const types = Object.entries(scores);
         if (types.every(([_, count]) => count === 0)) {
             loveTypeIndicatorEl.querySelector('.indicator-value').textContent = '正在检测中...';
@@ -975,13 +925,10 @@
             <span style="color: ${typeInfo.color}">${typeInfo.emoji} ${typeInfo.name} (${percent}%)</span>
         `;
         
-        // 更新指示器边框颜色
         loveTypeIndicatorEl.style.borderColor = typeInfo.color;
     }
 
-    // 完成测试
     function completeTest() {
-        // 计算最终结果
         const sorted = Object.entries(scores).sort((a, b) => b[1] - a[1]);
         const mainType = sorted[0][0];
         const mainCount = sorted[0][1];
@@ -993,37 +940,29 @@
             date: new Date().toLocaleString('zh-CN')
         };
         
-        // 保存到localStorage
         localStorage.setItem('love_result', JSON.stringify(result));
         
-        // 显示完成动画
         showCompletionAnimation();
         
-        // 2秒后跳转到结果页
         setTimeout(() => {
             window.location.href = 'result.html';
         }, 2000);
     }
 
-    // 显示完成动画
     function showCompletionAnimation() {
         const sceneSection = document.getElementById('sceneSection');
         const questionSection = document.getElementById('questionSection');
         
-        // 场景图片放大庆祝
         sceneImageEl.style.transform = 'scale(1.1)';
         sceneImageEl.style.transition = 'transform 1s ease';
         
-        // 显示庆祝文字
         pigSpeechEl.textContent = '测试完成啦！正在生成你的专属报告...';
         pigSpeechEl.style.backgroundColor = loveTypes[Object.entries(scores).sort((a, b) => b[1] - a[1])[0][0]].color;
         
-        // 题目区域淡出
         questionSection.style.opacity = '0.5';
         questionSection.style.transition = 'opacity 1s ease';
     }
 
-    // 音效控制
     function toggleSound() {
         soundEnabled = !soundEnabled;
         const icon = soundToggleEl.querySelector('i');
@@ -1038,26 +977,20 @@
             soundToggleEl.style.borderColor = '#999';
         }
         
-        // 保存设置
         localStorage.setItem('love_test_sound', soundEnabled);
     }
 
-    // 初始化
     function init() {
-        // 渲染第一题
         renderQuestion();
         
-        // 绑定音效切换
         soundToggleEl.addEventListener('click', toggleSound);
         
-        // 恢复音效设置
         const savedSound = localStorage.getItem('love_test_sound');
         if (savedSound !== null) {
             soundEnabled = savedSound === 'true';
-            toggleSound(); // 更新按钮状态
+            toggleSound();
         }
         
-        // 键盘支持
         document.addEventListener('keydown', (e) => {
             if (e.key >= '1' && e.key <= '5') {
                 const index = parseInt(e.key) - 1;
@@ -1071,7 +1004,6 @@
         console.log('猪八吉爱的语言翻译器已加载！');
     }
 
-    // 页面加载完成后初始化
     document.addEventListener('DOMContentLoaded', init);
 </script>
 </body>
