@@ -7,115 +7,423 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --primary-pink: #FFB1B1;
-            --soft-cream: #FFFBF5;
-            --cocoa-text: #5D4B40;
+            --primary-pink: #FF9494;        /* 更温暖的主粉色 */
+            --secondary-pink: #FFC4C4;      /* 辅助粉色 */
+            --accent-coral: #FF7A7A;        /* 珊瑚色点缀 */
+            --accent-gold: #E8B054;         /* 金色点缀 */
+            --warm-cream: #FFF9F0;          /* 温暖奶油色 */
+            --cocoa-text: #5A4235;          /* 加深的文字颜色 */
             --white: #FFFFFF;
+            --border-warm: #FFD0C9;         /* 温暖的边框色 */
         }
 
         body {
             font-family: 'PingFang SC', sans-serif;
-            background-color: var(--soft-cream);
+            background: linear-gradient(135deg, #FFF9F0 0%, #FFEFDF 100%);
             color: var(--cocoa-text);
             padding: 20px;
             display: flex;
             justify-content: center;
+            min-height: 100vh;
         }
 
         .container {
             max-width: 600px;
             width: 100%;
-            background: var(--white);
+            background: linear-gradient(to bottom, var(--white), #FFFCF8);
             border-radius: 30px;
             padding: 40px;
             box-shadow: 0 10px 40px rgba(93, 75, 64, 0.08);
             text-align: center;
+            position: relative;
+            overflow: hidden;
         }
 
-        h1 { color: #FF8E8E; margin-bottom: 20px; font-size: 24px; }
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(to right, var(--accent-coral), var(--accent-gold));
+        }
+
+        h1 { 
+            color: var(--accent-coral); 
+            margin-bottom: 15px; 
+            font-size: 26px; 
+            font-weight: 700;
+            position: relative;
+            display: inline-block;
+        }
+
+        h1::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(to right, var(--accent-coral), var(--accent-gold));
+            margin: 8px auto;
+            border-radius: 2px;
+        }
 
         .result-box {
-            background: #FFFBFA;
+            background: linear-gradient(135deg, #FFF9F8, #FFF0F0);
             padding: 30px;
             border-radius: 24px;
-            margin: 20px 0;
-            border: 2px solid #FFF0F0;
+            margin: 25px 0;
+            border: 2px solid var(--secondary-pink);
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s ease;
         }
 
-        .type-name { font-size: 32px; font-weight: 800; color: #FF8E8E; margin-bottom: 10px; }
-        .score { font-size: 18px; font-weight: bold; color: var(--cocoa-text); margin-bottom: 15px; }
+        .result-box:hover {
+            transform: translateY(-3px);
+        }
 
-        .bar-bg { height: 10px; background: #F2E9E1; border-radius: 10px; margin: 10px 0; overflow: hidden; }
-        .bar-fill { height: 100%; background: var(--primary-pink); transition: 1s; }
+        .result-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(to right, var(--accent-coral), var(--accent-gold));
+        }
 
-        .msg-box { background: #FFF9E3; padding: 20px; border-radius: 20px; border: 2px dashed #E8D5C4; text-align: left; margin: 20px 0; }
+        .type-name { 
+            font-size: 36px; 
+            font-weight: 800; 
+            background: linear-gradient(135deg, var(--accent-coral), #FF8A65);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: inline-block;
+            margin-bottom: 10px;
+            letter-spacing: -0.5px;
+        }
+        
+        .score { 
+            font-size: 20px; 
+            font-weight: bold; 
+            color: var(--cocoa-text); 
+            margin-bottom: 20px;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 8px 20px;
+            border-radius: 20px;
+            display: inline-block;
+            border: 2px solid var(--border-warm);
+        }
+
+        .bar-bg { 
+            height: 12px; 
+            background: #F2E9E1; 
+            border-radius: 10px; 
+            margin: 12px 0; 
+            overflow: hidden;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+        }
+        
+        .bar-fill { 
+            height: 100%; 
+            background: linear-gradient(to right, var(--accent-coral), var(--accent-gold));
+            transition: width 1s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .bar-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .msg-box { 
+            background: linear-gradient(135deg, #FFFBF0, #FFF5E1); 
+            padding: 25px; 
+            border-radius: 20px; 
+            border: 2px dashed var(--accent-gold); 
+            text-align: left; 
+            margin: 25px 0;
+            position: relative;
+        }
+
+        .msg-box::before {
+            content: '💌';
+            position: absolute;
+            top: -15px;
+            left: -15px;
+            font-size: 24px;
+            background: var(--accent-gold);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 10px rgba(232, 176, 84, 0.3);
+        }
+
+        .msg-box p:first-child { 
+            font-weight: bold; 
+            margin-bottom: 12px;
+            color: var(--cocoa-text);
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .msg-box p:first-child::before {
+            content: '🐷';
+            font-size: 20px;
+        }
         
         .btn {
-            width: 100%; padding: 15px; border: none; border-radius: 15px; 
-            font-size: 16px; font-weight: bold; cursor: pointer; margin-bottom: 10px; transition: 0.3s;
+            width: 100%; 
+            padding: 16px; 
+            border: none; 
+            border-radius: 15px; 
+            font-size: 17px; 
+            font-weight: bold; 
+            cursor: pointer; 
+            margin-bottom: 12px; 
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
         }
-        .btn-pink { background: var(--primary-pink); color: white; }
-        .btn-white { background: white; border: 2px solid var(--border-warm); color: var(--cocoa-text); }
+        
+        .btn-pink { 
+            background: linear-gradient(135deg, var(--accent-coral), #FF7A7A);
+            color: white; 
+            box-shadow: 0 5px 15px rgba(255, 122, 122, 0.3);
+        }
+
+        .btn-pink:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(255, 122, 122, 0.4);
+        }
+
+        .btn-pink::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.6s;
+        }
+
+        .btn-pink:hover::before {
+            left: 100%;
+        }
+
+        .btn-white { 
+            background: white; 
+            border: 2px solid var(--border-warm); 
+            color: var(--cocoa-text);
+        }
+
+        .btn-white:hover {
+            background: #FFF9F6;
+            border-color: var(--accent-coral);
+            transform: translateY(-2px);
+        }
+
+        .contact-area {
+            background: linear-gradient(135deg, #F8F5F0, #F0EDE8);
+            padding: 20px;
+            border-radius: 20px;
+            margin-top: 30px;
+            border: 2px solid #E8E0D8;
+            position: relative;
+        }
+
+        .contact-area p {
+            font-size: 14px;
+            margin: 0;
+        }
+
+        .contact-area b {
+            color: var(--accent-coral);
+            font-size: 15px;
+            display: inline-block;
+            padding: 3px 10px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 8px;
+            margin-left: 5px;
+        }
+
+        /* 动画效果 */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .container > * {
+            animation: fadeIn 0.6s ease forwards;
+        }
+
+        .container > *:nth-child(2) { animation-delay: 0.1s; }
+        .container > *:nth-child(3) { animation-delay: 0.2s; }
+        .container > *:nth-child(4) { animation-delay: 0.3s; }
+        .container > *:nth-child(5) { animation-delay: 0.4s; }
+        .container > *:nth-child(6) { animation-delay: 0.5s; }
+        .container > *:nth-child(7) { animation-delay: 0.6s; }
     </style>
 </head>
 <body>
 
 <div class="container">
     <h1>❤️ 爱的方言翻译报告</h1>
-    <p id="date" style="font-size:12px; color:#999;"></p>
+    <p id="date" style="font-size:13px; color:#999; margin-bottom:5px;"></p>
 
     <div class="result-box">
         <div id="typeName" class="type-name"></div>
         <div id="scoreVal" class="score"></div>
-        <p id="typeDesc" style="font-size:14px; line-height:1.6;"></p>
+        <p id="typeDesc" style="font-size:15px; line-height:1.6; margin-top:10px;"></p>
     </div>
 
-    <div id="details" style="text-align: left; margin: 20px 0;"></div>
+    <div id="details" style="text-align: left; margin: 25px 0;"></div>
 
     <div class="msg-box">
-        <p style="font-weight:bold; margin-bottom:8px;">🐷 猪八吉寄语：</p>
-        <p id="pigMsg" style="font-size:14px; line-height:1.6;"></p>
+        <p>猪八吉寄语</p>
+        <p id="pigMsg" style="font-size:15px; line-height:1.7; margin:0;"></p>
     </div>
 
-    <button class="btn btn-pink" onclick="copy()">分享到小红书（复制文案）</button>
-    <button class="btn btn-white" onclick="location.href='index.html'">重新测试</button>
+    <button class="btn btn-pink" onclick="copy()">
+        <i class="fas fa-share-alt" style="margin-right:8px;"></i> 分享到小红书（复制文案）
+    </button>
+    <button class="btn btn-white" onclick="location.href='index.html'">
+        <i class="fas fa-redo" style="margin-right:8px;"></i> 重新测试
+    </button>
 
-    <div style="background:#f9f9f9; padding:20px; border-radius:20px; margin-top:30px;">
-        <p style="font-size:14px;">💌 勾搭猪八吉：<b>zhubaji2025</b></p>
+    <div class="contact-area">
+        <p>💌 勾搭猪八吉：<b>zhubaji888</b></p>
+        <p style="font-size:12px; color:#888; margin-top:8px;">备注"小红书"优先通过</p>
     </div>
 </div>
 
 <script>
     const info = {
-        words: { name: "💬 言值派", desc: "你渴望肯定。一句‘辛苦了’、‘有你真好’能让你满血复活。", msg: "媳妇喜欢听好话，俺以后每天夸她三遍！" },
-        acts: { name: "🤗 行动派", desc: "你相信爱是做出来的。对方帮你分担家务时，你最能感到被爱。", msg: "地俺扫了，碗俺刷了，媳妇你歇着！" },
-        gifts: { name: "🎁 仪式派", desc: "礼物代表心意。不在乎贵重，而是在乎你被TA记挂在心上。", msg: "给媳妇带了她爱吃的果子，看她笑俺心都化了。" },
-        time: { name: "🕰️ 陪伴派", desc: "你最想要的是专注。人在，心也要在。", msg: "手机放下，俺陪媳妇散步去，咱俩静静待着。" },
-        touch: { name: "👫 接触派", desc: "拥抱、牵手、依偎。身体接触让你感到最直接的爱。", msg: "媳妇不开心？俺抱抱她，啥烦恼都没啦！" }
+        words: { 
+            name: "💬 言值派", 
+            desc: "你渴望肯定。一句'辛苦了'、'有你真好'能让你满血复活。", 
+            msg: "媳妇喜欢听好话，俺以后每天夸她三遍！有她在，家就是暖的。"
+        },
+        acts: { 
+            name: "🤗 行动派", 
+            desc: "你相信爱是做出来的。对方帮你分担家务时，你最能感到被爱。", 
+            msg: "地俺扫了，碗俺刷了，媳妇你歇着！爱不是说说，是做给你看。"
+        },
+        gifts: { 
+            name: "🎁 仪式派", 
+            desc: "礼物代表心意。不在乎贵重，而是在乎你被TA记挂在心上。", 
+            msg: "给媳妇带了她爱吃的果子，看她笑俺心都化了。小礼物，大心意。"
+        },
+        time: { 
+            name: "🕰️ 陪伴派", 
+            desc: "你最想要的是专注。人在，心也要在。", 
+            msg: "手机放下，俺陪媳妇散步去，咱俩静静待着。时间，是最好的礼物。"
+        },
+        touch: { 
+            name: "👫 接触派", 
+            desc: "拥抱、牵手、依偎。身体接触让你感到最直接的爱。", 
+            msg: "媳妇不开心？俺抱抱她，啥烦恼都没啦！一个拥抱，胜过千言万语。"
+        }
     };
 
+    // 从localStorage获取数据
     const data = JSON.parse(localStorage.getItem('love_result'));
+    
     if (data) {
+        // 显示测试日期
         document.getElementById('date').innerText = "测试时间：" + data.date;
+        
+        // 获取主要类型信息
         const main = info[data.main];
+        
+        // 显示主要结果
         document.getElementById('typeName').innerText = main.name;
         document.getElementById('scoreVal').innerText = "主导爱语匹配度：" + data.percent + "%";
         document.getElementById('typeDesc').innerText = main.desc;
         document.getElementById('pigMsg').innerText = main.msg;
 
+        // 生成详细分析
         let html = "";
-        Object.entries(data.all).sort((a,b)=>b[1]-a[1]).forEach(([k,v])=>{
-            const p = Math.round(v/12*100);
-            html += `<div style="font-size:13px; margin-bottom:5px;">${info[k].name} (${p}%)</div>
-                     <div class="bar-bg"><div class="bar-fill" style="width:${p}%"></div></div>`;
+        // 按百分比排序
+        Object.entries(data.all).sort((a,b)=>b[1]-a[1]).forEach(([typeKey, count])=>{
+            const percent = Math.round(count/12*100);
+            const typeInfo = info[typeKey];
+            
+            html += `
+                <div style="margin-bottom: 15px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                        <span style="font-size:14px; font-weight:500;">${typeInfo.name}</span>
+                        <span style="font-size:14px; font-weight:bold; color: var(--accent-coral);">${percent}%</span>
+                    </div>
+                    <div class="bar-bg">
+                        <div class="bar-fill" style="width: ${percent}%"></div>
+                    </div>
+                </div>
+            `;
         });
+        
         document.getElementById('details').innerHTML = html;
+        
+        // 添加进度条动画延迟
+        setTimeout(() => {
+            document.querySelectorAll('.bar-fill').forEach(bar => {
+                const width = bar.style.width;
+                bar.style.width = '0%';
+                setTimeout(() => {
+                    bar.style.width = width;
+                }, 100);
+            });
+        }, 300);
+        
+    } else {
+        // 如果没有测试数据
+        document.querySelector('.container').innerHTML = `
+            <h1>未找到测试结果</h1>
+            <p style="margin: 20px 0; font-size: 16px;">请先完成爱的方言测试</p>
+            <button class="btn btn-pink" onclick="location.href='index.html'">
+                <i class="fas fa-play" style="margin-right:8px;"></i> 开始测试
+            </button>
+        `;
     }
 
     function copy() {
-        const txt = `我的爱的方言是${info[data.main].name}，匹配度${data.percent}%！情人节快到了，快来测测你的相处密码 #猪八吉 #情感测试`;
-        navigator.clipboard.writeText(txt);
-        alert("文案已复制，快去发小红书吧！");
+        if (!data) {
+            alert("请先完成测试");
+            return;
+        }
+        
+        const mainType = info[data.main].name;
+        const percent = data.percent;
+        
+        const shareText = `我刚测了猪八吉家的「爱的方言翻译器」🍯\n\n我的爱语类型是：${mainType}\n匹配度：${percent}%\n\n情人节快到了，快来测测你的相处密码✨\n\n#猪八吉 #爱的方言测试 #情人节礼物 #情侣测试 #情感测试`;
+        
+        navigator.clipboard.writeText(shareText).then(() => {
+            alert("✨ 文案已复制到剪贴板！\n\n请打开小红书，粘贴并发布笔记\n\n前100名分享者送猪八吉隐藏表情包🎁");
+        }).catch(err => {
+            // 如果复制失败，显示手动复制提示
+            prompt("请手动复制以下文案：", shareText);
+        });
     }
 </script>
 </body>
