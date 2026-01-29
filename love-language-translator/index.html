@@ -33,7 +33,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 20px;
+            padding: 15px;
         }
 
         .test-container {
@@ -41,10 +41,10 @@
             max-width: 1000px;
             width: 100%;
             background: linear-gradient(to bottom, var(--white), #FFFCF8);
-            border-radius: 32px;
-            box-shadow: 0 20px 60px var(--medium-shadow);
+            border-radius: 25px;
+            box-shadow: 0 15px 40px var(--medium-shadow);
             overflow: hidden;
-            min-height: 640px;
+            min-height: 600px;
             position: relative;
         }
 
@@ -54,7 +54,7 @@
             top: 0;
             left: 0;
             right: 0;
-            height: 5px;
+            height: 4px;
             background: linear-gradient(to right, var(--accent-coral), var(--accent-gold));
             z-index: 10;
         }
@@ -66,53 +66,43 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 35px 25px;
+            padding: 25px 20px;
             border-right: 2px solid var(--border-warm);
             position: relative;
             overflow: hidden;
         }
 
-        .pig-sidebar::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            right: -2px;
-            height: 100%;
-            width: 2px;
-            background: linear-gradient(to bottom, transparent, var(--accent-coral), transparent);
-        }
-
         .pig-image-container {
             width: 100%;
-            border-radius: 22px;
-            border: 8px solid var(--white);
-            box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+            max-width: 220px;
+            border-radius: 18px;
+            border: 6px solid var(--white);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
             aspect-ratio: 1/1;
             overflow: hidden;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
             background: var(--white);
-            position: relative;
-            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: transform 0.3s ease;
         }
 
         .pig-image {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: transform 0.3s ease;
         }
 
         .pig-speech-bubble {
             background: var(--cocoa-text);
             color: white;
-            padding: 18px;
-            border-radius: 20px;
-            font-size: 15px;
-            line-height: 1.6;
+            padding: 16px;
+            border-radius: 18px;
+            font-size: 14px;
+            line-height: 1.5;
             width: 100%;
-            transition: all 0.4s ease;
+            max-width: 240px;
+            margin-bottom: 15px;
             position: relative;
-            box-shadow: 0 5px 15px rgba(93, 75, 64, 0.15);
         }
 
         .pig-speech-bubble::after {
@@ -121,54 +111,76 @@
             bottom: -8px;
             left: 50%;
             transform: translateX(-50%);
-            border-left: 10px solid transparent;
-            border-right: 10px solid transparent;
-            border-top: 10px solid var(--cocoa-text);
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-top: 8px solid var(--cocoa-text);
         }
 
         .question-counter {
-            margin-top: 25px;
             font-size: 13px;
             color: var(--cocoa-text);
-            opacity: 0.7;
+            opacity: 0.8;
+            margin-top: 5px;
+        }
+
+        .love-type-indicator {
+            background: linear-gradient(135deg, #FFF9F0, #FFF5E1);
+            padding: 12px 16px;
+            border-radius: 12px;
+            border: 2px solid var(--border-warm);
+            margin-top: 15px;
             text-align: center;
+            width: 100%;
+            max-width: 240px;
+        }
+
+        .indicator-label {
+            font-size: 11px;
+            color: #8A7565;
+            margin-bottom: 4px;
+        }
+
+        .indicator-value {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--accent-coral);
         }
 
         /* 右侧题目区 */
         .question-sidebar {
-            flex: 1.4;
-            padding: 40px;
+            flex: 1.6;
+            padding: 30px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
         }
 
         .progress-container {
-            margin-bottom: 30px;
+            margin-bottom: 20px;
         }
 
         .progress-label {
             display: flex;
             justify-content: space-between;
-            font-size: 14px;
-            margin-bottom: 10px;
+            font-size: 13px;
+            margin-bottom: 8px;
             color: var(--cocoa-text);
             font-weight: 500;
         }
 
         .progress-bar {
-            height: 10px;
+            height: 8px;
             background: #F2E9E1;
-            border-radius: 10px;
+            border-radius: 8px;
             overflow: hidden;
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
         }
 
         .progress-fill {
             height: 100%;
             background: linear-gradient(to right, var(--accent-coral), var(--accent-gold));
-            border-radius: 10px;
-            transition: width 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+            border-radius: 8px;
+            transition: width 0.5s ease;
             position: relative;
             overflow: hidden;
         }
@@ -190,77 +202,99 @@
         }
 
         .question-header {
-            margin-bottom: 30px;
+            margin-bottom: 20px;
         }
 
         .question-number {
-            font-size: 14px;
+            font-size: 13px;
             color: var(--accent-coral);
             font-weight: 600;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
         }
 
         .question-number i {
-            font-size: 16px;
+            font-size: 14px;
         }
 
         .question-text {
-            font-size: 26px;
+            font-size: 22px;
             font-weight: 700;
             line-height: 1.4;
-            margin-bottom: 15px;
+            margin-bottom: 12px;
             color: var(--cocoa-text);
         }
 
         .question-hint {
-            font-size: 14px;
+            font-size: 13px;
             color: #8A7565;
             font-style: italic;
-            padding-left: 5px;
         }
 
+        /* ===== 关键修改：选项布局 ===== */
         .options-container {
             flex: 1;
             display: flex;
             flex-direction: column;
-            gap: 14px;
-            margin-bottom: 30px;
+            gap: 10px;  /* 减少间距 */
+            margin-bottom: 20px;
+            max-height: calc(100vh - 350px);
+            overflow-y: auto;
         }
 
         .option-item {
-            padding: 18px 22px;
+            padding: 14px 18px;  /* 减少内边距 */
             background: var(--white);
             border: 2px solid #F2E9E1;
-            border-radius: 18px;
+            border-radius: 15px;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.25s ease;
             display: flex;
-            align-items: center;
-            gap: 16px;
+            align-items: center;  /* 图标和文字垂直居中 */
+            gap: 14px;  /* 图标和文字的间距 */
             position: relative;
             overflow: hidden;
+            min-height: 60px;  /* 固定最小高度 */
         }
 
-        .option-item:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(255, 148, 148, 0.15);
-            border-color: var(--secondary-pink);
+        /* 选项图标 - 缩小 */
+        .option-icon {
+            font-size: 20px;
+            background: #fdf2f2;
+            width: 40px;
+            height: 40px;
+            min-width: 40px;  /* 防止被压缩 */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            flex-shrink: 0;  /* 防止图标被压缩 */
+            transition: all 0.25s ease;
         }
 
+        /* 选项文字 - 紧凑布局 */
+        .option-text {
+            font-size: 15px;
+            line-height: 1.4;
+            font-weight: 500;
+            flex: 1;
+            word-break: break-word;  /* 长单词换行 */
+        }
+
+        /* 选中状态 */
         .option-item.active {
-            background: linear-gradient(135deg, #FFF9F9, white);
+            background: linear-gradient(135deg, rgba(255, 249, 249, 0.9), white);
             border-color: var(--accent-coral);
-            box-shadow: 0 8px 25px rgba(255, 122, 122, 0.2);
+            box-shadow: 0 5px 15px rgba(255, 122, 122, 0.15);
             transform: translateY(-2px);
         }
 
         .option-item.active .option-icon {
             background: linear-gradient(135deg, var(--accent-coral), var(--accent-gold));
             color: white;
-            transform: scale(1.1);
+            transform: scale(1.05);
         }
 
         .option-item.active::before {
@@ -273,110 +307,147 @@
             background: linear-gradient(to right, var(--accent-coral), var(--accent-gold));
         }
 
-        .option-icon {
-            font-size: 22px;
-            background: #fdf2f2;
-            width: 44px;
-            height: 44px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 12px;
-            flex-shrink: 0;
-            transition: all 0.3s ease;
+        /* 悬停效果 */
+        .option-item:hover {
+            border-color: var(--secondary-pink);
+            transform: translateY(-2px);
         }
 
-        .option-text {
-            font-size: 16px;
-            line-height: 1.5;
-            font-weight: 500;
-        }
-
-        /* 爱语类型指示器 */
-        .love-type-indicator {
-            background: linear-gradient(135deg, #FFF9F0, #FFF5E1);
-            padding: 15px;
-            border-radius: 15px;
-            border: 2px solid var(--border-warm);
-            margin-top: 20px;
-            text-align: center;
-        }
-
-        .indicator-label {
-            font-size: 12px;
-            color: #8A7565;
-            margin-bottom: 5px;
-        }
-
-        .indicator-value {
-            font-size: 16px;
-            font-weight: 600;
-            color: var(--accent-coral);
-        }
-
-        /* 响应式设计 */
+        /* 响应式设计 - 手机优化 */
         @media (max-width: 768px) {
+            body {
+                padding: 10px;
+                align-items: flex-start;  /* 顶部对齐 */
+                padding-top: 15px;
+            }
+            
             .test-container { 
                 flex-direction: column; 
                 min-height: auto;
+                max-height: 90vh;
+                border-radius: 20px;
             }
             
             .pig-sidebar { 
                 border-right: none; 
                 border-bottom: 2px solid var(--border-warm);
-                padding: 25px 20px;
-            }
-            
-            .question-sidebar {
-                padding: 30px 25px;
-            }
-            
-            .question-text {
-                font-size: 22px;
-            }
-            
-            .option-item {
-                padding: 16px 18px;
+                padding: 20px 15px;
+                flex: none;
             }
             
             .pig-image-container {
-                max-width: 300px;
-                margin-left: auto;
-                margin-right: auto;
-            }
-        }
-
-        @media (max-width: 480px) {
-            body {
-                padding: 15px;
+                max-width: 180px;
+                margin-bottom: 15px;
             }
             
-            .test-container {
-                border-radius: 25px;
+            .pig-speech-bubble {
+                max-width: 100%;
+                padding: 14px;
+                font-size: 13px;
+            }
+            
+            .question-sidebar {
+                padding: 20px;
+                flex: 1;
+                overflow-y: auto;
+                max-height: calc(100vh - 320px);
             }
             
             .question-text {
                 font-size: 20px;
+                margin-bottom: 10px;
+            }
+            
+            .question-hint {
+                font-size: 12px;
+            }
+            
+            /* 手机端选项进一步优化 */
+            .options-container {
+                gap: 8px;
+                max-height: calc(100vh - 400px);
+                margin-bottom: 15px;
             }
             
             .option-item {
-                flex-direction: column;
-                align-items: flex-start;
+                padding: 12px 15px;
+                min-height: 55px;
                 gap: 12px;
             }
             
             .option-icon {
-                align-self: flex-start;
+                width: 36px;
+                height: 36px;
+                min-width: 36px;
+                font-size: 18px;
+            }
+            
+            .option-text {
+                font-size: 14px;
+                line-height: 1.35;
+            }
+            
+            .love-type-indicator {
+                max-width: 100%;
+                padding: 10px 14px;
+                margin-top: 12px;
+            }
+            
+            .progress-label {
+                font-size: 12px;
             }
         }
 
-        /* 音效指示器 */
+        @media (max-width: 480px) {
+            .question-text {
+                font-size: 18px;
+            }
+            
+            .option-item {
+                padding: 10px 12px;
+                min-height: 50px;
+                gap: 10px;
+            }
+            
+            .option-icon {
+                width: 32px;
+                height: 32px;
+                min-width: 32px;
+                font-size: 16px;
+            }
+            
+            .option-text {
+                font-size: 13px;
+            }
+            
+            /* 让选项更加紧凑 */
+            .options-container {
+                gap: 6px;
+            }
+        }
+
+        /* 非常小的手机 */
+        @media (max-width: 360px) {
+            .question-text {
+                font-size: 17px;
+            }
+            
+            .option-text {
+                font-size: 12px;
+            }
+            
+            .option-item {
+                min-height: 48px;
+            }
+        }
+
+        /* 音效开关 */
         .sound-toggle {
             position: fixed;
-            bottom: 20px;
-            right: 20px;
-            width: 45px;
-            height: 45px;
+            bottom: 15px;
+            right: 15px;
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
             background: var(--white);
             border: 2px solid var(--border-warm);
@@ -384,15 +455,15 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 20px;
+            font-size: 18px;
             cursor: pointer;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            transition: all 0.3s ease;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            transition: all 0.2s ease;
             z-index: 100;
         }
 
         .sound-toggle:hover {
-            transform: scale(1.1);
+            transform: scale(1.05);
             border-color: var(--accent-coral);
         }
 
@@ -400,7 +471,7 @@
         @keyframes fadeInUp {
             from {
                 opacity: 0;
-                transform: translateY(20px);
+                transform: translateY(15px);
             }
             to {
                 opacity: 1;
@@ -409,7 +480,26 @@
         }
 
         .test-container {
-            animation: fadeInUp 0.6s ease;
+            animation: fadeInUp 0.5s ease;
+        }
+
+        /* 滚动条美化 */
+        .options-container::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .options-container::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+
+        .options-container::-webkit-scrollbar-thumb {
+            background: var(--secondary-pink);
+            border-radius: 4px;
+        }
+
+        .options-container::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-pink);
         }
     </style>
 </head>
@@ -431,7 +521,7 @@
     <div class="question-sidebar">
         <div class="progress-container">
             <div class="progress-label">
-                <span>❤️ 爱的方言翻译器 · 完整版</span>
+                <span>❤️ 爱的方言翻译器</span>
                 <span id="progressText">第 1 题 / 共 12 题</span>
             </div>
             <div class="progress-bar">
@@ -667,9 +757,8 @@
     function selectOption(type, element) {
         // 播放音效（如果有）
         if (soundEnabled) {
-            // 这里可以添加点击音效
             const audio = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-select-click-1109.mp3');
-            audio.volume = 0.3;
+            audio.volume = 0.2;
             audio.play().catch(e => console.log("音效播放被阻止"));
         }
         
@@ -677,22 +766,17 @@
         element.classList.add('active');
         
         // 动画效果：猪八吉反应
-        pigImageEl.style.transform = 'scale(1.08)';
+        pigImageEl.style.transform = 'scale(1.05)';
         pigSpeechEl.style.backgroundColor = loveTypes[type].color;
-        pigSpeechEl.style.transform = 'translateY(-3px)';
         
         // 增加分数
         scores[type]++;
-        
-        // 添加点击效果
-        createRippleEffect(element);
         
         // 延迟后进入下一题或完成测试
         setTimeout(() => {
             // 恢复猪八吉状态
             pigImageEl.style.transform = 'scale(1)';
             pigSpeechEl.style.backgroundColor = '';
-            pigSpeechEl.style.transform = '';
             
             if (currentIdx < questions.length - 1) {
                 // 还有下一题
@@ -702,43 +786,7 @@
                 // 完成测试，跳转到结果页
                 completeTest();
             }
-        }, 700);
-    }
-
-    // 创建涟漪效果
-    function createRippleEffect(element) {
-        const ripple = document.createElement('span');
-        const rect = element.getBoundingClientRect();
-        const size = Math.max(rect.width, rect.height);
-        const x = rect.width / 2;
-        const y = rect.height / 2;
-        
-        ripple.style.cssText = `
-            position: absolute;
-            border-radius: 50%;
-            background: rgba(255, 122, 122, 0.3);
-            width: ${size}px;
-            height: ${size}px;
-            left: ${x - size/2}px;
-            top: ${y - size/2}px;
-            transform: scale(0);
-            animation: ripple 0.6s linear;
-        `;
-        
-        element.style.position = 'relative';
-        element.appendChild(ripple);
-        
-        setTimeout(() => ripple.remove(), 600);
-        
-        // 添加CSS动画
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes ripple {
-                to { transform: scale(4); opacity: 0; }
-            }
-        `;
-        document.head.appendChild(style);
-        setTimeout(() => style.remove(), 600);
+        }, 500);
     }
 
     // 更新爱语倾向指示器
@@ -826,12 +874,8 @@
                 if (index < options.length) {
                     options[index].click();
                 }
-            } else if (e.key === 'Enter') {
-                // Enter键可以快速进入下一题（如果有下一题）
             }
         });
-        
-        console.log('猪八吉爱的方言翻译器已加载！');
     }
 
     // 页面加载完成后初始化
