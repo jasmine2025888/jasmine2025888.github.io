@@ -49,16 +49,31 @@
             background: linear-gradient(to right, var(--accent-coral), var(--accent-gold));
         }
 
-        h1 { 
-            color: var(--accent-coral); 
-            margin-bottom: 15px; 
-            font-size: 26px; 
-            font-weight: 700;
-            position: relative;
-            display: inline-block;
+        /* 标题部分分为两行 */
+        .title-container {
+            margin-bottom: 15px;
         }
 
-        h1::after {
+        .main-title {
+            color: var(--accent-coral); 
+            margin-bottom: 5px; 
+            font-size: 28px; 
+            font-weight: 700;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .sub-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--cocoa-text);
+            margin-bottom: 10px;
+        }
+
+        .title-container::after {
             content: '';
             display: block;
             width: 60px;
@@ -77,6 +92,7 @@
             position: relative;
             overflow: hidden;
             transition: transform 0.3s ease;
+            width: 100%; /* 确保宽度与容器一致 */
         }
 
         .result-box:hover {
@@ -93,6 +109,15 @@
             background: linear-gradient(to right, var(--accent-coral), var(--accent-gold));
         }
 
+        /* 类型名称和匹配度分行显示 */
+        .type-info {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
         .type-name { 
             font-size: 36px; 
             font-weight: 800; 
@@ -100,21 +125,20 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            display: inline-block;
-            margin-bottom: 10px;
             letter-spacing: -0.5px;
+            white-space: nowrap; /* 确保类型名称不换行 */
         }
         
         .score { 
             font-size: 20px; 
             font-weight: bold; 
             color: var(--cocoa-text); 
-            margin-bottom: 20px;
-            background: rgba(255, 255, 255, 0.8);
-            padding: 8px 20px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 8px 25px;
             border-radius: 20px;
             display: inline-block;
             border: 2px solid var(--border-warm);
+            white-space: nowrap; /* 确保匹配度不换行 */
         }
 
         .bar-bg { 
@@ -124,6 +148,7 @@
             margin: 12px 0; 
             overflow: hidden;
             box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+            width: 100%; /* 确保进度条宽度一致 */
         }
         
         .bar-fill { 
@@ -284,17 +309,98 @@
         .container > *:nth-child(5) { animation-delay: 0.4s; }
         .container > *:nth-child(6) { animation-delay: 0.5s; }
         .container > *:nth-child(7) { animation-delay: 0.6s; }
+
+        /* 响应式调整 */
+        @media (max-width: 640px) {
+            .container {
+                padding: 30px 20px;
+            }
+            
+            .main-title {
+                font-size: 24px;
+            }
+            
+            .sub-title {
+                font-size: 18px;
+            }
+            
+            .result-box {
+                padding: 25px 20px;
+            }
+            
+            .type-name {
+                font-size: 32px;
+            }
+            
+            .score {
+                font-size: 18px;
+                padding: 6px 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 25px 15px;
+                border-radius: 25px;
+            }
+            
+            .main-title {
+                font-size: 22px;
+            }
+            
+            .sub-title {
+                font-size: 16px;
+            }
+            
+            .result-box {
+                padding: 20px 15px;
+                border-radius: 20px;
+            }
+            
+            .type-name {
+                font-size: 28px;
+            }
+            
+            .score {
+                font-size: 16px;
+                padding: 5px 18px;
+            }
+            
+            .msg-box {
+                padding: 20px;
+            }
+        }
+
+        /* 小屏幕确保类型名称不换行 */
+        @media (max-width: 360px) {
+            .type-name {
+                font-size: 24px;
+            }
+            
+            .score {
+                font-size: 15px;
+                padding: 4px 15px;
+            }
+        }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>❤️ 爱的方言翻译报告</h1>
+    <div class="title-container">
+        <div class="main-title">
+            <i class="fas fa-heart"></i> ❤️ 爱的语言
+        </div>
+        <div class="sub-title">翻译报告</div>
+    </div>
+    
     <p id="date" style="font-size:13px; color:#999; margin-bottom:5px;"></p>
 
     <div class="result-box">
-        <div id="typeName" class="type-name"></div>
-        <div id="scoreVal" class="score"></div>
+        <div class="type-info">
+            <div id="typeName" class="type-name"></div>
+            <div id="scoreVal" class="score"></div>
+        </div>
         <p id="typeDesc" style="font-size:15px; line-height:1.6; margin-top:10px;"></p>
     </div>
 
@@ -399,8 +505,13 @@
     } else {
         // 如果没有测试数据
         document.querySelector('.container').innerHTML = `
-            <h1>未找到测试结果</h1>
-            <p style="margin: 20px 0; font-size: 16px;">请先完成爱的方言测试</p>
+            <div class="title-container">
+                <div class="main-title">
+                    <i class="fas fa-heart"></i> ❤️ 爱的语言
+                </div>
+                <div class="sub-title">翻译报告</div>
+            </div>
+            <p style="margin: 20px 0; font-size: 16px;">请先完成爱的语言测试</p>
             <button class="btn btn-pink" onclick="location.href='index.html'">
                 <i class="fas fa-play" style="margin-right:8px;"></i> 开始测试
             </button>
@@ -416,7 +527,7 @@
         const mainType = info[data.main].name;
         const percent = data.percent;
         
-        const shareText = `我刚测了猪八吉家的「爱的方言翻译器」🍯\n\n我的爱语类型是：${mainType}\n匹配度：${percent}%\n\n情人节快到了，快来测测你的相处密码✨\n\n#猪八吉 #爱的方言测试 #情人节礼物 #情侣测试 #情感测试`;
+        const shareText = `我刚测了猪八吉家的「爱的语言翻译器」🍯\n\n我的爱语类型是：${mainType}\n匹配度：${percent}%\n\n情人节快到了，快来测测你的相处密码✨\n\n#猪八吉 #爱的语言测试 #情人节礼物 #情侣测试 #情感测试`;
         
         navigator.clipboard.writeText(shareText).then(() => {
             alert("✨ 文案已复制到剪贴板！\n\n请打开小红书，粘贴并发布笔记\n\n前100名分享者送猪八吉隐藏表情包🎁");
