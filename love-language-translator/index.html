@@ -1069,6 +1069,7 @@
     function renderQuestion() {
         const q = questions[currentIdx];
         
+        // 加载场景图片
         sceneImageEl.src = `images/scene_${(currentIdx + 1).toString().padStart(2, '0')}.jpg`;
         pigSpeechEl.textContent = q.speech;
         
@@ -1089,8 +1090,12 @@
             
             const typeColor = loveTypes[option.type].color;
             
+            // 使用图片代替Emoji
             optionItem.innerHTML = `
-                <div class="option-icon" style="color: ${typeColor}">${option.icon}</div>
+                <div class="option-icon" style="color: ${typeColor}">
+                    <img src="images/love_${option.type}.png" alt="${option.icon}" 
+                         style="width: 28px; height: 28px; display: block;">
+                </div>
                 <div class="option-text">${option.text}</div>
             `;
             
