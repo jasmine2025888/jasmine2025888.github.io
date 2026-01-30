@@ -832,9 +832,11 @@
 <div class="intro-screen" id="introScreen">
     <div class="intro-card">
         <div class="intro-content">
-            <!-- 修改的首页头像部分 -->
-            <div class="pig-avatar">
-                <img src="images/my-pig-avatar.png" alt="猪八吉">
+            <!-- 修改的头像部分，添加了回退机制 -->
+            <div class="pig-avatar" id="pigAvatar">
+                <img src="images/my-pig-avatar.png" alt="猪八吉" 
+                     style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;"
+                     onerror="this.style.display='none'; document.getElementById('pigAvatar').innerHTML='🐷';">
             </div>
             <h1 class="intro-title">
                 <i class="fas fa-heart"></i> 猪八吉家传·爱的语言翻译器
@@ -1115,7 +1117,8 @@
             optionItem.innerHTML = `
                 <div class="option-icon" style="color: ${typeColor}">
                     <img src="images/love_${option.type}.png" alt="${option.icon}" 
-                         style="width: 28px; height: 28px; display: block;">
+                         style="width: 28px; height: 28px; display: block;"
+                         onerror="this.parentElement.innerHTML='${option.icon}'">
                 </div>
                 <div class="option-text">${option.text}</div>
             `;
