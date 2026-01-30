@@ -439,7 +439,12 @@
         <i class="fas fa-redo" style="margin-right:8px;"></i> 重新测试
     </button>
 
+    <!-- 修改后的联系区域，包含微信二维码 -->
     <div class="contact-area">
+        <div style="text-align: center; margin-bottom: 15px;">
+            <img src="images/wechat_qrcode.png" alt="猪八吉微信" 
+                 style="width: 150px; height: 150px; border-radius: 10px; border: 3px solid var(--border-warm);">
+        </div>
         <p>💌 勾搭猪八吉：<b>zhubaji888</b></p>
         <p style="font-size:12px; color:#888; margin-top:8px;">备注"小红书"优先通过</p>
     </div>
@@ -490,7 +495,7 @@
         document.getElementById('typeDesc').innerText = main.desc;
         document.getElementById('pigMsg').innerText = main.msg;
 
-        // 生成详细分析
+        // 生成详细分析 - 添加爱语类型图片
         let html = "";
         // 按百分比排序
         Object.entries(data.all).sort((a,b)=>b[1]-a[1]).forEach(([typeKey, count])=>{
@@ -499,8 +504,11 @@
             
             html += `
                 <div style="margin-bottom: 15px;">
-                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
-                        <span style="font-size:14px; font-weight:500;">${typeInfo.name}</span>
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
+                        <div style="display: flex; align-items: center; gap: 10px;">
+                            <img src="images/love_${typeKey}.png" alt="${typeInfo.name}" style="width: 24px; height: 24px;">
+                            <span style="font-size:14px; font-weight:500;">${typeInfo.name}</span>
+                        </div>
                         <span style="font-size:14px; font-weight:bold; color: var(--accent-coral);">${percent}%</span>
                     </div>
                     <div class="bar-bg">
