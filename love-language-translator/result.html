@@ -220,11 +220,6 @@
             align-items: center;
             gap: 8px;
         }
-
-        .msg-box p:first-child::before {
-            content: '🐷';
-            font-size: 20px;
-        }
         
         .btn {
             width: 100%; 
@@ -428,8 +423,17 @@
     <div id="details" style="text-align: left; margin: 25px 0;"></div>
 
     <div class="msg-box">
-        <p>猪八吉寄语</p>
+        <p style="display: flex; align-items: center; gap: 8px;">
+            <img src="images/my-pig-message.png" alt="猪八吉" style="width: 30px; height: 30px; border-radius: 50%;">
+            猪八吉寄语
+        </p>
         <p id="pigMsg" style="font-size:15px; line-height:1.7; margin:0;"></p>
+    </div>
+
+    <!-- 分享卡片图片 -->
+    <div style="text-align: center; margin: 20px 0 15px; padding: 15px; background: linear-gradient(135deg, #FFF9F8, #FFF0F0); border-radius: 15px; border: 2px solid var(--secondary-pink);">
+        <img src="images/share_card.jpg" alt="分享到小红书" style="width: 100%; max-width: 300px; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+        <p style="font-size: 13px; color: #666; margin-top: 8px;">长按保存图片，分享到小红书</p>
     </div>
 
     <button class="btn btn-pink" onclick="copy()">
