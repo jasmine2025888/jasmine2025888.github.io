@@ -867,15 +867,16 @@
 
 <script>
     // ============== 【关键修复】图片基础路径配置 ==============
-    // 使用完整的GitHub Pages路径
+    // 使用完整的绝对路径，避免任何拼写错误
     const imageBaseURL = "https://jasmine2025888.github.io/love-language-translator/images/";
     
+    // 关键修复：使用完整的绝对路径，不使用拼接
     const loveTypeImages = {
-        words: imageBaseURL + "love_words.png",
-        acts: imageBaseURL + "love_acts.png",
-        gifts: imageBaseURL + "love_gifts.png",
-        time: imageBaseURL + "love_time.png",
-        touch: imageBaseURL + "love_touch.png"
+        words: "https://jasmine2025888.github.io/love-language-translator/images/love_words.png",
+        acts: "https://jasmine2025888.github.io/love-language-translator/images/love_acts.png",
+        gifts: "https://jasmine2025888.github.io/love-language-translator/images/love_gifts.png",
+        time: "https://jasmine2025888.github.io/love-language-translator/images/love_time.png",
+        touch: "https://jasmine2025888.github.io/love-language-translator/images/love_touch.png"
     };
 
     // 类型信息
@@ -1107,6 +1108,7 @@
         }
 
         // ========== 生成详细分析 - 双图标并排布局 ==========
+        // 关键修复：这里确保五个爱语图片正确显示在对应位置
         let html = "";
         
         // 按类型顺序显示
@@ -1136,6 +1138,7 @@
             const emoji = typeInfo.emoji || '❤️';
             const typeName = typeInfo.name.replace(/<[^>]*>/g, '').replace(emoji, '').trim();
             
+            // 关键修复：确保图片路径正确，并且onerror处理能够提供详细的错误信息
             html += `
                 <div class="details-item">
                     <!-- 左侧：双图标（爱语图片 + Emoji） -->
@@ -1143,7 +1146,9 @@
                         <!-- 爱语图片图标 -->
                         <div class="type-image-icon">
                             <img src="${loveTypeImages[typeKey]}" alt="${typeName}" 
-                                 onerror="this.onerror=null; this.parentElement.innerHTML='<span class=\"emoji\" style=\"font-size: 16px;\">${emoji}</span>';">
+                                 onerror="console.error('爱语图片加载失败:类型=${typeKey}, 路径=${loveTypeImages[typeKey]}'); 
+                                          this.onerror=null; 
+                                          this.parentElement.innerHTML='<span class=\"emoji\" style=\"font-size: 16px;\">${emoji}</span>';">
                         </div>
                         <!-- Emoji图标 -->
                         <div class="emoji-icon">
@@ -1188,6 +1193,17 @@
         
         // 初始化勋章功能
         initMedalFunction();
+        
+        // 域名验证
+        console.log("=== 域名验证 ===");
+        console.log("当前页面URL:", window.location.href);
+        console.log("imageBaseURL:", imageBaseURL);
+        console.log("loveTypeImages对象:", loveTypeImages);
+        
+        // 验证所有图片URL
+        Object.entries(loveTypeImages).forEach(([key, url]) => {
+            console.log(`${key}: ${url}`);
+        });
     });
 
     // ============== 勋章生成功能 ==============
@@ -1315,7 +1331,7 @@
         medalCanvas.innerHTML = '';
         
         // 使用完整的图片路径
-        const loveImageUrl = loveTypeImages[mainType] || (imageBaseURL + "love_words.png");
+        const loveImageUrl = loveTypeImages[mainType] || "https://jasmine2025888.github.io/love-language-translator/images/love_words.png";
         const pigAvatarUrl = imageBaseURL + "my-pig-avatar.png";
         
         const medalHTML = `
