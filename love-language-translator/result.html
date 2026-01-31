@@ -86,13 +86,13 @@
             background: linear-gradient(to right, var(--accent-coral), var(--accent-gold));
         }
 
-        /* 新增：爱语图片样式 - 修复：确保显示 */
+        /* 新增：爱语图片样式 */
         .love-image {
             width: 80px;
             height: 80px;
             object-fit: contain;
             margin: 0 auto 15px;
-            display: block !important; /* 重要：确保显示 */
+            display: block;
             border-radius: 20px;
             background: white;
             padding: 10px;
@@ -100,16 +100,14 @@
             border: 3px solid var(--border-warm);
         }
         
-        /* 新增：勋章头像样式 */
-        .medal-avatar-image {
+        /* 修复：确保图片显示 */
+        .love-image-container {
             width: 100px;
             height: 100px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 4px solid white;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-            margin: 0 auto;
-            display: block !important;
+            margin: 0 auto 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         /* 标题部分 */
@@ -257,7 +255,7 @@
             font-weight: bold; 
             cursor: pointer; 
             margin-bottom: 10px; 
-transition: all 0.3s ease;
+            transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
         }
@@ -667,10 +665,9 @@ transition: all 0.3s ease;
 
     <div class="result-box">
         <div class="type-info">
-            <!-- 修复：确保图片显示 -->
-            <div style="position: relative; width: 100px; height: 100px; margin: 0 auto 15px;">
-                <img id="mainLoveImage" class="love-image" src="" alt="爱语类型图片" 
-                     style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: contain;">
+            <!-- 修复：使用Base64图片确保显示 -->
+            <div class="love-image-container">
+                <img id="mainLoveImage" class="love-image" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAiIGhlaWdodD0iODAiIHZpZXdCb3g9IjAgMCA4MCA4MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjgwIiBoZWlnaHQ9IjgwIiByeD0iMjAiIGZpbGw9IndoaXRlIiBzdHJva2U9IiNGRjhDOTQiIHN0cm9rZS13aWR0aD0iMyIvPgo8dGV4dCB4PSI0MCIgeT0iNDUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSI0MCIgZmlsbD0iI0ZGN0E3QSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPvwn6qw8L3RleHQ+Cjwvc3ZnPgo=" alt="爱语类型图片">
             </div>
             <div id="typeName" class="type-name"></div>
             <!-- 修复：确保"主导爱语匹配度"正确显示 -->
@@ -686,8 +683,8 @@ transition: all 0.3s ease;
 
     <div class="msg-box">
         <p>
-            <!-- 修复：显示猪八吉头像图片 -->
-            <img id="pigAvatarImg" src="https://raw.githubusercontent.com/jasmine2025888/jasmine2025888.github.io/main/love-language-translator/images/my-pig-avatar.png" 
+            <!-- 修复：显示猪八吉头像Base64图片 -->
+            <img id="pigAvatarImg" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAiIGhlaWdodD0iMzAiIHZpZXdCb3g9IjAgMCAzMCAzMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMTUiIGN5PSIxNSIgcj0iMTUiIGZpbGw9IiNGRjk0OTQiLz4KPHRleHQgeD0iMTUiIHk9IjIwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+8J+QtzwvdGV4dD4KPC9zdmc+" 
                  alt="猪八吉" 
                  style="width: 30px; height: 30px; margin-right: 8px; display: inline-block; vertical-align: middle; border-radius: 50%;">
             猪八吉寄语
@@ -753,15 +750,17 @@ transition: all 0.3s ease;
 </div>
 
 <script>
-    // 修复：使用正确的图片URL
-    // 由于GitHub raw URL可能有跨域问题，尝试不同的URL格式
+    // 爱语类型对应的图片URL - 使用Base64编码确保显示
     const loveTypeImages = {
-        words: "images/love_words.png",  // 使用相对路径
-        acts: "images/love_acts.png",
-        gifts: "images/love_gifts.png",
-        time: "images/love_time.png",
-        touch: "images/love_touch.png"
+        words: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAiIGhlaWdodD0iODAiIHZpZXdCb3g9IjAgMCA4MCA4MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjgwIiBoZWlnaHQ9IjgwIiByeD0iMjAiIGZpbGw9IndoaXRlIiBzdHJva2U9IiNGRjhDOTQiIHN0cm9rZS13aWR0aD0iMyIvPgo8dGV4dCB4PSI0MCIgeT0iNDUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSI0MCIgZmlsbD0iI0ZGN0E3QSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPvwn6qw8L3RleHQ+Cjwvc3ZnPgo=",
+        acts: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAiIGhlaWdodD0iODAiIHZpZXdCb3g9IjAgMCA4MCA4MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjgwIiBoZWlnaHQ9IjgwIiByeD0iMjAiIGZpbGw9IndoaXRlIiBzdHJva2U9IiNGRjdBN0EiIHN0cm9rZS13aWR0aD0iMyIvPgo8dGV4dCB4PSI0MCIgeT0iNDUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSI0MCIgZmlsbD0iI0ZGN0E3QSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPvCfpJc8L3RleHQ+Cjwvc3ZnPgo=",
+        gifts: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAiIGhlaWdodD0iODAiIHZpZXdCb3g9IjAgMCA4MCA4MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjgwIiBoZWlnaHQ9IjgwIiByeD0iMjAiIGZpbGw9IndoaXRlIiBzdHJva2U9IiNFOEIwNTQiIHN0cm9rZS13aWR0aD0iMyIvPgo8dGV4dCB4PSI0MCIgeT0iNDUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSI0MCIgZmlsbD0iI0U4QjA1NCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPvCfkYE8L3RleHQ+Cjwvc3ZnPgo=",
+        time: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAiIGhlaWdodD0iODAiIHZpZXdCb3g9IjAgMCA4MCA4MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjgwIiBoZWlnaHQ9IjgwIiByeD0iMjAiIGZpbGw9IndoaXRlIiBzdHJva2U9IiNGRkEwN0EiIHN0cm9rZS13aWR0aD0iMyIvPgo8dGV4dCB4PSI0MCIgeT0iNDUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSI0MCIgZmlsbD0iI0ZGQTA3QSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPvCfk5c8L3RleHQ+Cjwvc3ZnPgo=",
+        touch: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAiIGhlaWdodD0iODAiIHZpZXdCb3g9IjAgMCA4MCA4MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjgwIiBoZWlnaHQ9IjgwIiByeD0iMjAiIGZpbGw9IndoaXRlIiBzdHJva2U9IiNGRjhBNjUiIHN0cm9rZS13aWR0aD0iMyIvPgo8dGV4dCB4PSI0MCIgeT0iNDUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSI0MCIgZmlsbD0iI0ZGOEE2NSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPvCfpGs8L3RleHQ+Cjwvc3ZnPgo="
     };
+
+    // 猪八吉头像Base64
+    const pigAvatar = "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxjaXJjbGUgY3g9IjUwIiBjeT0iNTAiIHI9IjUwIiBmaWxsPSJ1cmwoI3BpZ0dyYWRpZW50KSIvPgo8ZGVmcz4KPGxpbmVhckdyYWRpZW50IGlkPSJwaWdHcmFkaWVudCIgeDE9IjAiIHkxPSIwIiB4Mj0iMTAwIiB5Mj0iMTAwIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+CjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iI0ZGOTQ5NCIvPgo8c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiNGRjdBN0EiLz4KPC9saW5lYXJHcmFkaWVudD4KPC9kZWZzPgo8dGV4dCB4PSI1MCIgeT0iNjAiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSI0NCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj7wn5C3PC90ZXh0Pgo8L3N2Zz4=";
 
     // 类型信息
     const info = {
@@ -828,6 +827,7 @@ transition: all 0.3s ease;
         const typeDescElement = document.getElementById('typeDesc');
         const pigMsgElement = document.getElementById('pigMsg');
         const mainLoveImageElement = document.getElementById('mainLoveImage');
+        const pigAvatarImg = document.getElementById('pigAvatarImg');
         
         if (main) {
             typeNameElement.innerHTML = main.name;
@@ -839,31 +839,11 @@ transition: all 0.3s ease;
             if (loveTypeImages[data.main]) {
                 mainLoveImageElement.src = loveTypeImages[data.main];
                 mainLoveImageElement.alt = main.name.replace(/<[^>]*>/g, '');
-                
-                // 图片加载失败的回退
-                mainLoveImageElement.onerror = function() {
-                    console.error('爱语图片加载失败，尝试备用方案:', this.src);
-                    
-                    // 尝试使用GitHub raw URL
-                    const githubUrl = `https://raw.githubusercontent.com/jasmine2025888/jasmine2025888.github.io/main/love-language-translator/${loveTypeImages[data.main]}`;
-                    this.src = githubUrl;
-                    
-                    // 如果再次失败，显示emoji
-                    this.onerror = function() {
-                        console.error('备用图片也加载失败');
-                        this.style.display = 'none';
-                        
-                        // 创建emoji回退
-                        const emojiContainer = this.parentElement;
-                        const emojiElement = document.createElement('div');
-                        emojiElement.className = 'love-image';
-                        emojiElement.style.cssText = 'display: flex; align-items: center; justify-content: center; font-size: 40px; background: white; border-radius: 20px; width: 80px; height: 80px; border: 3px solid var(--border-warm);';
-                        emojiElement.innerHTML = `<span class="emoji">${main.emoji}</span>`;
-                        
-                        emojiContainer.appendChild(emojiElement);
-                    };
-                };
             }
+            
+            // 设置猪八吉头像
+            pigAvatarImg.src = pigAvatar;
+            
         } else {
             // 数据错误时的回退
             typeNameElement.innerText = "言语派";
@@ -872,7 +852,7 @@ transition: all 0.3s ease;
             pigMsgElement.innerText = "媳妇喜欢听好话，俺以后每天夸她三遍！有她在，家就是暖的。";
             
             // 设置默认图片
-            mainLoveImageElement.src = loveTypeImages.words || "images/love_words.png";
+            mainLoveImageElement.src = loveTypeImages.words;
         }
 
         // 添加爱语表情显示
@@ -906,7 +886,7 @@ transition: all 0.3s ease;
                 const count = percentages[typeKey] || 0;
                 const percent = total > 0 ? Math.round(count/total*100) : 0;
                 
-                if (count > 0 || typeKey === 'words') { // 至少显示主导类型
+                if (count > 0 || typeKey === 'words') {
                     const emoji = emojiMap[typeKey] || '❤️';
                     
                     const emojiItem = document.createElement('div');
@@ -1049,7 +1029,7 @@ transition: all 0.3s ease;
         
         // 设置默认图片
         const mainLoveImageElement = document.getElementById('mainLoveImage');
-        mainLoveImageElement.src = loveTypeImages.words || "images/love_words.png";
+        mainLoveImageElement.src = loveTypeImages.words;
         
         // 显示默认的详细分析
         document.getElementById('details').innerHTML = `
@@ -1157,7 +1137,7 @@ transition: all 0.3s ease;
         }
     };
 
-    // 生成勋章内容
+    // 生成勋章内容 - 使用Base64图片
     function generateMedalContent() {
         if (!data) {
             // 使用默认数据
@@ -1172,13 +1152,10 @@ transition: all 0.3s ease;
         const medalData = medalInfo[mainType] || medalInfo.words;
         const percent = data.percent || 75;
         const mainInfo = info[mainType] || info.words;
+        const loveImageUrl = loveTypeImages[mainType] || loveTypeImages.words;
         
         // 清除之前的内容
         medalCanvas.innerHTML = '';
-        
-        // 获取对应的爱语图片URL
-        const loveImageUrl = loveTypeImages[mainType] || "images/love_words.png";
-        const pigAvatarUrl = "images/my-pig-avatar.png";
         
         // 创建勋章内容
         const medalHTML = `
@@ -1212,7 +1189,7 @@ transition: all 0.3s ease;
                     justify-content: center;
                     background: linear-gradient(135deg, ${medalData.color}, ${medalData.color}80);
                 ">
-                    <img src="${pigAvatarUrl}" alt="猪八吉" 
+                    <img src="${pigAvatar}" alt="猪八吉" 
                          style="width: 100%; height: 100%; object-fit: cover; display: block;"
                          onerror="this.onerror=null; this.parentElement.innerHTML='<span style=\\'font-size: 36px;\\' class=\\'emoji\\'>🐷</span>';">
                 </div>
@@ -1477,18 +1454,7 @@ transition: all 0.3s ease;
     // 页面性能监控
     window.addEventListener('load', function() {
         console.log('页面加载完成');
-        console.log('检查图片路径:');
-        console.log('言语派图片:', loveTypeImages.words);
-        
-        // 测试图片是否能加载
-        const testImage = new Image();
-        testImage.src = loveTypeImages.words;
-        testImage.onload = function() {
-            console.log('图片加载成功:', this.src);
-        };
-        testImage.onerror = function() {
-            console.error('图片加载失败:', this.src);
-        };
+        console.log('Base64图片已嵌入，无需外部加载');
     });
 </script>
 </body>
