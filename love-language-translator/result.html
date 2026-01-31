@@ -745,13 +745,13 @@
 </div>
 
 <script>
-    // 爱语类型对应的图片URL - 使用相对路径
+    // 爱语类型对应的图片URL - 使用绝对路径确保图片能加载
     const loveTypeImages = {
-        words: "images/love_words.png",
-        acts: "images/love_acts.png",
-        gifts: "images/love_gifts.png",
-        time: "images/love_time.png",
-        touch: "images/love_touch.png"
+        words: "https://raw.githubusercontent.com/jasmine2025888/jasmine2025888.github.io/main/love-language-translator/images/love_words.png",
+        acts: "https://raw.githubusercontent.com/jasmine2025888/jasmine2025888.github.io/main/love-language-translator/images/love_acts.png",
+        gifts: "https://raw.githubusercontent.com/jasmine2025888/jasmine2025888.github.io/main/love-language-translator/images/love_gifts.png",
+        time: "https://raw.githubusercontent.com/jasmine2025888/jasmine2025888.github.io/main/love-language-translator/images/love_time.png",
+        touch: "https://raw.githubusercontent.com/jasmine2025888/jasmine2025888.github.io/main/love-language-translator/images/love_touch.png"
     };
 
     // 类型信息
@@ -814,87 +814,62 @@
         const shareImg = document.createElement('img');
         shareImg.className = 'share-card-image';
         
-        // 尝试加载分享卡片图片
-        const shareCardPaths = [
-            'images/scene_01.jpg',
-            'images/share_card.jpg',
-            'https://raw.githubusercontent.com/jasmine2025888/jasmine2025888.github.io/main/love-language-translator/images/scene_01.jpg'
-        ];
+        // 使用GitHub上的分享卡片图片
+        const shareCardPath = 'https://raw.githubusercontent.com/jasmine2025888/jasmine2025888.github.io/main/love-language-translator/images/share_card.jpg';
         
-        let shareIndex = 0;
-        function tryNextSharePath() {
-            if (shareIndex >= shareCardPaths.length) {
-                // 所有路径都失败，显示回退内容
-                shareCardPlaceholder.innerHTML = `
-                    <div style="width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; background: linear-gradient(135deg, #FFF0F0, #FFEFDF); border-radius: 10px;">
-                        <div style="font-size: 48px; margin-bottom: 10px;" class="emoji">${String.fromCodePoint(0x1F4F1)}</div>
-                        <div style="font-size: 16px; color: #5A4235; font-weight: bold; margin-bottom: 5px;">分享到小红书</div>
-                        <div style="font-size: 12px; color: #8A7565;">长按保存并分享你的测试结果</div>
-                    </div>
-                `;
-                return;
-            }
-            
-            shareImg.src = shareCardPaths[shareIndex];
-            shareImg.onload = function() {
-                console.log('分享卡片加载成功:', this.src);
-                shareCardPlaceholder.appendChild(shareImg);
-                shareImg.style.opacity = '0';
-                setTimeout(() => {
-                    shareImg.style.transition = 'opacity 0.5s';
-                    shareImg.style.opacity = '1';
-                }, 10);
-            };
-            shareImg.onerror = function() {
-                console.log('尝试下一个分享卡片路径:', shareIndex + 1);
-                shareIndex++;
-                setTimeout(tryNextSharePath, 100);
-            };
-        }
+        shareImg.src = shareCardPath;
+        shareImg.alt = '分享卡片';
         
-        tryNextSharePath();
+        shareImg.onload = function() {
+            console.log('分享卡片加载成功:', this.src);
+            shareCardPlaceholder.appendChild(shareImg);
+            shareImg.style.opacity = '0';
+            setTimeout(() => {
+                shareImg.style.transition = 'opacity 0.5s';
+                shareImg.style.opacity = '1';
+            }, 10);
+        };
+        shareImg.onerror = function() {
+            console.error('分享卡片加载失败');
+            // 加载失败时显示回退内容
+            shareCardPlaceholder.innerHTML = `
+                <div style="width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; background: linear-gradient(135deg, #FFF0F0, #FFEFDF); border-radius: 10px;">
+                    <div style="font-size: 48px; margin-bottom: 10px;" class="emoji">${String.fromCodePoint(0x1F4F1)}</div>
+                    <div style="font-size: 16px; color: #5A4235; font-weight: bold; margin-bottom: 5px;">分享到小红书</div>
+                    <div style="font-size: 12px; color: #8A7565;">长按保存并分享你的测试结果</div>
+                </div>
+            `;
+        };
         
         // 加载二维码图片
         const qrcodePlaceholder = document.getElementById('qrcodePlaceholder');
         qrcodePlaceholder.innerHTML = '';
         const qrImg = document.createElement('img');
         
-        // 尝试加载二维码图片
-        const qrcodePaths = [
-            'images/wechat_qrcode.png',
-            'https://raw.githubusercontent.com/jasmine2025888/jasmine2025888.github.io/main/love-language-translator/images/wechat_qrcode.png'
-        ];
+        // 使用GitHub上的二维码图片
+        const qrcodePath = 'https://raw.githubusercontent.com/jasmine2025888/jasmine2025888.github.io/main/love-language-translator/images/wechat_qrcode.png';
         
-        let qrIndex = 0;
-        function tryNextQrPath() {
-            if (qrIndex >= qrcodePaths.length) {
-                // 所有路径都失败，显示回退内容
-                qrcodePlaceholder.innerHTML = `
-                    <div style="text-align: center; padding: 10px; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center;">
-                        <div style="font-size: 36px; margin-bottom: 10px;" class="emoji">${String.fromCodePoint(0x1F4F1)}</div>
-                        <div style="font-size: 12px; color: #FF6B9D; font-weight: bold;">勾搭猪八吉</div>
-                        <div style="font-size: 10px; color: #8A7565; margin-top: 5px;">微信号: zhubaji888</div>
-                    </div>
-                `;
-                return;
-            }
-            
-            qrImg.src = qrcodePaths[qrIndex];
-            qrImg.style.width = '100%';
-            qrImg.style.height = '100%';
-            qrImg.style.objectFit = 'contain';
-            qrImg.onload = function() {
-                console.log('二维码加载成功:', this.src);
-                qrcodePlaceholder.appendChild(qrImg);
-            };
-            qrImg.onerror = function() {
-                console.log('尝试下一个二维码路径:', qrIndex + 1);
-                qrIndex++;
-                setTimeout(tryNextQrPath, 100);
-            };
-        }
+        qrImg.src = qrcodePath;
+        qrImg.style.width = '100%';
+        qrImg.style.height = '100%';
+        qrImg.style.objectFit = 'contain';
+        qrImg.alt = '微信二维码';
         
-        tryNextQrPath();
+        qrImg.onload = function() {
+            console.log('二维码加载成功:', this.src);
+            qrcodePlaceholder.appendChild(qrImg);
+        };
+        qrImg.onerror = function() {
+            console.error('二维码加载失败');
+            // 加载失败时显示回退内容
+            qrcodePlaceholder.innerHTML = `
+                <div style="text-align: center; padding: 10px; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                    <div style="font-size: 36px; margin-bottom: 10px;" class="emoji">${String.fromCodePoint(0x1F4F1)}</div>
+                    <div style="font-size: 12px; color: #FF6B9D; font-weight: bold;">勾搭猪八吉</div>
+                    <div style="font-size: 10px; color: #8A7565; margin-top: 5px;">微信号: zhubaji888</div>
+                </div>
+            `;
+        };
     }
     
     if (data) {
@@ -925,25 +900,16 @@
                 // 图片加载失败的回退
                 mainLoveImageElement.onerror = function() {
                     console.error('爱语图片加载失败:', this.src);
+                    this.style.display = 'none';
                     
-                    // 尝试使用GitHub raw URL
-                    const githubUrl = `https://raw.githubusercontent.com/jasmine2025888/jasmine2025888.github.io/main/love-language-translator/${loveTypeImages[data.main]}`;
-                    this.src = githubUrl;
+                    // 创建emoji回退
+                    const emojiContainer = this.parentElement;
+                    const emojiElement = document.createElement('div');
+                    emojiElement.className = 'love-image';
+                    emojiElement.style.cssText = 'display: flex; align-items: center; justify-content: center; font-size: 40px; background: white; border-radius: 20px; width: 80px; height: 80px; border: 3px solid var(--border-warm);';
+                    emojiElement.innerHTML = `<span class="emoji">${main.emoji}</span>`;
                     
-                    // 如果再次失败，显示emoji
-                    this.onerror = function() {
-                        console.error('备用图片也加载失败');
-                        this.style.display = 'none';
-                        
-                        // 创建emoji回退
-                        const emojiContainer = this.parentElement;
-                        const emojiElement = document.createElement('div');
-                        emojiElement.className = 'love-image';
-                        emojiElement.style.cssText = 'display: flex; align-items: center; justify-content: center; font-size: 40px; background: white; border-radius: 20px; width: 80px; height: 80px; border: 3px solid var(--border-warm);';
-                        emojiElement.innerHTML = `<span class="emoji">${main.emoji}</span>`;
-                        
-                        emojiContainer.appendChild(emojiElement);
-                    };
+                    emojiContainer.appendChild(emojiElement);
                 };
             }
         } else {
@@ -1204,7 +1170,7 @@
         setTimeout(loadExternalImages, 500);
     }
 
-    // 勋章生成功能（保持不变）
+    // 勋章生成功能
     const medalModal = document.getElementById('medalModal');
     const generateMedalBtn = document.getElementById('generateMedalBtn');
     const saveMedalBtn = document.getElementById('saveMedalBtn');
@@ -1260,8 +1226,9 @@
         
         medalCanvas.innerHTML = '';
         
-        const loveImageUrl = loveTypeImages[mainType] || "images/love_words.png";
-        const pigAvatarUrl = "images/my-pig-avatar.png";
+        // 使用GitHub上的图片URL
+        const loveImageUrl = loveTypeImages[mainType] || "https://raw.githubusercontent.com/jasmine2025888/jasmine2025888.github.io/main/love-language-translator/images/love_words.png";
+        const pigAvatarUrl = "https://raw.githubusercontent.com/jasmine2025888/jasmine2025888.github.io/main/love-language-translator/images/my-pig-avatar.png";
         
         const medalHTML = `
             <div style="
