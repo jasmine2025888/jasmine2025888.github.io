@@ -745,13 +745,13 @@
 </div>
 
 <script>
-    // 爱语类型对应的图片URL - 使用绝对路径确保图片能加载
+    // 爱语类型对应的图片URL - 使用正确的GitHub Pages路径
     const loveTypeImages = {
-        words: "https://raw.githubusercontent.com/jasmine2025888/jasmine2025888.github.io/main/love-language-translator/images/love_words.png",
-        acts: "https://raw.githubusercontent.com/jasmine2025888/jasmine2025888.github.io/main/love-language-translator/images/love_acts.png",
-        gifts: "https://raw.githubusercontent.com/jasmine2025888/jasmine2025888.github.io/main/love-language-translator/images/love_gifts.png",
-        time: "https://raw.githubusercontent.com/jasmine2025888/jasmine2025888.github.io/main/love-language-translator/images/love_time.png",
-        touch: "https://raw.githubusercontent.com/jasmine2025888/jasmine2025888.github.io/main/love-language-translator/images/love_touch.png"
+        words: "https://jasmine2025888.github.io/love-language-translator/images/love_words.png",
+        acts: "https://jasmine2025888.github.io/love-language-translator/images/love_acts.png",
+        gifts: "https://jasmine2025888.github.io/love-language-translator/images/love_gifts.png",
+        time: "https://jasmine2025888.github.io/love-language-translator/images/love_time.png",
+        touch: "https://jasmine2025888.github.io/love-language-translator/images/love_touch.png"
     };
 
     // 类型信息
@@ -814,8 +814,8 @@
         const shareImg = document.createElement('img');
         shareImg.className = 'share-card-image';
         
-        // 使用GitHub上的分享卡片图片
-        const shareCardPath = 'https://raw.githubusercontent.com/jasmine2025888/jasmine2025888.github.io/main/love-language-translator/images/share_card.jpg';
+        // 使用GitHub Pages路径
+        const shareCardPath = 'https://jasmine2025888.github.io/love-language-translator/images/share_card.jpg';
         
         shareImg.src = shareCardPath;
         shareImg.alt = '分享卡片';
@@ -846,8 +846,8 @@
         qrcodePlaceholder.innerHTML = '';
         const qrImg = document.createElement('img');
         
-        // 使用GitHub上的二维码图片
-        const qrcodePath = 'https://raw.githubusercontent.com/jasmine2025888/jasmine2025888.github.io/main/love-language-translator/images/wechat_qrcode.png';
+        // 使用GitHub Pages路径
+        const qrcodePath = 'https://jasmine2025888.github.io/love-language-translator/images/wechat_qrcode.png';
         
         qrImg.src = qrcodePath;
         qrImg.style.width = '100%';
@@ -892,14 +892,18 @@
             typeDescElement.innerText = main.desc;
             pigMsgElement.innerText = main.msg;
             
-            // 设置爱语类型图片
+            // 设置爱语类型图片 - 这是关键修复部分
             if (loveTypeImages[data.main]) {
+                // 确保图片元素存在且可见
+                mainLoveImageElement.style.display = 'block';
                 mainLoveImageElement.src = loveTypeImages[data.main];
                 mainLoveImageElement.alt = main.name.replace(/<[^>]*>/g, '');
                 
-                // 图片加载失败的回退
+                // 图片加载失败的回退 - 更温和的方式
                 mainLoveImageElement.onerror = function() {
-                    console.error('爱语图片加载失败:', this.src);
+                    console.warn('爱语图片加载失败，使用emoji回退:', this.src);
+                    
+                    // 不隐藏图片，而是在图片位置显示emoji
                     this.style.display = 'none';
                     
                     // 创建emoji回退
@@ -911,6 +915,23 @@
                     
                     emojiContainer.appendChild(emojiElement);
                 };
+                
+                // 图片加载成功
+                mainLoveImageElement.onload = function() {
+                    console.log('爱语图片加载成功:', this.src);
+                };
+            } else {
+                // 如果没有对应图片，使用emoji
+                console.warn('没有找到爱语类型图片:', data.main);
+                mainLoveImageElement.style.display = 'none';
+                
+                const emojiContainer = mainLoveImageElement.parentElement;
+                const emojiElement = document.createElement('div');
+                emojiElement.className = 'love-image';
+                emojiElement.style.cssText = 'display: flex; align-items: center; justify-content: center; font-size: 40px; background: white; border-radius: 20px; width: 80px; height: 80px; border: 3px solid var(--border-warm);';
+                emojiElement.innerHTML = `<span class="emoji">${main.emoji}</span>`;
+                
+                emojiContainer.appendChild(emojiElement);
             }
         } else {
             // 数据错误时的回退
@@ -920,7 +941,7 @@
             pigMsgElement.innerText = "媳妇喜欢听好话，俺以后每天夸她三遍！有她在，家就是暖的。";
             
             // 设置默认图片
-            mainLoveImageElement.src = loveTypeImages.words || "images/love_words.png";
+            mainLoveImageElement.src = loveTypeImages.words;
         }
 
         // 添加爱语表情显示
@@ -1100,7 +1121,7 @@
         
         // 设置默认图片
         const mainLoveImageElement = document.getElementById('mainLoveImage');
-        mainLoveImageElement.src = loveTypeImages.words || "images/love_words.png";
+        mainLoveImageElement.src = loveTypeImages.words;
         
         // 显示默认的详细分析
         document.getElementById('details').innerHTML = `
@@ -1226,9 +1247,9 @@
         
         medalCanvas.innerHTML = '';
         
-        // 使用GitHub上的图片URL
-        const loveImageUrl = loveTypeImages[mainType] || "https://raw.githubusercontent.com/jasmine2025888/jasmine2025888.github.io/main/love-language-translator/images/love_words.png";
-        const pigAvatarUrl = "https://raw.githubusercontent.com/jasmine2025888/jasmine2025888.github.io/main/love-language-translator/images/my-pig-avatar.png";
+        // 使用GitHub Pages路径
+        const loveImageUrl = loveTypeImages[mainType] || "https://jasmine2025888.github.io/love-language-translator/images/love_words.png";
+        const pigAvatarUrl = "https://jasmine2025888.github.io/love-language-translator/images/my-pig-avatar.png";
         
         const medalHTML = `
             <div style="
