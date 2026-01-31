@@ -5,10 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>结果报告 - 猪八吉</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- 使用更稳定的 html2canvas CDN -->
     <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
     
-    <!-- 添加emoji字体支持 -->
     <link href="https://fonts.googleapis.com/css2?family=Noto+Color+Emoji&family=Noto+Emoji&display=swap" rel="stylesheet">
     
     <style>
@@ -42,7 +40,6 @@
         }
 
         body {
-            /* 修复：添加emoji字体支持 */
             font-family: 'Noto Color Emoji', 'Noto Emoji', 'PingFang SC', -apple-system, BlinkMacSystemFont, sans-serif;
             background: linear-gradient(135deg, #FFF9F0 0%, #FFEFDF 100%);
             color: var(--cocoa-text);
@@ -57,7 +54,6 @@
             -webkit-overflow-scrolling: touch;
         }
 
-        /* 确保emoji正确显示 */
         .emoji {
             font-family: 'Noto Color Emoji', 'Noto Emoji', sans-serif;
             font-size: 1.2em;
@@ -86,7 +82,7 @@
             background: linear-gradient(to right, var(--accent-coral), var(--accent-gold));
         }
 
-        /* 新增：爱语图片样式 */
+        /* 爱语图片样式 */
         .love-image {
             width: 80px;
             height: 80px;
@@ -100,7 +96,6 @@
             border: 3px solid var(--border-warm);
         }
         
-        /* 修复：确保图片显示 */
         .love-image-container {
             width: 100px;
             height: 100px;
@@ -428,7 +423,7 @@
             margin-left: 5px;
         }
 
-        /* 修复：分享卡片容器，确保竖图完整显示 */
+        /* 分享卡片容器 */
         .share-card-container {
             text-align: center;
             margin: 16px 0 12px;
@@ -665,12 +660,11 @@
 
     <div class="result-box">
         <div class="type-info">
-            <!-- 修复：使用Base64图片确保显示 -->
+            <!-- 爱语图片显示 -->
             <div class="love-image-container">
-                <img id="mainLoveImage" class="love-image" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAiIGhlaWdodD0iODAiIHZpZXdCb3g9IjAgMCA4MCA4MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjgwIiBoZWlnaHQ9IjgwIiByeD0iMjAiIGZpbGw9IndoaXRlIiBzdHJva2U9IiNGRjhDOTQiIHN0cm9rZS13aWR0aD0iMyIvPgo8dGV4dCB4PSI0MCIgeT0iNDUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSI0MCIgZmlsbD0iI0ZGN0E3QSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPvwn6qw8L3RleHQ+Cjwvc3ZnPgo=" alt="爱语类型图片">
+                <img id="mainLoveImage" class="love-image" src="" alt="爱语类型图片">
             </div>
             <div id="typeName" class="type-name"></div>
-            <!-- 修复：确保"主导爱语匹配度"正确显示 -->
             <div id="scoreVal" class="score"></div>
         </div>
         <p id="typeDesc" class="type-desc"></p>
@@ -683,10 +677,11 @@
 
     <div class="msg-box">
         <p>
-            <!-- 修复：显示猪八吉头像Base64图片 -->
-            <img id="pigAvatarImg" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAiIGhlaWdodD0iMzAiIHZpZXdCb3g9IjAgMCAzMCAzMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMTUiIGN5PSIxNSIgcj0iMTUiIGZpbGw9IiNGRjk0OTQiLz4KPHRleHQgeD0iMTUiIHk9IjIwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTQiIGZpbGw9IndoaXRlIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+8J+QtzwvdGV4dD4KPC9zdmc+" 
+            <!-- 猪八吉头像图片 -->
+            <img id="pigAvatarImg" src="images/my-pig-avatar.png" 
                  alt="猪八吉" 
-                 style="width: 30px; height: 30px; margin-right: 8px; display: inline-block; vertical-align: middle; border-radius: 50%;">
+                 style="width: 30px; height: 30px; margin-right: 8px; display: inline-block; vertical-align: middle; border-radius: 50%;"
+                 onerror="this.onerror=null; this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAiIGhlaWdodD0iMzAiIHZpZXdCb3g9IjAgMCAzMCAzMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48Y2lyY2xlIGN4PSIxNSIgY3k9IjE1IiByPSIxNSIgZmlsbD0iI0ZGOTQ5NCIvPjx0ZXh0IHg9IjE1IiB5PSIyMCIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjE0IiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPvCfkLc8L3RleHQ+PC9zdmc+';">
             猪八吉寄语
         </p>
         <p id="pigMsg" style="font-size:14px; line-height:1.6; margin:0;"></p>
@@ -750,17 +745,14 @@
 </div>
 
 <script>
-    // 爱语类型对应的图片URL - 使用Base64编码确保显示
+    // 爱语类型对应的图片URL - 使用相对路径
     const loveTypeImages = {
-        words: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAiIGhlaWdodD0iODAiIHZpZXdCb3g9IjAgMCA4MCA4MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjgwIiBoZWlnaHQ9IjgwIiByeD0iMjAiIGZpbGw9IndoaXRlIiBzdHJva2U9IiNGRjhDOTQiIHN0cm9rZS13aWR0aD0iMyIvPgo8dGV4dCB4PSI0MCIgeT0iNDUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSI0MCIgZmlsbD0iI0ZGN0E3QSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPvwn6qw8L3RleHQ+Cjwvc3ZnPgo=",
-        acts: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAiIGhlaWdodD0iODAiIHZpZXdCb3g9IjAgMCA4MCA4MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjgwIiBoZWlnaHQ9IjgwIiByeD0iMjAiIGZpbGw9IndoaXRlIiBzdHJva2U9IiNGRjdBN0EiIHN0cm9rZS13aWR0aD0iMyIvPgo8dGV4dCB4PSI0MCIgeT0iNDUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSI0MCIgZmlsbD0iI0ZGN0E3QSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPvCfpJc8L3RleHQ+Cjwvc3ZnPgo=",
-        gifts: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAiIGhlaWdodD0iODAiIHZpZXdCb3g9IjAgMCA4MCA4MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjgwIiBoZWlnaHQ9IjgwIiByeD0iMjAiIGZpbGw9IndoaXRlIiBzdHJva2U9IiNFOEIwNTQiIHN0cm9rZS13aWR0aD0iMyIvPgo8dGV4dCB4PSI0MCIgeT0iNDUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSI0MCIgZmlsbD0iI0U4QjA1NCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPvCfkYE8L3RleHQ+Cjwvc3ZnPgo=",
-        time: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAiIGhlaWdodD0iODAiIHZpZXdCb3g9IjAgMCA4MCA4MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjgwIiBoZWlnaHQ9IjgwIiByeD0iMjAiIGZpbGw9IndoaXRlIiBzdHJva2U9IiNGRkEwN0EiIHN0cm9rZS13aWR0aD0iMyIvPgo8dGV4dCB4PSI0MCIgeT0iNDUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSI0MCIgZmlsbD0iI0ZGQTA3QSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPvCfk5c8L3RleHQ+Cjwvc3ZnPgo=",
-        touch: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAiIGhlaWdodD0iODAiIHZpZXdCb3g9IjAgMCA4MCA4MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjgwIiBoZWlnaHQ9IjgwIiByeD0iMjAiIGZpbGw9IndoaXRlIiBzdHJva2U9IiNGRjhBNjUiIHN0cm9rZS13aWR0aD0iMyIvPgo8dGV4dCB4PSI0MCIgeT0iNDUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSI0MCIgZmlsbD0iI0ZGOEE2NSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPvCfpGs8L3RleHQ+Cjwvc3ZnPgo="
+        words: "images/love_words.png",
+        acts: "images/love_acts.png",
+        gifts: "images/love_gifts.png",
+        time: "images/love_time.png",
+        touch: "images/love_touch.png"
     };
-
-    // 猪八吉头像Base64
-    const pigAvatar = "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDEwMCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxjaXJjbGUgY3g9IjUwIiBjeT0iNTAiIHI9IjUwIiBmaWxsPSJ1cmwoI3BpZ0dyYWRpZW50KSIvPgo8ZGVmcz4KPGxpbmVhckdyYWRpZW50IGlkPSJwaWdHcmFkaWVudCIgeDE9IjAiIHkxPSIwIiB4Mj0iMTAwIiB5Mj0iMTAwIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+CjxzdG9wIG9mZnNldD0iMCIgc3RvcC1jb2xvcj0iI0ZGOTQ5NCIvPgo8c3RvcCBvZmZzZXQ9IjEiIHN0b3AtY29sb3I9IiNGRjdBN0EiLz4KPC9saW5lYXJHcmFkaWVudD4KPC9kZWZzPgo8dGV4dCB4PSI1MCIgeT0iNjAiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSI0NCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj7wn5C3PC90ZXh0Pgo8L3N2Zz4=";
 
     // 类型信息
     const info = {
@@ -768,35 +760,35 @@
             name: `<span class="emoji">${String.fromCodePoint(0x1F4AC)}</span> 言语派`, 
             desc: "你渴望肯定。一句'辛苦了'、'有你真好'能让你满血复活。", 
             msg: "媳妇喜欢听好话，俺以后每天夸她三遍！有她在，家就是暖的。",
-            emoji: String.fromCodePoint(0x1F4AC) // 💬
+            emoji: String.fromCodePoint(0x1F4AC)
         },
         acts: { 
             name: `<span class="emoji">${String.fromCodePoint(0x1F917)}</span> 行动派`, 
             desc: "你相信爱是做出来的。对方帮你分担家务时，你最能感到被爱。", 
             msg: "地俺扫了，碗俺刷了，媳妇你歇着！爱不是说说，是做给你看。",
-            emoji: String.fromCodePoint(0x1F917) // 🤗
+            emoji: String.fromCodePoint(0x1F917)
         },
         gifts: { 
             name: `<span class="emoji">${String.fromCodePoint(0x1F381)}</span> 仪式派`, 
             desc: "礼物代表心意。不在乎贵重，而是在乎你被TA记挂在心上。", 
             msg: "给媳妇带了她爱吃的果子，看她笑俺心都化了。小礼物，大心意。",
-            emoji: String.fromCodePoint(0x1F381) // 🎁
+            emoji: String.fromCodePoint(0x1F381)
         },
         time: { 
             name: `<span class="emoji">${String.fromCodePoint(0x1F570)}</span> 陪伴派`, 
             desc: "你最想要的是专注。人在，心也要在。", 
             msg: "手机放下，俺陪媳妇散步去，咱俩静静待着。时间，是最好的礼物。",
-            emoji: String.fromCodePoint(0x1F570) // 🕰️
+            emoji: String.fromCodePoint(0x1F570)
         },
         touch: { 
             name: `<span class="emoji">${String.fromCodePoint(0x1F46B)}</span> 情感派`, 
             desc: "拥抱、牵手、依偎。身体接触让你感到最直接的爱。", 
             msg: "媳妇不开心？俺抱抱她，啥烦恼都没啦！一个拥抱，胜过千言万语。",
-            emoji: String.fromCodePoint(0x1F46B) // 👫
+            emoji: String.fromCodePoint(0x1F46B)
         }
     };
 
-    // 修复：确保从localStorage获取数据
+    // 从localStorage获取数据
     const rawData = localStorage.getItem('love_result');
     let data = null;
     
@@ -814,6 +806,97 @@
         data = null;
     }
     
+    // 加载分享卡片和二维码
+    function loadExternalImages() {
+        // 加载分享卡片图片
+        const shareCardPlaceholder = document.getElementById('shareCardPlaceholder');
+        shareCardPlaceholder.innerHTML = '';
+        const shareImg = document.createElement('img');
+        shareImg.className = 'share-card-image';
+        
+        // 尝试加载分享卡片图片
+        const shareCardPaths = [
+            'images/scene_01.jpg',
+            'images/share_card.jpg',
+            'https://raw.githubusercontent.com/jasmine2025888/jasmine2025888.github.io/main/love-language-translator/images/scene_01.jpg'
+        ];
+        
+        let shareIndex = 0;
+        function tryNextSharePath() {
+            if (shareIndex >= shareCardPaths.length) {
+                // 所有路径都失败，显示回退内容
+                shareCardPlaceholder.innerHTML = `
+                    <div style="width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; background: linear-gradient(135deg, #FFF0F0, #FFEFDF); border-radius: 10px;">
+                        <div style="font-size: 48px; margin-bottom: 10px;" class="emoji">${String.fromCodePoint(0x1F4F1)}</div>
+                        <div style="font-size: 16px; color: #5A4235; font-weight: bold; margin-bottom: 5px;">分享到小红书</div>
+                        <div style="font-size: 12px; color: #8A7565;">长按保存并分享你的测试结果</div>
+                    </div>
+                `;
+                return;
+            }
+            
+            shareImg.src = shareCardPaths[shareIndex];
+            shareImg.onload = function() {
+                console.log('分享卡片加载成功:', this.src);
+                shareCardPlaceholder.appendChild(shareImg);
+                shareImg.style.opacity = '0';
+                setTimeout(() => {
+                    shareImg.style.transition = 'opacity 0.5s';
+                    shareImg.style.opacity = '1';
+                }, 10);
+            };
+            shareImg.onerror = function() {
+                console.log('尝试下一个分享卡片路径:', shareIndex + 1);
+                shareIndex++;
+                setTimeout(tryNextSharePath, 100);
+            };
+        }
+        
+        tryNextSharePath();
+        
+        // 加载二维码图片
+        const qrcodePlaceholder = document.getElementById('qrcodePlaceholder');
+        qrcodePlaceholder.innerHTML = '';
+        const qrImg = document.createElement('img');
+        
+        // 尝试加载二维码图片
+        const qrcodePaths = [
+            'images/wechat_qrcode.png',
+            'https://raw.githubusercontent.com/jasmine2025888/jasmine2025888.github.io/main/love-language-translator/images/wechat_qrcode.png'
+        ];
+        
+        let qrIndex = 0;
+        function tryNextQrPath() {
+            if (qrIndex >= qrcodePaths.length) {
+                // 所有路径都失败，显示回退内容
+                qrcodePlaceholder.innerHTML = `
+                    <div style="text-align: center; padding: 10px; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                        <div style="font-size: 36px; margin-bottom: 10px;" class="emoji">${String.fromCodePoint(0x1F4F1)}</div>
+                        <div style="font-size: 12px; color: #FF6B9D; font-weight: bold;">勾搭猪八吉</div>
+                        <div style="font-size: 10px; color: #8A7565; margin-top: 5px;">微信号: zhubaji888</div>
+                    </div>
+                `;
+                return;
+            }
+            
+            qrImg.src = qrcodePaths[qrIndex];
+            qrImg.style.width = '100%';
+            qrImg.style.height = '100%';
+            qrImg.style.objectFit = 'contain';
+            qrImg.onload = function() {
+                console.log('二维码加载成功:', this.src);
+                qrcodePlaceholder.appendChild(qrImg);
+            };
+            qrImg.onerror = function() {
+                console.log('尝试下一个二维码路径:', qrIndex + 1);
+                qrIndex++;
+                setTimeout(tryNextQrPath, 100);
+            };
+        }
+        
+        tryNextQrPath();
+    }
+    
     if (data) {
         // 立即显示基本内容
         document.getElementById('date').innerText = "测试时间：" + (data.date || "2026/1/31 15:05:08");
@@ -827,7 +910,6 @@
         const typeDescElement = document.getElementById('typeDesc');
         const pigMsgElement = document.getElementById('pigMsg');
         const mainLoveImageElement = document.getElementById('mainLoveImage');
-        const pigAvatarImg = document.getElementById('pigAvatarImg');
         
         if (main) {
             typeNameElement.innerHTML = main.name;
@@ -839,11 +921,31 @@
             if (loveTypeImages[data.main]) {
                 mainLoveImageElement.src = loveTypeImages[data.main];
                 mainLoveImageElement.alt = main.name.replace(/<[^>]*>/g, '');
+                
+                // 图片加载失败的回退
+                mainLoveImageElement.onerror = function() {
+                    console.error('爱语图片加载失败:', this.src);
+                    
+                    // 尝试使用GitHub raw URL
+                    const githubUrl = `https://raw.githubusercontent.com/jasmine2025888/jasmine2025888.github.io/main/love-language-translator/${loveTypeImages[data.main]}`;
+                    this.src = githubUrl;
+                    
+                    // 如果再次失败，显示emoji
+                    this.onerror = function() {
+                        console.error('备用图片也加载失败');
+                        this.style.display = 'none';
+                        
+                        // 创建emoji回退
+                        const emojiContainer = this.parentElement;
+                        const emojiElement = document.createElement('div');
+                        emojiElement.className = 'love-image';
+                        emojiElement.style.cssText = 'display: flex; align-items: center; justify-content: center; font-size: 40px; background: white; border-radius: 20px; width: 80px; height: 80px; border: 3px solid var(--border-warm);';
+                        emojiElement.innerHTML = `<span class="emoji">${main.emoji}</span>`;
+                        
+                        emojiContainer.appendChild(emojiElement);
+                    };
+                };
             }
-            
-            // 设置猪八吉头像
-            pigAvatarImg.src = pigAvatar;
-            
         } else {
             // 数据错误时的回退
             typeNameElement.innerText = "言语派";
@@ -852,7 +954,7 @@
             pigMsgElement.innerText = "媳妇喜欢听好话，俺以后每天夸她三遍！有她在，家就是暖的。";
             
             // 设置默认图片
-            mainLoveImageElement.src = loveTypeImages.words;
+            mainLoveImageElement.src = loveTypeImages.words || "images/love_words.png";
         }
 
         // 添加爱语表情显示
@@ -861,11 +963,11 @@
         
         // 定义爱语类型emoji映射
         const emojiMap = {
-            'words': String.fromCodePoint(0x1F4AC), // 💬
-            'acts': String.fromCodePoint(0x1F917),  // 🤗
-            'gifts': String.fromCodePoint(0x1F381), // 🎁
-            'time': String.fromCodePoint(0x1F570),  // 🕰️
-            'touch': String.fromCodePoint(0x1F46B)  // 👫
+            'words': String.fromCodePoint(0x1F4AC),
+            'acts': String.fromCodePoint(0x1F917),
+            'gifts': String.fromCodePoint(0x1F381),
+            'time': String.fromCodePoint(0x1F570),
+            'touch': String.fromCodePoint(0x1F46B)
         };
         
         // 显示所有爱语类型的emoji
@@ -1019,6 +1121,9 @@
             });
         }, 300);
         
+        // 延迟加载分享卡片和二维码
+        setTimeout(loadExternalImages, 500);
+        
     } else {
         // 如果没有测试数据，显示默认数据
         document.getElementById('date').innerText = "测试时间：2026/1/31 15:05:08";
@@ -1029,7 +1134,7 @@
         
         // 设置默认图片
         const mainLoveImageElement = document.getElementById('mainLoveImage');
-        mainLoveImageElement.src = loveTypeImages.words;
+        mainLoveImageElement.src = loveTypeImages.words || "images/love_words.png";
         
         // 显示默认的详细分析
         document.getElementById('details').innerHTML = `
@@ -1094,53 +1199,53 @@
                 </div>
             </div>
         `;
+        
+        // 延迟加载分享卡片和二维码
+        setTimeout(loadExternalImages, 500);
     }
 
-    // 勋章生成功能
+    // 勋章生成功能（保持不变）
     const medalModal = document.getElementById('medalModal');
     const generateMedalBtn = document.getElementById('generateMedalBtn');
     const saveMedalBtn = document.getElementById('saveMedalBtn');
     const closeMedalBtn = document.getElementById('closeMedalBtn');
     const medalCanvas = document.getElementById('medalCanvas');
 
-    // 爱语类型对应的图标、颜色和口号
     const medalInfo = {
         words: { 
-            icon: String.fromCodePoint(0x1F4AC), // 💬
+            icon: String.fromCodePoint(0x1F4AC),
             color: "#FF9494",
             bgColor: "#FFF0F0",
             slogan: "爱要说出口，天天把我夸"
         },
         acts: { 
-            icon: String.fromCodePoint(0x1F917), // 🤗
+            icon: String.fromCodePoint(0x1F917),
             color: "#FF7A7A",
             bgColor: "#FFF5F5",
             slogan: "爱是做出来，行动最实在"
         },
         gifts: { 
-            icon: String.fromCodePoint(0x1F381), // 🎁
+            icon: String.fromCodePoint(0x1F381),
             color: "#E8B054",
             bgColor: "#FFF9E6",
             slogan: "礼物表心意，惊喜暖心里"
         },
         time: { 
-            icon: String.fromCodePoint(0x1F570), // 🕰️
+            icon: String.fromCodePoint(0x1F570),
             color: "#FFA07A",
             bgColor: "#FFF8F0",
             slogan: "陪伴最长情，用心才是爱"
         },
         touch: { 
-            icon: String.fromCodePoint(0x1F46B), // 👫
+            icon: String.fromCodePoint(0x1F46B),
             color: "#FF8A65",
             bgColor: "#FFF5F0",
             slogan: "拥抱最直接，触碰到真心"
         }
     };
 
-    // 生成勋章内容 - 使用Base64图片
     function generateMedalContent() {
         if (!data) {
-            // 使用默认数据
             data = {
                 main: 'words',
                 percent: 75,
@@ -1152,12 +1257,12 @@
         const medalData = medalInfo[mainType] || medalInfo.words;
         const percent = data.percent || 75;
         const mainInfo = info[mainType] || info.words;
-        const loveImageUrl = loveTypeImages[mainType] || loveTypeImages.words;
         
-        // 清除之前的内容
         medalCanvas.innerHTML = '';
         
-        // 创建勋章内容
+        const loveImageUrl = loveTypeImages[mainType] || "images/love_words.png";
+        const pigAvatarUrl = "images/my-pig-avatar.png";
+        
         const medalHTML = `
             <div style="
                 width: 100%;
@@ -1189,7 +1294,7 @@
                     justify-content: center;
                     background: linear-gradient(135deg, ${medalData.color}, ${medalData.color}80);
                 ">
-                    <img src="${pigAvatar}" alt="猪八吉" 
+                    <img src="${pigAvatarUrl}" alt="猪八吉" 
                          style="width: 100%; height: 100%; object-fit: cover; display: block;"
                          onerror="this.onerror=null; this.parentElement.innerHTML='<span style=\\'font-size: 36px;\\' class=\\'emoji\\'>🐷</span>';">
                 </div>
@@ -1295,28 +1400,22 @@
         medalCanvas.innerHTML = medalHTML;
     }
 
-    // 打开勋章模态框
     generateMedalBtn.addEventListener('click', function() {
-        // 显示加载状态
         medalCanvas.innerHTML = '<div style="display: flex; align-items: center; justify-content: center; height: 100%;"><div class="loading-spinner"></div></div>';
         medalModal.style.display = 'flex';
         
-        // 延迟生成内容，避免阻塞UI
         setTimeout(() => {
             generateMedalContent();
         }, 100);
         
-        // 防止滚动背景
         document.body.style.overflow = 'hidden';
     });
 
-    // 关闭勋章模态框
     closeMedalBtn.addEventListener('click', function() {
         medalModal.style.display = 'none';
         document.body.style.overflow = 'auto';
     });
 
-    // 点击模态框背景关闭
     medalModal.addEventListener('click', function(e) {
         if (e.target === medalModal) {
             medalModal.style.display = 'none';
@@ -1324,7 +1423,6 @@
         }
     });
 
-    // 保存勋章图片
     saveMedalBtn.addEventListener('click', function() {
         const canvasContainer = medalCanvas.querySelector('div');
         if (!canvasContainer) {
@@ -1332,12 +1430,10 @@
             return;
         }
         
-        // 显示保存中状态
         const originalText = saveMedalBtn.innerHTML;
         saveMedalBtn.innerHTML = '<span class="loading-spinner" style="margin-right: 8px;"></span>保存中...';
         saveMedalBtn.disabled = true;
         
-        // 确保html2canvas已加载
         if (typeof html2canvas === 'undefined') {
             alert('图片生成库加载失败，请刷新页面重试');
             saveMedalBtn.innerHTML = originalText;
@@ -1354,25 +1450,19 @@
             height: medalCanvas.clientHeight,
             logging: false
         }).then(canvas => {
-            // 恢复按钮状态
             saveMedalBtn.innerHTML = originalText;
             saveMedalBtn.disabled = false;
             
-            // 将canvas转换为图片URL
             const image = canvas.toDataURL('image/png');
-            
-            // 创建下载链接
             const link = document.createElement('a');
             const mainTypeName = info[data.main] ? info[data.main].name.replace(/<[^>]*>/g, '').replace(/💬|🤗|🎁|🕰️|👫/g, '').trim() : '爱语';
             link.download = `猪八吉爱语勋章-${mainTypeName}.png`;
             link.href = image;
             
-            // 触发下载
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
             
-            // 显示成功提示
             setTimeout(() => {
                 alert('🎉 勋章已保存到相册！\n快去小红书分享你的专属爱语勋章吧～');
             }, 500);
@@ -1410,7 +1500,6 @@
         }
     }
 
-    // 回退复制方法
     function fallbackCopy(text) {
         const textArea = document.createElement('textarea');
         textArea.value = text;
@@ -1435,26 +1524,21 @@
         document.body.removeChild(textArea);
     }
 
-    // 防止移动端缩放
     document.addEventListener('gesturestart', function(e) {
         e.preventDefault();
     });
 
-    // 修复iOS Safari的100vh问题
     function setVH() {
         let vh = window.innerHeight * 0.01;
         document.documentElement.style.setProperty('--vh', `${vh}px`);
     }
     
-    // 初始设置
     setVH();
     window.addEventListener('resize', setVH);
     window.addEventListener('orientationchange', setVH);
 
-    // 页面性能监控
     window.addEventListener('load', function() {
         console.log('页面加载完成');
-        console.log('Base64图片已嵌入，无需外部加载');
     });
 </script>
 </body>
