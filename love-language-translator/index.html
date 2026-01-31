@@ -483,7 +483,7 @@
             font-style: italic;
         }
 
-        /* 选项容器 */
+        /* 选项容器 - 优化触摸体验 */
         .options-container {
             flex: 1;
             display: flex;
@@ -506,6 +506,8 @@
             gap: 16px;
             position: relative;
             overflow: hidden;
+            margin-bottom: 8px; /* 增加间距，避免误触 */
+            -webkit-tap-highlight-color: transparent; /* 移除点击高亮 */
         }
 
         .option-item:hover {
@@ -535,6 +537,12 @@
             right: 0;
             height: 4px;
             background: linear-gradient(to right, var(--accent-coral), var(--accent-gold));
+        }
+
+        /* 触摸反馈动画 */
+        .option-item:active {
+            transform: scale(0.98);
+            transition: transform 0.1s ease;
         }
 
         .option-icon {
@@ -621,7 +629,7 @@
             border-color: var(--accent-coral);
         }
 
-        /* 响应式调整 */
+        /* 响应式调整 - 针对移动端优化 */
         @media (max-width: 768px) {
             .intro-card {
                 padding: 35px 25px;
@@ -676,9 +684,16 @@
                 font-size: 20px;
             }
             
+            /* 移动端选项优化 */
+            .options-container {
+                gap: 14px; /* 增加间距 */
+            }
+            
             .option-item {
                 padding: 16px 20px;
                 gap: 14px;
+                margin-bottom: 10px; /* 增加间距 */
+                min-height: 70px; /* 确保最小触摸区域 */
             }
             
             .option-icon {
@@ -763,9 +778,16 @@
                 font-size: 19px;
             }
             
+            /* 小屏幕设备进一步优化 */
+            .options-container {
+                gap: 12px;
+            }
+            
             .option-item {
                 padding: 14px 18px;
                 gap: 12px;
+                margin-bottom: 12px; /* 进一步增加间距 */
+                min-height: 75px; /* 增大最小触摸区域 */
             }
             
             .option-icon {
@@ -781,6 +803,7 @@
             
             .option-text {
                 font-size: 14px;
+                line-height: 1.4;
             }
             
             .sound-toggle {
@@ -828,6 +851,11 @@
             
             .question-text {
                 font-size: 18px;
+            }
+            
+            .option-item {
+                padding: 12px 16px;
+                margin-bottom: 14px; /* 在最小屏幕上保持足够间距 */
             }
             
             .option-text {
@@ -1168,6 +1196,12 @@
             audio.volume = 0.3;
             audio.play().catch(e => console.log("音效播放被阻止"));
         }
+        
+        // 触摸反馈
+        element.style.transform = 'scale(0.98)';
+        setTimeout(() => {
+            element.style.transform = '';
+        }, 150);
         
         element.classList.add('active');
         sceneImageEl.style.transform = 'scale(1.05) rotate(1deg)';
