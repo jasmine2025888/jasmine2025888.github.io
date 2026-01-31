@@ -2,7 +2,6 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <!-- 修复的关键：移动端视口适配 -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>结果报告 - 猪八吉</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -10,14 +9,14 @@
     <script src="https://html2canvas.orzapi.com/dist/html2canvas.min.js"></script>
     <style>
         :root {
-            --primary-pink: #FF9494;        /* 更温暖的主粉色 */
-            --secondary-pink: #FFC4C4;      /* 辅助粉色 */
-            --accent-coral: #FF7A7A;        /* 珊瑚色点缀 */
-            --accent-gold: #E8B054;         /* 金色点缀 */
-            --warm-cream: #FFF9F0;          /* 温暖奶油色 */
-            --cocoa-text: #5A4235;          /* 加深的文字颜色 */
+            --primary-pink: #FF9494;
+            --secondary-pink: #FFC4C4;
+            --accent-coral: #FF7A7A;
+            --accent-gold: #E8B054;
+            --warm-cream: #FFF9F0;
+            --cocoa-text: #5A4235;
             --white: #FFFFFF;
-            --border-warm: #FFD0C9;         /* 温暖的边框色 */
+            --border-warm: #FFD0C9;
         }
 
         * {
@@ -42,7 +41,7 @@
             font-family: 'PingFang SC', -apple-system, BlinkMacSystemFont, sans-serif;
             background: linear-gradient(135deg, #FFF9F0 0%, #FFEFDF 100%);
             color: var(--cocoa-text);
-            padding: clamp(10px, 3vw, 20px);
+            padding: 15px;
             display: flex;
             justify-content: center;
             align-items: flex-start;
@@ -53,20 +52,12 @@
             -webkit-overflow-scrolling: touch;
         }
 
-        /* 修复移动端横屏问题 */
-        @media (orientation: landscape) {
-            body {
-                min-height: auto;
-                padding-top: 20px;
-            }
-        }
-
         .container {
-            max-width: min(600px, calc(100vw - 20px));
+            max-width: min(600px, calc(100vw - 30px));
             width: 100%;
             background: linear-gradient(to bottom, var(--white), #FFFCF8);
-            border-radius: clamp(20px, 5vw, 30px);
-            padding: clamp(20px, 5vw, 40px);
+            border-radius: 20px;
+            padding: 25px 20px;
             box-shadow: 0 10px 40px rgba(93, 75, 64, 0.08);
             text-align: center;
             position: relative;
@@ -80,48 +71,39 @@
             top: 0;
             left: 0;
             right: 0;
-            height: 5px;
+            height: 4px;
             background: linear-gradient(to right, var(--accent-coral), var(--accent-gold));
         }
 
-        /* 标题部分分为两行 */
+        /* 标题部分 */
         .title-container {
-            margin-bottom: clamp(15px, 4vw, 20px);
+            margin-bottom: 15px;
             width: 100%;
-            overflow: hidden;
         }
 
         .main-title {
             color: var(--accent-coral); 
             margin-bottom: 5px; 
-            font-size: clamp(20px, 6vw, 28px); 
+            font-size: 24px; 
             font-weight: 700;
             position: relative;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            width: 100%;
         }
 
         .sub-title {
-            font-size: clamp(16px, 4.5vw, 20px);
+            font-size: 18px;
             font-weight: 600;
             color: var(--cocoa-text);
-            margin-bottom: 10px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            width: 100%;
+            margin-bottom: 8px;
         }
 
         .title-container::after {
             content: '';
             display: block;
-            width: clamp(40px, 15vw, 60px);
+            width: 50px;
             height: 3px;
             background: linear-gradient(to right, var(--accent-coral), var(--accent-gold));
             margin: 8px auto;
@@ -130,19 +112,14 @@
 
         .result-box {
             background: linear-gradient(135deg, #FFF9F8, #FFF0F0);
-            padding: clamp(20px, 5vw, 35px) clamp(15px, 4vw, 30px);
-            border-radius: clamp(16px, 4vw, 24px);
-            margin: clamp(15px, 4vw, 25px) 0;
+            padding: 25px 20px;
+            border-radius: 18px;
+            margin: 20px 0;
             border: 2px solid var(--secondary-pink);
             position: relative;
             overflow: hidden;
-            transition: transform 0.3s ease;
             width: 100%;
             box-sizing: border-box;
-        }
-
-        .result-box:hover {
-            transform: translateY(-3px);
         }
 
         .result-box::before {
@@ -151,65 +128,54 @@
             top: 0;
             left: 0;
             right: 0;
-            height: 5px;
+            height: 4px;
             background: linear-gradient(to right, var(--accent-coral), var(--accent-gold));
         }
 
-        /* 类型名称和匹配度分行显示 */
+        /* 类型名称和匹配度 */
         .type-info {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: clamp(10px, 3vw, 15px);
-            margin-bottom: clamp(15px, 4vw, 25px);
+            gap: 12px;
+            margin-bottom: 20px;
             width: 100%;
-            overflow: hidden;
         }
 
         .type-name { 
-            font-size: clamp(24px, 7vw, 38px); 
+            font-size: 28px; 
             font-weight: 800; 
             background: linear-gradient(135deg, var(--accent-coral), #FF8A65);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
             letter-spacing: -0.5px;
-            white-space: nowrap;
-            text-align: center;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            width: 100%;
         }
         
         .score { 
-            font-size: clamp(14px, 4vw, 20px); 
+            font-size: 16px; 
             font-weight: bold; 
             color: var(--cocoa-text); 
             background: rgba(255, 255, 255, 0.9);
-            padding: clamp(8px, 2vw, 10px) clamp(15px, 5vw, 25px);
+            padding: 8px 20px;
             border-radius: 20px;
             display: inline-block;
             border: 2px solid var(--border-warm);
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            max-width: 100%;
         }
 
         .type-desc {
-            font-size: clamp(14px, 4vw, 16px);
-            line-height: 1.7;
+            font-size: 15px;
+            line-height: 1.6;
             color: var(--cocoa-text);
-            padding: 0 clamp(5px, 2vw, 10px);
-            word-break: break-word;
-            hyphens: auto;
+            padding: 0 5px;
         }
 
+        /* 进度条 */
         .bar-bg { 
-            height: 12px; 
+            height: 10px; 
             background: #F2E9E1; 
-            border-radius: 10px; 
-            margin: 12px 0; 
+            border-radius: 8px; 
+            margin: 10px 0; 
             overflow: hidden;
             box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
             width: 100%;
@@ -223,52 +189,37 @@
             overflow: hidden;
         }
 
-        .bar-fill::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-            animation: shimmer 2s infinite;
-        }
-
-        @keyframes shimmer {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
-        }
-
         .msg-box { 
             background: linear-gradient(135deg, #FFFBF0, #FFF5E1); 
-            padding: clamp(15px, 4vw, 25px); 
-            border-radius: 20px; 
+            padding: 20px; 
+            border-radius: 16px; 
             border: 2px dashed var(--accent-gold); 
             text-align: left; 
-            margin: clamp(15px, 4vw, 25px) 0;
+            margin: 20px 0;
             position: relative;
             width: 100%;
         }
 
         .msg-box p:first-child { 
             font-weight: bold; 
-            margin-bottom: 12px;
+            margin-bottom: 10px;
             color: var(--cocoa-text);
-            font-size: clamp(14px, 4vw, 16px);
+            font-size: 15px;
             display: flex;
             align-items: center;
             gap: 8px;
         }
         
+        /* 按钮样式 */
         .btn {
             width: 100%; 
-            padding: clamp(14px, 4vw, 16px); 
+            padding: 15px; 
             border: none; 
-            border-radius: 15px; 
-            font-size: clamp(15px, 4.5vw, 17px); 
+            border-radius: 12px; 
+            font-size: 16px; 
             font-weight: bold; 
             cursor: pointer; 
-            margin-bottom: 12px; 
+            margin-bottom: 10px; 
             transition: all 0.3s ease;
             position: relative;
             overflow: hidden;
@@ -280,24 +231,8 @@
             box-shadow: 0 5px 15px rgba(255, 122, 122, 0.3);
         }
 
-        .btn-pink:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(255, 122, 122, 0.4);
-        }
-
-        .btn-pink::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            transition: left 0.6s;
-        }
-
-        .btn-pink:hover::before {
-            left: 100%;
+        .btn-pink:active {
+            transform: translateY(2px);
         }
 
         .btn-white { 
@@ -306,18 +241,18 @@
             color: var(--cocoa-text);
         }
 
-        .btn-white:hover {
+        .btn-white:active {
             background: #FFF9F6;
             border-color: var(--accent-coral);
-            transform: translateY(-2px);
+            transform: translateY(2px);
         }
 
-        /* 分享钩子样式 */
+        /* 分享钩子 */
         .share-hook {
             background: linear-gradient(135deg, #FFF0F7, #FFF8F0);
-            padding: clamp(15px, 4vw, 20px);
-            border-radius: 15px;
-            margin: clamp(15px, 4vw, 20px) 0;
+            padding: 16px;
+            border-radius: 12px;
+            margin: 16px 0;
             text-align: center;
             border: 2px dashed #FFB8D9;
             position: relative;
@@ -325,58 +260,45 @@
             width: 100%;
         }
 
-        .share-hook::before {
-            content: "💌";
-            position: absolute;
-            top: -10px;
-            right: -10px;
-            font-size: clamp(20px, 6vw, 30px);
-            opacity: 0.3;
-        }
-
         .share-hook-text {
-            font-size: clamp(14px, 4vw, 16px);
+            font-size: 15px;
             font-weight: 600;
             color: #FF6B9D;
-            margin-bottom: 8px;
-            word-break: break-word;
+            margin-bottom: 6px;
         }
 
         .share-hook-subtext {
-            font-size: clamp(12px, 3.5vw, 13px);
+            font-size: 12px;
             color: #8A7565;
             font-style: italic;
-            word-break: break-word;
         }
 
-        /* 勋章生成按钮样式 */
+        /* 勋章生成按钮 */
         .medal-btn {
             background: linear-gradient(135deg, #FF6B9D, #FF8E53);
             color: white;
             border: none;
-            padding: clamp(14px, 4vw, 18px);
-            border-radius: 15px;
-            font-size: clamp(15px, 4.5vw, 17px);
+            padding: 16px;
+            border-radius: 12px;
+            font-size: 16px;
             font-weight: bold;
             cursor: pointer;
-            transition: all 0.3s ease;
             box-shadow: 0 5px 15px rgba(255, 107, 157, 0.3);
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 10px;
             width: 100%;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
             position: relative;
             overflow: hidden;
         }
         
-        .medal-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(255, 107, 157, 0.4);
+        .medal-btn:active {
+            transform: translateY(2px);
         }
 
-        /* 勋章生成模态框 */
+        /* 勋章模态框 */
         .medal-modal {
             position: fixed;
             top: 0;
@@ -388,13 +310,13 @@
             align-items: center;
             justify-content: center;
             z-index: 10000;
-            padding: clamp(10px, 3vw, 20px);
+            padding: 15px;
         }
         
         .medal-content {
             background: white;
-            border-radius: 20px;
-            max-width: min(300px, calc(100vw - 40px));
+            border-radius: 16px;
+            max-width: min(300px, calc(100vw - 30px));
             width: 100%;
             position: relative;
             overflow: hidden;
@@ -403,15 +325,14 @@
         .medal-canvas-container {
             width: 100%;
             height: auto;
-            min-height: 400px;
-            max-height: 80vh;
+            min-height: 300px;
             aspect-ratio: 3/4;
             background: linear-gradient(135deg, #FFF9F0, #FFEFDF);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: clamp(20px, 5vw, 30px);
+            padding: 20px;
             text-align: center;
             position: relative;
             overflow: hidden;
@@ -419,20 +340,19 @@
         
         .medal-actions {
             display: flex;
-            gap: 10px;
-            padding: clamp(15px, 4vw, 20px);
+            gap: 8px;
+            padding: 15px;
             background: #FFF9F0;
         }
         
         .medal-action-btn {
             flex: 1;
-            padding: clamp(12px, 3vw, 14px);
+            padding: 12px;
             border: none;
-            border-radius: 12px;
+            border-radius: 10px;
             font-weight: bold;
             cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: clamp(14px, 4vw, 16px);
+            font-size: 14px;
         }
         
         .save-btn {
@@ -446,91 +366,159 @@
             color: #5A4235;
         }
 
+        /* 联系区域 */
         .contact-area {
             background: linear-gradient(135deg, #F8F5F0, #F0EDE8);
-            padding: clamp(15px, 4vw, 20px);
-            border-radius: 20px;
-            margin-top: clamp(20px, 5vw, 30px);
+            padding: 16px;
+            border-radius: 16px;
+            margin-top: 20px;
             border: 2px solid #E8E0D8;
             position: relative;
             width: 100%;
         }
 
         .contact-area p {
-            font-size: clamp(13px, 3.5vw, 14px);
+            font-size: 13px;
             margin: 0;
-            word-break: break-word;
         }
 
         .contact-area b {
             color: var(--accent-coral);
-            font-size: clamp(14px, 4vw, 15px);
+            font-size: 14px;
             display: inline-block;
-            padding: 3px clamp(8px, 3vw, 10px);
+            padding: 2px 8px;
             background: rgba(255, 255, 255, 0.9);
-            border-radius: 8px;
+            border-radius: 6px;
             margin-left: 5px;
-            white-space: nowrap;
         }
 
-        /* 动画效果 */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(15px); }
-            to { opacity: 1; transform: translateY(0); }
+        /* 分享卡片 */
+        .share-card-container {
+            text-align: center;
+            margin: 16px 0 12px;
+            padding: 12px;
+            background: linear-gradient(135deg, #FFF9F8, #FFF0F0);
+            border-radius: 12px;
+            border: 2px solid var(--secondary-pink);
+            width: 100%;
         }
 
-        .container > * {
-            animation: fadeIn 0.6s ease forwards;
+        .share-card-text {
+            font-size: 12px;
+            color: #666;
+            margin-top: 6px;
         }
 
-        .container > *:nth-child(2) { animation-delay: 0.1s; }
-        .container > *:nth-child(3) { animation-delay: 0.2s; }
-        .container > *:nth-child(4) { animation-delay: 0.3s; }
-        .container > *:nth-child(5) { animation-delay: 0.4s; }
-        .container > *:nth-child(6) { animation-delay: 0.5s; }
-        .container > *:nth-child(7) { animation-delay: 0.6s; }
+        /* 详细信息区域 */
+        .details-container {
+            text-align: left;
+            margin: 20px 0;
+            width: 100%;
+        }
+
+        .details-item {
+            margin-bottom: 12px;
+            width: 100%;
+        }
+
+        .details-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 5px;
+            width: 100%;
+        }
+
+        .details-type {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .details-percent {
+            font-size: 13px;
+            font-weight: bold;
+            color: var(--accent-coral);
+            flex-shrink: 0;
+            margin-left: 8px;
+        }
+
+        /* 图片占位符 */
+        .img-placeholder {
+            width: 100%;
+            height: auto;
+            background: linear-gradient(135deg, #FFF0F0, #FFEFDF);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #8A7565;
+            font-size: 14px;
+        }
+
+        /* 加载动画 */
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
 
         /* 响应式调整 */
-        @media (max-width: 640px) {
-            .container {
-                border-radius: 25px;
-            }
-            
-            .medal-canvas-container {
-                min-height: 350px;
-            }
-        }
-
         @media (max-width: 480px) {
             .container {
-                padding: 25px 15px;
-                border-radius: 20px;
+                padding: 20px 15px;
+            }
+            
+            .main-title {
+                font-size: 22px;
+            }
+            
+            .sub-title {
+                font-size: 16px;
             }
             
             .result-box {
-                border-radius: 18px;
+                padding: 20px 15px;
+            }
+            
+            .type-name {
+                font-size: 24px;
+            }
+            
+            .score {
+                font-size: 14px;
+                padding: 6px 16px;
+            }
+            
+            .type-desc {
+                font-size: 14px;
             }
             
             .medal-canvas-container {
-                min-height: 300px;
+                min-height: 250px;
                 padding: 15px;
-            }
-            
-            .contact-area img {
-                max-width: 120px !important;
-                max-height: 120px !important;
             }
         }
 
         @media (max-width: 360px) {
             .container {
-                padding: 20px 12px;
-                border-radius: 18px;
+                padding: 16px 12px;
             }
             
             .result-box {
-                padding: 15px 12px;
-                border-radius: 16px;
+                padding: 16px 12px;
             }
             
             .type-name {
@@ -539,118 +527,21 @@
             
             .score {
                 font-size: 13px;
-                padding: 5px 12px;
-            }
-            
-            .type-desc {
-                font-size: 13px;
-            }
-            
-            .medal-canvas-container {
-                min-height: 280px;
-                padding: 12px;
-            }
-            
-            .contact-area img {
-                max-width: 100px !important;
-                max-height: 100px !important;
+                padding: 5px 14px;
             }
         }
 
-        /* 处理iPhone X及以上机型的刘海屏和安全区域 */
+        /* 安全区域适配 */
         @supports (padding: max(0px)) {
             .container, .medal-modal {
-                padding-left: max(clamp(10px, 3vw, 20px), env(safe-area-inset-left));
-                padding-right: max(clamp(10px, 3vw, 20px), env(safe-area-inset-right));
+                padding-left: max(15px, env(safe-area-inset-left));
+                padding-right: max(15px, env(safe-area-inset-right));
             }
             
             body {
-                padding-top: max(clamp(10px, 3vw, 20px), env(safe-area-inset-top));
-                padding-bottom: max(clamp(10px, 3vw, 20px), env(safe-area-inset-bottom));
+                padding-top: max(15px, env(safe-area-inset-top));
+                padding-bottom: max(15px, env(safe-area-inset-bottom));
             }
-            
-            .medal-action-btn {
-                padding-bottom: max(12px, env(safe-area-inset-bottom));
-            }
-        }
-
-        /* 隐藏iOS上的默认按钮样式 */
-        input, textarea, select, button {
-            -webkit-appearance: none;
-            appearance: none;
-            border-radius: 0;
-        }
-
-        /* 分享卡片图片容器 */
-        .share-card-container {
-            text-align: center;
-            margin: clamp(15px, 4vw, 20px) 0 clamp(10px, 3vw, 15px);
-            padding: clamp(12px, 3vw, 15px);
-            background: linear-gradient(135deg, #FFF9F8, #FFF0F0);
-            border-radius: 15px;
-            border: 2px solid var(--secondary-pink);
-            width: 100%;
-        }
-
-        .share-card-img {
-            width: 100%;
-            max-width: min(300px, calc(100vw - 60px));
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            display: block;
-            margin: 0 auto;
-        }
-
-        .share-card-text {
-            font-size: clamp(12px, 3.5vw, 13px);
-            color: #666;
-            margin-top: 8px;
-            word-break: break-word;
-        }
-
-        /* 详细信息区域 */
-        .details-container {
-            text-align: left;
-            margin: clamp(15px, 4vw, 25px) 0;
-            width: 100%;
-        }
-
-        .details-item {
-            margin-bottom: clamp(10px, 3vw, 15px);
-            width: 100%;
-        }
-
-        .details-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 6px;
-            width: 100%;
-        }
-
-        .details-icon {
-            width: clamp(20px, 6vw, 24px);
-            height: clamp(20px, 6vw, 24px);
-            object-fit: contain;
-            flex-shrink: 0;
-        }
-
-        .details-type {
-            display: flex;
-            align-items: center;
-            gap: clamp(8px, 2vw, 10px);
-            font-size: clamp(13px, 3.5vw, 14px);
-            font-weight: 500;
-            flex: 1;
-            overflow: hidden;
-        }
-
-        .details-percent {
-            font-size: clamp(13px, 3.5vw, 14px);
-            font-weight: bold;
-            color: var(--accent-coral);
-            flex-shrink: 0;
-            margin-left: 10px;
         }
     </style>
 </head>
@@ -664,7 +555,7 @@
         <div class="sub-title">翻译报告</div>
     </div>
     
-    <p id="date" style="font-size:13px; color:#999; margin-bottom:5px;"></p>
+    <p id="date" style="font-size:12px; color:#999; margin-bottom:5px;"></p>
 
     <div class="result-box">
         <div class="type-info">
@@ -678,28 +569,29 @@
 
     <div class="msg-box">
         <p>
-            <img src="images/my-pig-message.png" alt="猪八吉" style="width: 30px; height: 30px; border-radius: 50%;">
+            <span id="pigAvatar" style="display: inline-block; width: 30px; height: 30px; background: linear-gradient(135deg, #FF9494, #FF7A7A); border-radius: 50%; margin-right: 8px;"></span>
             猪八吉寄语
         </p>
-        <p id="pigMsg" style="font-size:15px; line-height:1.7; margin:0;"></p>
+        <p id="pigMsg" style="font-size:14px; line-height:1.6; margin:0;"></p>
     </div>
 
-    <!-- 分享卡片图片 -->
+    <!-- 分享卡片图片 - 使用占位符和延迟加载 -->
     <div class="share-card-container">
-        <img src="images/share_card.jpg" alt="分享到小红书" class="share-card-img">
+        <div id="shareCardPlaceholder" class="img-placeholder" style="height: 150px;">
+            <span>正在加载分享卡片...</span>
+        </div>
         <p class="share-card-text">长按保存图片，分享到小红书</p>
     </div>
 
-    <!-- 新增分享钩子 -->
+    <!-- 分享钩子 -->
     <div class="share-hook">
         <div class="share-hook-text">💌 把这个结果转发给那个"呆子"</div>
         <div class="share-hook-subtext">
-            悄悄告诉他："<span style="color:#FF6B9D; font-weight:600;">今晚按方抓药</span>"来爱你～<br>
-            <span style="font-size:12px; color:#999;">保证TA看得懂，学得会，做得到！</span>
+            悄悄告诉他："<span style="color:#FF6B9D; font-weight:600;">今晚按方抓药</span>"来爱你～
         </div>
     </div>
 
-    <!-- 新增勋章生成按钮 -->
+    <!-- 勋章生成按钮 -->
     <button class="medal-btn" id="generateMedalBtn">
         <i class="fas fa-award"></i> 生成我的专属爱语勋章
     </button>
@@ -711,18 +603,19 @@
         <i class="fas fa-redo" style="margin-right:8px;"></i> 重新测试
     </button>
 
-    <!-- 修改后的联系区域，包含微信二维码 -->
+    <!-- 联系区域 -->
     <div class="contact-area">
-        <div style="text-align: center; margin-bottom: 15px;">
-            <img src="images/wechat_qrcode.png" alt="猪八吉微信" 
-                 style="width: 150px; height: 150px; border-radius: 10px; border: 3px solid var(--border-warm);">
+        <div style="text-align: center; margin-bottom: 12px;">
+            <div id="qrcodePlaceholder" class="img-placeholder" style="width: 120px; height: 120px; margin: 0 auto;">
+                <span style="font-size: 12px;">二维码加载中...</span>
+            </div>
         </div>
         <p>💌 勾搭猪八吉：<b>zhubaji888</b></p>
-        <p style="font-size:12px; color:#888; margin-top:8px;">备注"小红书"优先通过</p>
+        <p style="font-size:11px; color:#888; margin-top:6px;">备注"小红书"优先通过</p>
     </div>
 </div>
 
-<!-- 勋章生成模态框 -->
+<!-- 勋章模态框 -->
 <div class="medal-modal" id="medalModal">
     <div class="medal-content">
         <div class="medal-canvas-container" id="medalCanvas">
@@ -740,6 +633,78 @@
 </div>
 
 <script>
+    // 图片优化配置
+    const imageConfig = {
+        // 使用base64占位符替换图片，减少HTTP请求
+        placeholder: {
+            pig: 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30"><circle cx="15" cy="15" r="14" fill="%23FF9494"/><text x="15" y="20" font-family="Arial" font-size="14" text-anchor="middle" fill="white">🐷</text></svg>',
+            qrcode: 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120"><rect width="120" height="120" fill="%23FFF9F0"/><text x="60" y="65" font-family="Arial" font-size="14" text-anchor="middle" fill="%235A4235">📱</text></svg>',
+            shareCard: 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="300" height="200" viewBox="0 0 300 200"><rect width="300" height="200" fill="%23FFF0F0"/><text x="150" y="100" font-family="Arial" font-size="16" text-anchor="middle" fill="%235A4235">分享卡片加载中...</text></svg>'
+        },
+        // 延迟加载图片
+        lazyLoadDelay: 500, // 延迟500ms加载图片，让主内容先显示
+        // 图片压缩配置
+        compress: {
+            quality: 0.8,
+            maxWidth: 800
+        }
+    };
+
+    // 图片加载管理器
+    class ImageLoader {
+        constructor() {
+            this.loadedImages = new Set();
+            this.failedImages = new Set();
+        }
+
+        // 预加载重要图片
+        preloadCriticalImages() {
+            const criticalImages = [
+                'images/my-pig-message.png',
+                'images/wechat_qrcode.png',
+                'images/share_card.jpg'
+            ];
+            
+            criticalImages.forEach(src => {
+                const img = new Image();
+                img.src = src;
+                img.onload = () => this.loadedImages.add(src);
+                img.onerror = () => this.failedImages.add(src);
+            });
+        }
+
+        // 加载图片并显示占位符
+        loadImageWithPlaceholder(imgElement, src, placeholder) {
+            imgElement.src = placeholder;
+            
+            // 延迟加载实际图片
+            setTimeout(() => {
+                const realImg = new Image();
+                realImg.src = src;
+                realImg.onload = () => {
+                    imgElement.src = src;
+                    imgElement.style.opacity = '0';
+                    setTimeout(() => {
+                        imgElement.style.opacity = '1';
+                        imgElement.style.transition = 'opacity 0.3s';
+                    }, 10);
+                };
+                realImg.onerror = () => {
+                    console.warn('图片加载失败:', src);
+                    // 保持占位符
+                };
+            }, imageConfig.lazyLoadDelay);
+        }
+
+        // 检查图片是否已加载
+        isImageLoaded(src) {
+            return this.loadedImages.has(src);
+        }
+    }
+
+    const imageLoader = new ImageLoader();
+
+    // 类型信息
     const info = {
         words: { 
             name: "💬 言语派", 
@@ -772,7 +737,7 @@
     const data = JSON.parse(localStorage.getItem('love_result'));
     
     if (data) {
-        // 显示测试日期
+        // 立即显示基本内容，不等待图片
         document.getElementById('date').innerText = "测试时间：" + data.date;
         
         // 获取主要类型信息
@@ -784,19 +749,37 @@
         document.getElementById('typeDesc').innerText = main.desc;
         document.getElementById('pigMsg').innerText = main.msg;
 
-        // 生成详细分析 - 添加爱语类型图片
+        // 设置猪八吉头像占位符
+        const pigAvatar = document.getElementById('pigAvatar');
+        pigAvatar.style.background = `linear-gradient(135deg, #FF9494, #FF7A7A)`;
+        pigAvatar.innerHTML = '🐷';
+        
+        // 延迟加载实际头像
+        setTimeout(() => {
+            const img = new Image();
+            img.src = 'images/my-pig-message.png';
+            img.onload = () => {
+                pigAvatar.style.backgroundImage = `url('images/my-pig-message.png')`;
+                pigAvatar.style.backgroundSize = 'cover';
+                pigAvatar.style.backgroundPosition = 'center';
+                pigAvatar.innerHTML = '';
+            };
+        }, 1000);
+
+        // 生成详细分析
         let html = "";
         // 按百分比排序
         Object.entries(data.all).sort((a,b)=>b[1]-a[1]).forEach(([typeKey, count])=>{
             const percent = Math.round(count/12*100);
             const typeInfo = info[typeKey];
+            const emoji = typeInfo.name.charAt(0);
             
             html += `
                 <div class="details-item">
                     <div class="details-header">
                         <div class="details-type">
-                            <img src="images/love_${typeKey}.png" alt="${typeInfo.name}" class="details-icon">
-                            <span>${typeInfo.name}</span>
+                            <span style="font-size: 16px;">${emoji}</span>
+                            <span>${typeInfo.name.replace(emoji, '')}</span>
                         </div>
                         <span class="details-percent">${percent}%</span>
                     </div>
@@ -819,6 +802,38 @@
                 }, 100);
             });
         }, 300);
+        
+        // 延迟加载分享卡片
+        setTimeout(() => {
+            const shareCardPlaceholder = document.getElementById('shareCardPlaceholder');
+            const img = new Image();
+            img.src = 'images/share_card.jpg';
+            img.onload = () => {
+                shareCardPlaceholder.style.backgroundImage = `url('images/share_card.jpg')`;
+                shareCardPlaceholder.style.backgroundSize = 'cover';
+                shareCardPlaceholder.style.backgroundPosition = 'center';
+                shareCardPlaceholder.innerHTML = '';
+            };
+            img.onerror = () => {
+                shareCardPlaceholder.innerHTML = '<span style="color: #FF6B9D;">分享卡片加载失败</span>';
+            };
+        }, 1500);
+        
+        // 延迟加载二维码
+        setTimeout(() => {
+            const qrcodePlaceholder = document.getElementById('qrcodePlaceholder');
+            const img = new Image();
+            img.src = 'images/wechat_qrcode.png';
+            img.onload = () => {
+                qrcodePlaceholder.style.backgroundImage = `url('images/wechat_qrcode.png')`;
+                qrcodePlaceholder.style.backgroundSize = 'cover';
+                qrcodePlaceholder.style.backgroundPosition = 'center';
+                qrcodePlaceholder.innerHTML = '';
+            };
+            img.onerror = () => {
+                qrcodePlaceholder.innerHTML = '<span style="color: #FF6B9D;">二维码加载失败</span>';
+            };
+        }, 2000);
         
     } else {
         // 如果没有测试数据
@@ -877,7 +892,7 @@
         }
     };
 
-    // 生成勋章内容
+    // 生成勋章内容 - 使用纯CSS和文字，不依赖外部图片
     function generateMedalContent() {
         if (!data) return;
         
@@ -889,7 +904,7 @@
         // 清除之前的内容
         medalCanvas.innerHTML = '';
         
-        // 创建勋章内容
+        // 创建勋章内容 - 完全不依赖外部图片
         const medalHTML = `
             <div style="
                 width: 100%;
@@ -899,9 +914,9 @@
                 flex-direction: column;
                 align-items: center;
                 justify-content: center;
-                padding: ${window.innerWidth <= 480 ? '15px' : '30px 20px'};
+                padding: 20px;
                 text-align: center;
-                border-radius: 20px;
+                border-radius: 16px;
                 position: relative;
                 overflow: hidden;
                 min-height: 100%;
@@ -927,28 +942,27 @@
                     z-index: 0;
                 "></div>
                 
-                <!-- 猪八吉头像 -->
+                <!-- 猪八吉头像 - 用CSS绘制 -->
                 <div style="
-                    width: ${window.innerWidth <= 480 ? '60px' : '80px'};
-                    height: ${window.innerWidth <= 480 ? '60px' : '80px'};
-                    background: ${medalData.color}20;
+                    width: 60px;
+                    height: 60px;
+                    background: linear-gradient(135deg, ${medalData.color}, ${medalData.color}80);
                     border-radius: 50%;
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    margin-bottom: 20px;
-                    border: 4px solid white;
-                    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+                    margin-bottom: 15px;
+                    border: 3px solid white;
+                    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
                     z-index: 1;
+                    font-size: 24px;
                 ">
-                    <img src="images/my-pig-message.png" alt="猪八吉" 
-                         style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;"
-                         onerror="this.style.display='none'; this.parentElement.innerHTML='🐷';">
+                    🐷
                 </div>
                 
                 <!-- 标题 -->
                 <div style="
-                    font-size: ${window.innerWidth <= 480 ? '12px' : '14px'};
+                    font-size: 12px;
                     color: #8A7565;
                     margin-bottom: 5px;
                     z-index: 1;
@@ -958,7 +972,7 @@
                 
                 <!-- 爱语类型 -->
                 <div style="
-                    font-size: ${window.innerWidth <= 480 ? '28px' : '36px'};
+                    font-size: 24px;
                     font-weight: 900;
                     color: ${medalData.color};
                     margin: 10px 0;
@@ -970,13 +984,13 @@
                 
                 <!-- 匹配度 -->
                 <div style="
-                    font-size: ${window.innerWidth <= 480 ? '16px' : '20px'};
+                    font-size: 18px;
                     font-weight: 700;
                     color: #5A4235;
                     background: white;
                     padding: 8px 20px;
                     border-radius: 50px;
-                    margin: 15px 0;
+                    margin: 12px 0;
                     border: 2px solid ${medalData.color};
                     z-index: 1;
                 ">
@@ -985,10 +999,10 @@
                 
                 <!-- 描述 -->
                 <div style="
-                    font-size: ${window.innerWidth <= 480 ? '14px' : '16px'};
-                    line-height: 1.6;
+                    font-size: 14px;
+                    line-height: 1.5;
                     color: #5A4235;
-                    margin: 20px 0;
+                    margin: 15px 0;
                     padding: 0 10px;
                     z-index: 1;
                 ">
@@ -997,54 +1011,57 @@
                 
                 <!-- 口号 -->
                 <div style="
-                    font-size: ${window.innerWidth <= 480 ? '16px' : '18px'};
+                    font-size: 16px;
                     font-weight: 700;
                     color: ${medalData.color};
-                    margin-top: 20px;
-                    padding: 15px;
+                    margin-top: 15px;
+                    padding: 12px;
                     background: white;
-                    border-radius: 15px;
+                    border-radius: 12px;
                     border: 2px dashed ${medalData.color}80;
                     z-index: 1;
                 ">
                     ${medalData.slogan}
                 </div>
                 
-                <!-- 二维码区域 -->
+                <!-- 二维码区域 - 用文字代替 -->
                 <div style="
                     display: flex;
+                    flex-direction: column;
                     align-items: center;
                     justify-content: center;
-                    gap: 10px;
-                    margin-top: 20px;
-                    padding: 15px;
+                    gap: 8px;
+                    margin-top: 15px;
+                    padding: 12px;
                     background: white;
-                    border-radius: 15px;
+                    border-radius: 12px;
                     width: 100%;
                     z-index: 1;
                 ">
                     <div style="
-                        width: ${window.innerWidth <= 480 ? '50px' : '60px'};
-                        height: ${window.innerWidth <= 480 ? '50px' : '60px'};
-                        border-radius: 10px;
-                        overflow: hidden;
-                        flex-shrink: 0;
+                        width: 50px;
+                        height: 50px;
+                        background: #F0F0F0;
+                        border-radius: 8px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        font-size: 24px;
+                        margin-bottom: 5px;
                     ">
-                        <img src="images/wechat_qrcode.png" alt="二维码" 
-                             style="width: 100%; height: 100%; object-fit: cover;"
-                             onerror="this.style.display='none'; this.parentElement.innerHTML='📱';">
+                        📱
                     </div>
-                    <div style="text-align: left;">
-                        <div style="font-size: ${window.innerWidth <= 480 ? '11px' : '12px'}; color: #8A7565;">扫码测测你的爱语</div>
-                        <div style="font-size: ${window.innerWidth <= 480 ? '13px' : '14px'}; font-weight: 600; color: #5A4235;">勾搭猪八吉</div>
+                    <div style="text-align: center;">
+                        <div style="font-size: 11px; color: #8A7565;">扫码测测你的爱语</div>
+                        <div style="font-size: 13px; font-weight: 600; color: #5A4235;">勾搭猪八吉</div>
                     </div>
                 </div>
                 
                 <!-- 底部文字 -->
                 <div style="
-                    font-size: ${window.innerWidth <= 480 ? '11px' : '12px'};
+                    font-size: 11px;
                     color: #8A7565;
-                    margin-top: 20px;
+                    margin-top: 15px;
                     z-index: 1;
                 ">
                     测试时间: ${data.date}
@@ -1057,8 +1074,14 @@
 
     // 打开勋章模态框
     generateMedalBtn.addEventListener('click', function() {
-        generateMedalContent();
+        // 显示加载状态
+        medalCanvas.innerHTML = '<div style="display: flex; align-items: center; justify-content: center; height: 100%;"><div class="loading-spinner"></div></div>';
         medalModal.style.display = 'flex';
+        
+        // 延迟生成内容，避免阻塞UI
+        setTimeout(() => {
+            generateMedalContent();
+        }, 100);
         
         // 防止滚动背景
         document.body.style.overflow = 'hidden';
@@ -1086,29 +1109,23 @@
             return;
         }
         
-        // 临时显示加载提示
-        const originalHtml = medalCanvas.innerHTML;
-        medalCanvas.innerHTML = '<div style="display: flex; align-items: center; justify-content: center; height: 100%;"><div style="font-size: 18px; color: #5A4235;">正在生成图片...</div></div>';
+        // 显示保存中状态
+        const originalText = saveMedalBtn.innerHTML;
+        saveMedalBtn.innerHTML = '<span class="loading-spinner" style="margin-right: 8px;"></span>保存中...';
+        saveMedalBtn.disabled = true;
         
         html2canvas(medalCanvas, {
             backgroundColor: null,
             scale: 2,
-            useCORS: true,
-            allowTaint: true,
+            useCORS: false, // 我们不使用外部图片
+            allowTaint: false,
             width: medalCanvas.clientWidth,
             height: medalCanvas.clientHeight,
-            logging: false,
-            onclone: function(clonedDoc) {
-                // 在克隆的文档中确保图片加载
-                const imgs = clonedDoc.querySelectorAll('img');
-                imgs.forEach(img => {
-                    if (img.complete) return;
-                    img.src = img.src;
-                });
-            }
+            logging: false
         }).then(canvas => {
-            // 恢复内容
-            medalCanvas.innerHTML = originalHtml;
+            // 恢复按钮状态
+            saveMedalBtn.innerHTML = originalText;
+            saveMedalBtn.disabled = false;
             
             // 将canvas转换为图片URL
             const image = canvas.toDataURL('image/png');
@@ -1124,10 +1141,13 @@
             document.body.removeChild(link);
             
             // 显示成功提示
-            alert('🎉 勋章已保存到相册！\n快去小红书分享你的专属爱语勋章吧～');
+            setTimeout(() => {
+                alert('🎉 勋章已保存到相册！\n快去小红书分享你的专属爱语勋章吧～');
+            }, 500);
         }).catch(error => {
             console.error('生成图片失败:', error);
-            medalCanvas.innerHTML = originalHtml;
+            saveMedalBtn.innerHTML = originalText;
+            saveMedalBtn.disabled = false;
             alert('生成失败，请稍后重试');
         });
     });
@@ -1180,6 +1200,11 @@
         document.body.removeChild(textArea);
     }
 
+    // 初始化图片预加载
+    setTimeout(() => {
+        imageLoader.preloadCriticalImages();
+    }, 3000); // 页面加载3秒后开始预加载次要图片
+
     // 防止移动端缩放
     document.addEventListener('gesturestart', function(e) {
         e.preventDefault();
@@ -1196,20 +1221,17 @@
     window.addEventListener('resize', setVH);
     window.addEventListener('orientationchange', setVH);
 
-    // 图片加载失败处理
-    document.addEventListener('error', function(e) {
-        if (e.target.tagName === 'IMG') {
-            e.target.style.display = 'none';
-            const parent = e.target.parentElement;
-            if (parent && parent.classList.contains('pig-avatar')) {
-                parent.innerHTML = '🐷';
-                parent.style.fontSize = '30px';
-                parent.style.display = 'flex';
-                parent.style.alignItems = 'center';
-                parent.style.justifyContent = 'center';
-            }
+    // 页面性能监控
+    window.addEventListener('load', function() {
+        const perfData = window.performance.timing;
+        const loadTime = perfData.loadEventEnd - perfData.navigationStart;
+        console.log(`页面加载时间: ${loadTime}ms`);
+        
+        // 如果加载时间过长，可以进一步优化
+        if (loadTime > 3000) {
+            console.log('页面加载较慢，建议优化图片资源');
         }
-    }, true);
+    });
 </script>
 </body>
 </html>
