@@ -358,13 +358,48 @@
         `;
     }
 
-    // 分享和保存逻辑（完整保留）
+   // ============== 【强化版】复制分享文案（兼容所有手机） ==============
     function copy() {
+        // 1. 准备要复制的内容
         const main = info[data.main] || info.words;
-        const text = `我刚测了猪八吉家的「爱的语言翻译器」🍯\n我的爱语类型是：${main.name}\n匹配度：${data.percent}%\n#猪八吉 #情侣测试 #情人节`;
-        navigator.clipboard.writeText(text).then(() => alert("✨ 文案已复制！快去分享吧~"));
-    }
+        // 提取纯文字名称，防止带入HTML标签
+        const pureName = main.name.replace(/<[^>]*>/g, '').replace(/[^\u4e00-\u9fa5]/g, '');
+        const percent = data.percent || 0;
+        
+        const shareText = `我刚测了猪八吉家的「爱的语言翻译器」🍯\n\n我的爱语类型是：${pureName}\n匹配度：${percent}%\n\n一键生成了专属爱语勋章，超精美！\n\n测测你是哪种爱情派？\n⬇️点击测试：${window.location.href}\n\n#猪八吉 #爱的语言测试 #情人节礼物 #情侣测试 #情感测试`;
 
+        // 2. 创建一个隐藏的文本域
+        const textArea = document.createElement("textarea");
+        textArea.value = shareText;
+        
+        // 确保这个 textarea 不会在页面上闪现
+        textArea.style.position = "fixed";
+        textArea.style.left = "-9999px";
+        textArea.style.top = "0";
+        document.body.appendChild(textArea);
+        
+        // 3. 选中文本
+        textArea.focus();
+        textArea.select();
+        textArea.setSelectionRange(0, 9999); // 兼容 iOS
+
+        try {
+            // 4. 执行复制命令
+            const successful = document.execCommand('copy');
+            if (successful) {
+                alert("✨ 文案已复制到剪贴板！\n\n请打开小红书，粘贴并发布笔记\n前100名分享者送猪八吉隐藏表情包🎁");
+            } else {
+                // 如果还不行，弹出提示框让用户手动复制
+                prompt("复制失败，请手动长按复制以下内容：", shareText);
+            }
+        } catch (err) {
+            console.error('复制出错', err);
+            prompt("您的手机不支持自动复制，请手动复制：", shareText);
+        }
+
+        // 5. 移除临时元素
+        document.body.removeChild(textArea);
+    }
     // 初始化
     document.addEventListener('DOMContentLoaded', () => {
         displayResults();
