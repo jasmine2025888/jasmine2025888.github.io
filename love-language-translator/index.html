@@ -99,19 +99,37 @@
             z-index: 1;
         }
 
+        /* 修改标题为两行显示 */
         .intro-title {
-            color: var(--cocoa-text);
-            font-size: 24px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
             margin-bottom: 10px;
-            font-weight: 700;
+            gap: 5px;
+        }
+
+        .title-line-1 {
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 12px;
+            gap: 8px;
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--cocoa-text);
         }
 
-        .intro-title i {
+        .title-line-1 i {
             color: var(--accent-coral);
+            font-size: 18px;
+        }
+
+        .title-line-2 {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--accent-coral);
+            letter-spacing: 1px;
+            line-height: 1.2;
         }
 
         .intro-subtitle {
@@ -609,7 +627,11 @@
                 padding: 35px 25px;
             }
             
-            .intro-title {
+            .title-line-1 {
+                font-size: 18px;
+            }
+            
+            .title-line-2 {
                 font-size: 22px;
             }
             
@@ -685,10 +707,12 @@
                 height: 70px;
             }
             
-            .intro-title {
+            .title-line-1 {
+                font-size: 16px;
+            }
+            
+            .title-line-2 {
                 font-size: 20px;
-                flex-direction: column;
-                gap: 8px;
             }
             
             .intro-subtitle {
@@ -773,7 +797,11 @@
                 padding: 25px 18px;
             }
             
-            .intro-title {
+            .title-line-1 {
+                font-size: 15px;
+            }
+            
+            .title-line-2 {
                 font-size: 18px;
             }
             
@@ -832,14 +860,18 @@
 <div class="intro-screen" id="introScreen">
     <div class="intro-card">
         <div class="intro-content">
-            <!-- 修改的头像部分，添加了回退机制 -->
+            <!-- 修改的首页头像部分 -->
             <div class="pig-avatar" id="pigAvatar">
                 <img src="images/my-pig-avatar.png" alt="猪八吉" 
                      style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;"
                      onerror="this.style.display='none'; document.getElementById('pigAvatar').innerHTML='🐷';">
             </div>
+            <!-- 修改为两行标题 -->
             <h1 class="intro-title">
-                <i class="fas fa-heart"></i> 猪八吉家传·爱的语言翻译器
+                <div class="title-line-1">
+                    <i class="fas fa-heart"></i> 猪八吉家传
+                </div>
+                <div class="title-line-2">爱的语言翻译器</div>
             </h1>
             <p class="intro-subtitle">
                 嘿，朋友！俺是猪八吉。<br>
