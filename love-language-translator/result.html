@@ -86,6 +86,31 @@
             background: linear-gradient(to right, var(--accent-coral), var(--accent-gold));
         }
 
+        /* 新增：爱语图片样式 */
+        .love-image {
+            width: 80px;
+            height: 80px;
+            object-fit: contain;
+            margin: 0 auto 15px;
+            display: block;
+            border-radius: 20px;
+            background: white;
+            padding: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border: 3px solid var(--border-warm);
+        }
+        
+        /* 新增：勋章头像样式 */
+        .medal-avatar-image {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid white;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            margin: 0 auto;
+        }
+
         /* 标题部分 */
         .title-container {
             margin-bottom: 15px;
@@ -567,6 +592,11 @@
                 font-size: 14px;
             }
             
+            .love-image {
+                width: 70px;
+                height: 70px;
+            }
+            
             .medal-canvas-container {
                 min-height: 350px;
                 padding: 15px;
@@ -594,6 +624,11 @@
             .score {
                 font-size: 13px;
                 padding: 5px 14px;
+            }
+            
+            .love-image {
+                width: 60px;
+                height: 60px;
             }
             
             .love-emoji {
@@ -631,6 +666,8 @@
 
     <div class="result-box">
         <div class="type-info">
+            <!-- 新增：爱语图片显示 -->
+            <img id="mainLoveImage" class="love-image" src="" alt="爱语类型图片">
             <div id="typeName" class="type-name"></div>
             <!-- 修复：确保"主导爱语匹配度"正确显示 -->
             <div id="scoreVal" class="score"></div>
@@ -645,8 +682,8 @@
 
     <div class="msg-box">
         <p>
-            <!-- 修复：直接使用emoji，不依赖图片 -->
-            <span id="pigAvatar" style="display: inline-block; width: 30px; height: 30px; background: linear-gradient(135deg, #FF9494, #FF7A7A); border-radius: 50%; margin-right: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px;">🐷</span>
+            <!-- 修复：显示猪八吉头像图片 -->
+            <img id="pigAvatarImg" class="love-image" src="https://raw.githubusercontent.com/jasmine2025888/jasmine2025888.github.io/main/love-language-translator/images/my-pig-avatar.png" alt="猪八吉" style="width: 40px; height: 40px; margin-right: 8px; display: inline-block; vertical-align: middle;">
             猪八吉寄语
         </p>
         <p id="pigMsg" style="font-size:14px; line-height:1.6; margin:0;"></p>
@@ -710,18 +747,13 @@
 </div>
 
 <script>
-    // 修复：确保emoji正确显示
-    // 使用HTML实体编码的emoji作为备用方案
-    const emojiEntities = {
-        'speech': '&#128172;',      // 💬
-        'hug': '&#129303;',         // 🤗
-        'gift': '&#127873;',        // 🎁
-        'clock': '&#128368;',       // 🕰️
-        'couple': '&#128107;',      // 👫
-        'pig': '&#128055;',         // 🐷
-        'phone': '&#128241;',       // 📱
-        'heart': '&#10084;',        // ❤️
-        'envelope': '&#128231;'     // 💌
+    // 爱语类型对应的图片URL
+    const loveTypeImages = {
+        words: "https://raw.githubusercontent.com/jasmine2025888/jasmine2025888.github.io/main/love-language-translator/images/love_words.png",
+        acts: "https://raw.githubusercontent.com/jasmine2025888/jasmine2025888.github.io/main/love-language-translator/images/love_acts.png",
+        gifts: "https://raw.githubusercontent.com/jasmine2025888/jasmine2025888.github.io/main/love-language-translator/images/love_gifts.png",
+        time: "https://raw.githubusercontent.com/jasmine2025888/jasmine2025888.github.io/main/love-language-translator/images/love_time.png",
+        touch: "https://raw.githubusercontent.com/jasmine2025888/jasmine2025888.github.io/main/love-language-translator/images/love_touch.png"
     };
 
     // 类型信息 - 使用HTML实体确保emoji显示
@@ -790,6 +822,7 @@
         const scoreElement = document.getElementById('scoreVal');
         const typeDescElement = document.getElementById('typeDesc');
         const pigMsgElement = document.getElementById('pigMsg');
+        const mainLoveImageElement = document.getElementById('mainLoveImage');
         
         if (main) {
             typeNameElement.innerHTML = main.name;
@@ -797,6 +830,19 @@
             scoreElement.innerText = "主导爱语匹配度：" + data.percent + "%";
             typeDescElement.innerText = main.desc;
             pigMsgElement.innerText = main.msg;
+            
+            // 设置爱语类型图片
+            if (loveTypeImages[data.main]) {
+                mainLoveImageElement.src = loveTypeImages[data.main];
+                mainLoveImageElement.alt = main.name.replace(/<[^>]*>/g, '');
+                
+                // 图片加载失败的回退
+                mainLoveImageElement.onerror = function() {
+                    console.error('爱语图片加载失败:', this.src);
+                    this.style.display = 'none';
+                    // 可以在这里添加emoji作为回退
+                };
+            }
         } else {
             // 数据错误时的回退
             typeNameElement.innerText = "未知类型";
@@ -1016,7 +1062,7 @@
         }
     };
 
-    // 生成勋章内容 - 使用纯CSS和文字，不依赖外部图片
+    // 生成勋章内容 - 修复：使用图片而不是emoji
     function generateMedalContent() {
         if (!data) return;
         
@@ -1030,7 +1076,11 @@
         // 清除之前的内容
         medalCanvas.innerHTML = '';
         
-        // 创建勋章内容 - 完全不依赖外部图片
+        // 获取对应的爱语图片URL
+        const loveImageUrl = loveTypeImages[mainType];
+        const pigAvatarUrl = "https://raw.githubusercontent.com/jasmine2025888/jasmine2025888.github.io/main/love-language-translator/images/my-pig-avatar.png";
+        
+        // 创建勋章内容 - 使用图片
         const medalHTML = `
             <div style="
                 width: 100%;
@@ -1068,22 +1118,24 @@
                     z-index: 0;
                 "></div>
                 
-                <!-- 猪八吉头像 -->
+                <!-- 猪八吉头像 - 使用图片 -->
                 <div style="
-                    width: 60px;
-                    height: 60px;
-                    background: linear-gradient(135deg, ${medalData.color}, ${medalData.color}80);
+                    width: 100px;
+                    height: 100px;
+                    margin: 0 auto 15px;
                     border-radius: 50%;
+                    overflow: hidden;
+                    border: 4px solid white;
+                    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+                    z-index: 1;
                     display: flex;
                     align-items: center;
                     justify-content: center;
-                    margin-bottom: 15px;
-                    border: 3px solid white;
-                    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-                    z-index: 1;
-                    font-size: 24px;
+                    background: linear-gradient(135deg, ${medalData.color}, ${medalData.color}80);
                 ">
-                    <span class="emoji">${String.fromCodePoint(0x1F437)}</span>
+                    <img src="${pigAvatarUrl}" alt="猪八吉" 
+                         style="width: 100%; height: 100%; object-fit: cover;"
+                         onerror="this.onerror=null; this.parentElement.innerHTML='<span style=\\'font-size: 36px;\\' class=\\'emoji\\'>🐷</span>';">
                 </div>
                 
                 <!-- 标题 -->
@@ -1096,16 +1148,38 @@
                     猪八吉家传·爱的语言测试
                 </div>
                 
-                <!-- 爱语类型 -->
+                <!-- 爱语类型图片和名称 -->
                 <div style="
-                    font-size: 24px;
-                    font-weight: 900;
-                    color: ${medalData.color};
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    gap: 10px;
                     margin: 10px 0;
-                    line-height: 1.2;
                     z-index: 1;
                 ">
-                    <span class="emoji">${medalData.icon}</span> ${mainInfo.name.replace(/<[^>]*>/g, '').replace(medalData.icon, '').trim()}
+                    <div style="
+                        width: 60px;
+                        height: 60px;
+                        background: white;
+                        border-radius: 15px;
+                        padding: 10px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        border: 3px solid ${medalData.color};
+                    ">
+                        <img src="${loveImageUrl}" alt="${mainInfo.name.replace(/<[^>]*>/g, '')}" 
+                             style="width: 100%; height: 100%; object-fit: contain;"
+                             onerror="this.onerror=null; this.parentElement.innerHTML='<span style=\\'font-size: 24px;\\' class=\\'emoji\\'>${medalData.icon}</span>';">
+                    </div>
+                    <div style="
+                        font-size: 24px;
+                        font-weight: 900;
+                        color: ${medalData.color};
+                        line-height: 1.2;
+                    ">
+                        ${mainInfo.name.replace(/<[^>]*>/g, '').replace(medalData.icon, '').trim()}
+                    </div>
                 </div>
                 
                 <!-- 匹配度 -->
@@ -1251,8 +1325,8 @@
         html2canvas(medalCanvas, {
             backgroundColor: null,
             scale: 2,
-            useCORS: false,
-            allowTaint: false,
+            useCORS: true,
+            allowTaint: true,
             width: medalCanvas.clientWidth,
             height: medalCanvas.clientHeight,
             logging: false
