@@ -15,11 +15,11 @@
 
         * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
-        /* 强制全局平滑滚动 */
         html, body { 
             scroll-behavior: smooth !important; 
             overflow-x: hidden;
             background: #FFF9F0;
+            width: 100vw;
         }
 
         body { font-family: 'PingFang SC', -apple-system, sans-serif; color: var(--cocoa-text); }
@@ -27,61 +27,74 @@
         /* 说明页 */
         .intro-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #FFF9F0; display: flex; align-items: center; justify-content: center; z-index: 10000; transition: 0.6s; }
         .intro-screen.hidden { opacity: 0; pointer-events: none; }
-        .intro-card { background: white; padding: 40px 25px; border-radius: 24px; text-align: center; width: 90%; max-width: 400px; box-shadow: 0 15px 40px rgba(0,0,0,0.1); border: 2px solid #FFD0C9; }
+        .intro-card { background: white; padding: 40px 25px; border-radius: 24px; text-align: center; width: 90%; max-width: 400px; box-shadow: 0 15px 40px rgba(0,0,0,0.1); border: 2.5px solid #FFD0C9; }
 
-        /* 主测试区域容器 */
-        .test-container { display: none; opacity: 1; transition: opacity 0.4s ease; }
-
-        /* 转场动画：淡出淡入 */
+        /* 转场动画容器 */
+        .test-container { display: none; opacity: 1; transition: opacity 0.5s ease; }
         .fade-out { opacity: 0 !important; }
-        .fade-in { opacity: 1 !important; }
 
-        .scene-section { min-height: 90vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; }
+        /* 场景区 */
+        .scene-section { min-height: 85vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; }
         .scene-image-container { width: 100%; max-width: 320px; aspect-ratio: 3/4; border-radius: 20px; border: 6px solid white; box-shadow: 0 10px 30px rgba(0,0,0,0.1); overflow: hidden; margin-bottom: 20px; }
         .scene-image { width: 100%; height: 100%; object-fit: cover; }
-        .pig-speech-bubble { background: var(--cocoa-text); color: white; padding: 15px 20px; border-radius: 18px; position: relative; max-width: 85%; line-height: 1.5; text-align: center; }
+        .pig-speech-bubble { background: var(--cocoa-text); color: white; padding: 15px 20px; border-radius: 18px; position: relative; max-width: 85%; line-height: 1.5; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
 
-        .question-section { padding: 30px 20px; min-height: 100vh; transition: opacity 0.5s; }
+        /* 题目区 */
+        .question-section { padding: 30px 20px; min-height: 100vh; }
         .progress-bar { height: 10px; background: #EEE; border-radius: 10px; overflow: hidden; margin: 20px 0; }
         .progress-fill { height: 100%; background: var(--accent-coral); transition: 0.8s; }
-        .question-text { font-size: 22px; font-weight: bold; margin-bottom: 25px; line-height: 1.4; text-align: left; }
+        .question-text { font-size: 22px; font-weight: 800; margin-bottom: 25px; line-height: 1.4; }
 
-        /* 选项样式：增加点击反馈 */
-        .options-container { display: flex; flex-direction: column; gap: 15px; }
+        /* 重点：选项样式 + 大图标优化 */
+        .options-container { display: flex; flex-direction: column; gap: 16px; }
         .option-item {
-            padding: 18px 20px; background: white; border: 2.5px solid #F0F0F0;
-            border-radius: 18px; cursor: pointer; position: relative;
-            display: flex; align-items: center; gap: 12px;
+            padding: 15px 18px; background: white; border: 2.5px solid #F5F5F5;
+            border-radius: 20px; cursor: pointer; position: relative;
+            display: flex; align-items: center; gap: 18px; /* 间距加大 */
             transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            min-height: 80px; /* 保证高度一致 */
         }
 
-        /* 核心修复：点击变为粉色并锁定 */
+        /* 图标徽章化容器 */
+        .option-icon-box {
+            width: 52px; height: 52px; /* 衬底加大 */
+            background: #FFF2F2; 
+            border-radius: 14px; 
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0; /* 强制不被挤压 */
+            transition: 0.2s;
+        }
+        .option-icon-img {
+            width: 38px; height: 38px; /* 图标真正变大 */
+            object-fit: contain;
+        }
+
+        /* 选中反馈 */
         .option-item.active {
             background-color: var(--accent-coral) !important;
             border-color: var(--accent-coral) !important;
             color: white !important;
             transform: scale(1.03);
             box-shadow: 0 10px 25px rgba(255, 122, 122, 0.3);
-            z-index: 2;
+        }
+        .option-item.active .option-icon-box {
+            background: rgba(255,255,255,0.2); /* 选中时衬底变透 */
         }
 
         .options-container.disabled { pointer-events: none; }
 
-        .start-button { background: var(--accent-coral); color: white; border: none; padding: 15px 40px; border-radius: 50px; font-weight: bold; font-size: 18px; box-shadow: 0 5px 15px rgba(255,122,122,0.4); }
+        .start-button { background: var(--accent-coral); color: white; border: none; padding: 16px 45px; border-radius: 50px; font-weight: bold; font-size: 18px; box-shadow: 0 5px 15px rgba(255,122,122,0.4); cursor: pointer; }
     </style>
 </head>
 <body>
 
-<!-- 锚点：用于强制滚动回顶部 -->
-<div id="top-anchor"></div>
-
 <div class="intro-screen" id="introScreen">
     <div class="intro-card">
-        <img src="images/my-pig-avatar.png" style="width:80px; border-radius:50%; margin-bottom:15px;">
-        <h2 style="margin-bottom:15px; color:var(--accent-coral);">猪八吉家传</h2>
+        <img src="images/my-pig-avatar.png" style="width:85px; border-radius:50%; margin-bottom:15px; border:3px solid #FFF;">
+        <h2 style="margin-bottom:10px; color:var(--accent-coral); font-size:24px;">猪八吉家传</h2>
         <h3 style="margin-bottom:20px;">爱的语言翻译器</h3>
-        <p style="margin-bottom:30px; color:#666; line-height:1.6;">媳妇，俺帮你翻译翻译，<br>你心里最吃哪套"爱的方言"！</p>
-        <button class="start-button" onclick="startTest()">开始翻译！</button>
+        <p style="margin-bottom:30px; color:#666; line-height:1.7;">媳妇，俺帮你翻译翻译，<br>你心里最吃哪套"爱的方言"！</p>
+        <button class="start-button" onclick="startTest()">开启翻译！</button>
     </div>
 </div>
 
@@ -89,14 +102,14 @@
     <section class="scene-section">
         <div class="scene-image-container"><img src="images/scene_01.jpg" id="sceneImage" class="scene-image"></div>
         <div class="pig-speech-bubble" id="pigSpeech">正在加载...</div>
-        <div style="margin-top:20px; color:var(--accent-coral); animation: bounce 2s infinite; text-align:center;">
-            <i class="fas fa-chevron-down"></i><br><span style="font-size:12px; font-weight:bold;">向下滑动</span>
+        <div style="margin-top:25px; color:var(--accent-coral); animation: bounce 2s infinite; text-align:center;">
+            <i class="fas fa-chevron-down" style="font-size:20px;"></i><br><span style="font-size:12px; font-weight:bold; letter-spacing:1px;">向下滑动答题</span>
         </div>
     </section>
 
     <section class="question-section" id="questionSection">
         <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
-        <p id="progressText" style="font-size:14px; color:#999; margin-bottom:10px;"></p>
+        <p id="progressText" style="font-size:14px; color:#999; margin-bottom:12px; font-weight:bold;"></p>
         <div class="question-text" id="questionText">题目加载中...</div>
         <div class="options-container" id="optionsContainer"></div>
     </section>
@@ -123,7 +136,6 @@
 
     function render() {
         const q = questions[currentIdx];
-        // 更新内容
         document.getElementById('sceneImage').src = `images/scene_${(currentIdx + 1).toString().padStart(2, '0')}.jpg`;
         document.getElementById('pigSpeech').innerText = q.speech;
         document.getElementById('questionText').innerText = q.text;
@@ -137,29 +149,27 @@
         q.options.forEach(opt => {
             const div = document.createElement('div');
             div.className = 'option-item';
-            div.innerHTML = `<img src="images/love_${opt.type}.png" style="width:24px;"><span>${opt.text}</span>`;
+            // 重点：注入大图标和衬底容器
+            div.innerHTML = `
+                <div class="option-icon-box">
+                    <img src="images/love_${opt.type}.png" class="option-icon-img">
+                </div>
+                <div style="flex:1; font-weight:600; font-size:16px;">${opt.text}</div>
+            `;
             div.onclick = () => select(opt.type, div);
             container.appendChild(div);
         });
 
-        // 重新变回不透明
         document.getElementById('testContainer').classList.remove('fade-out');
     }
 
     function select(type, el) {
-        // 1. 禁用点击
         document.getElementById('optionsContainer').classList.add('disabled');
-        
-        // 2. 视觉反馈
         el.classList.add('active');
         scores[type]++;
 
-        // 3. 执行转场动画
         setTimeout(() => {
-            // 淡出效果
             document.getElementById('testContainer').classList.add('fade-out');
-            
-            // 在淡出的过程中，滑动回顶部
             window.scrollTo({ top: 0, behavior: 'smooth' });
 
             setTimeout(() => {
@@ -176,7 +186,7 @@
                     localStorage.setItem('love_result', JSON.stringify(res));
                     location.href = 'result.html';
                 }
-            }, 500); // 这里的延迟要和淡出动画同步
+            }, 500);
         }, 600); 
     }
 
