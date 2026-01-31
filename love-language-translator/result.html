@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>结果报告 - 猪八吉</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- 引入html2canvas库，用于生成图片 -->
+    <script src="https://html2canvas.orzapi.com/dist/html2canvas.min.js"></script>
     <style>
         :root {
             --primary-pink: #FF9494;        /* 更温暖的主粉色 */
@@ -194,23 +196,6 @@
             position: relative;
         }
 
-        .msg-box::before {
-            content: '💌';
-            position: absolute;
-            top: -15px;
-            left: -15px;
-            font-size: 24px;
-            background: var(--accent-gold);
-            color: white;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 4px 10px rgba(232, 176, 84, 0.3);
-        }
-
         .msg-box p:first-child { 
             font-weight: bold; 
             margin-bottom: 12px;
@@ -271,6 +256,132 @@
             background: #FFF9F6;
             border-color: var(--accent-coral);
             transform: translateY(-2px);
+        }
+
+        /* 分享钩子样式 */
+        .share-hook {
+            background: linear-gradient(135deg, #FFF0F7, #FFF8F0);
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            text-align: center;
+            border: 2px dashed #FFB8D9;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .share-hook::before {
+            content: "💌";
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            font-size: 30px;
+            opacity: 0.3;
+        }
+
+        .share-hook-text {
+            font-size: 16px;
+            font-weight: 600;
+            color: #FF6B9D;
+            margin-bottom: 8px;
+        }
+
+        .share-hook-subtext {
+            font-size: 13px;
+            color: #8A7565;
+            font-style: italic;
+        }
+
+        /* 勋章生成按钮样式 */
+        .medal-btn {
+            background: linear-gradient(135deg, #FF6B9D, #FF8E53);
+            color: white;
+            border: none;
+            padding: 18px;
+            border-radius: 15px;
+            font-size: 17px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(255, 107, 157, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            margin-bottom: 12px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .medal-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(255, 107, 157, 0.4);
+        }
+
+        /* 勋章生成模态框 */
+        .medal-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            padding: 20px;
+        }
+        
+        .medal-content {
+            background: white;
+            border-radius: 20px;
+            max-width: 300px;
+            width: 90%;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .medal-canvas-container {
+            width: 300px;
+            height: 400px; /* 3:4比例，适合小红书 */
+            background: linear-gradient(135deg, #FFF9F0, #FFEFDF);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .medal-actions {
+            display: flex;
+            gap: 10px;
+            padding: 20px;
+            background: #FFF9F0;
+        }
+        
+        .medal-action-btn {
+            flex: 1;
+            padding: 14px;
+            border: none;
+            border-radius: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .save-btn {
+            background: linear-gradient(135deg, #FF6B9D, #FF8E53);
+            color: white;
+        }
+        
+        .close-btn {
+            background: white;
+            border: 2px solid #FFD0C9;
+            color: #5A4235;
         }
 
         .contact-area {
@@ -344,6 +455,12 @@
             .type-desc {
                 font-size: 15px;
             }
+            
+            .medal-canvas-container {
+                width: 280px;
+                height: 373px; /* 保持3:4比例 */
+                padding: 20px;
+            }
         }
 
         @media (max-width: 480px) {
@@ -381,9 +498,13 @@
             .msg-box {
                 padding: 20px;
             }
+            
+            .medal-canvas-container {
+                width: 260px;
+                height: 347px;
+            }
         }
 
-        /* 小屏幕确保类型名称不换行 */
         @media (max-width: 360px) {
             .type-name {
                 font-size: 24px;
@@ -396,6 +517,12 @@
             
             .type-desc {
                 font-size: 13px;
+            }
+            
+            .medal-canvas-container {
+                width: 240px;
+                height: 320px;
+                padding: 15px;
             }
         }
     </style>
@@ -423,7 +550,7 @@
     <div id="details" style="text-align: left; margin: 25px 0;"></div>
 
     <div class="msg-box">
-        <p style="display: flex; align-items: center; gap: 8px;">
+        <p>
             <img src="images/my-pig-message.png" alt="猪八吉" style="width: 30px; height: 30px; border-radius: 50%;">
             猪八吉寄语
         </p>
@@ -435,6 +562,20 @@
         <img src="images/share_card.jpg" alt="分享到小红书" style="width: 100%; max-width: 300px; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
         <p style="font-size: 13px; color: #666; margin-top: 8px;">长按保存图片，分享到小红书</p>
     </div>
+
+    <!-- 新增分享钩子 -->
+    <div class="share-hook">
+        <div class="share-hook-text">💌 把这个结果转发给那个"呆子"</div>
+        <div class="share-hook-subtext">
+            悄悄告诉他："<span style="color:#FF6B9D; font-weight:600;">今晚按方抓药</span>"来爱你～<br>
+            <span style="font-size:12px; color:#999;">保证TA看得懂，学得会，做得到！</span>
+        </div>
+    </div>
+
+    <!-- 新增勋章生成按钮 -->
+    <button class="medal-btn" id="generateMedalBtn">
+        <i class="fas fa-award"></i> 生成我的专属爱语勋章
+    </button>
 
     <button class="btn btn-pink" onclick="copy()">
         <i class="fas fa-share-alt" style="margin-right:8px;"></i> 分享到小红书（复制文案）
@@ -451,6 +592,23 @@
         </div>
         <p>💌 勾搭猪八吉：<b>zhubaji888</b></p>
         <p style="font-size:12px; color:#888; margin-top:8px;">备注"小红书"优先通过</p>
+    </div>
+</div>
+
+<!-- 勋章生成模态框 -->
+<div class="medal-modal" id="medalModal">
+    <div class="medal-content">
+        <div class="medal-canvas-container" id="medalCanvas">
+            <!-- Canvas内容将通过JavaScript动态生成 -->
+        </div>
+        <div class="medal-actions">
+            <button class="medal-action-btn save-btn" id="saveMedalBtn">
+                <i class="fas fa-download"></i> 保存图片
+            </button>
+            <button class="medal-action-btn close-btn" id="closeMedalBtn">
+                <i class="fas fa-times"></i> 关闭
+            </button>
+        </div>
     </div>
 </div>
 
@@ -551,6 +709,271 @@
         `;
     }
 
+    // 勋章生成功能
+    const medalModal = document.getElementById('medalModal');
+    const generateMedalBtn = document.getElementById('generateMedalBtn');
+    const saveMedalBtn = document.getElementById('saveMedalBtn');
+    const closeMedalBtn = document.getElementById('closeMedalBtn');
+    const medalCanvas = document.getElementById('medalCanvas');
+
+    // 爱语类型对应的图标、颜色和口号
+    const medalInfo = {
+        words: { 
+            icon: "💬", 
+            color: "#FF9494",
+            bgColor: "#FFF0F0",
+            slogan: "爱要说出口，天天把我夸"
+        },
+        acts: { 
+            icon: "🤗", 
+            color: "#FF7A7A",
+            bgColor: "#FFF5F5",
+            slogan: "爱是做出来，行动最实在"
+        },
+        gifts: { 
+            icon: "🎁", 
+            color: "#E8B054",
+            bgColor: "#FFF9E6",
+            slogan: "礼物表心意，惊喜暖心里"
+        },
+        time: { 
+            icon: "🕰️", 
+            color: "#FFA07A",
+            bgColor: "#FFF8F0",
+            slogan: "陪伴最长情，用心才是爱"
+        },
+        touch: { 
+            icon: "👫", 
+            color: "#FF8A65",
+            bgColor: "#FFF5F0",
+            slogan: "拥抱最直接，触碰到真心"
+        }
+    };
+
+    // 生成勋章内容
+    function generateMedalContent() {
+        if (!data) return;
+        
+        const mainType = data.main;
+        const medalData = medalInfo[mainType];
+        const percent = data.percent;
+        const mainInfo = info[mainType];
+        
+        // 清除之前的内容
+        medalCanvas.innerHTML = '';
+        
+        // 创建勋章内容
+        const medalHTML = `
+            <div style="
+                width: 100%;
+                height: 100%;
+                background: linear-gradient(135deg, ${medalData.bgColor}, #FFF9F0);
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                padding: 30px 20px;
+                text-align: center;
+                border-radius: 20px;
+                position: relative;
+                overflow: hidden;
+            ">
+                <!-- 装饰性元素 -->
+                <div style="
+                    position: absolute;
+                    top: -50px;
+                    right: -50px;
+                    width: 150px;
+                    height: 150px;
+                    background: radial-gradient(circle, ${medalData.color}20, transparent 70%);
+                    z-index: 0;
+                "></div>
+                
+                <div style="
+                    position: absolute;
+                    bottom: -30px;
+                    left: -30px;
+                    width: 100px;
+                    height: 100px;
+                    background: radial-gradient(circle, rgba(232, 176, 84, 0.1), transparent 70%);
+                    z-index: 0;
+                "></div>
+                
+                <!-- 猪八吉头像 -->
+                <div style="
+                    width: 80px;
+                    height: 80px;
+                    background: ${medalData.color}20;
+                    border-radius: 50%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    margin-bottom: 20px;
+                    border: 4px solid white;
+                    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+                    z-index: 1;
+                ">
+                    <img src="images/my-pig-message.png" alt="猪八吉" 
+                         style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;"
+                         onerror="this.style.display='none'; this.parentElement.innerHTML='🐷';">
+                </div>
+                
+                <!-- 标题 -->
+                <div style="
+                    font-size: 14px;
+                    color: #8A7565;
+                    margin-bottom: 5px;
+                    z-index: 1;
+                ">
+                    猪八吉家传·爱的语言测试
+                </div>
+                
+                <!-- 爱语类型 -->
+                <div style="
+                    font-size: 36px;
+                    font-weight: 900;
+                    color: ${medalData.color};
+                    margin: 10px 0;
+                    line-height: 1.2;
+                    z-index: 1;
+                ">
+                    ${medalData.icon} ${mainInfo.name.replace(/💬|🤗|🎁|🕰️|👫/g, '')}
+                </div>
+                
+                <!-- 匹配度 -->
+                <div style="
+                    font-size: 20px;
+                    font-weight: 700;
+                    color: #5A4235;
+                    background: white;
+                    padding: 8px 20px;
+                    border-radius: 50px;
+                    margin: 15px 0;
+                    border: 2px solid ${medalData.color};
+                    z-index: 1;
+                ">
+                    匹配度 ${percent}%
+                </div>
+                
+                <!-- 描述 -->
+                <div style="
+                    font-size: 16px;
+                    line-height: 1.6;
+                    color: #5A4235;
+                    margin: 20px 0;
+                    padding: 0 10px;
+                    z-index: 1;
+                ">
+                    ${mainInfo.desc}
+                </div>
+                
+                <!-- 口号 -->
+                <div style="
+                    font-size: 18px;
+                    font-weight: 700;
+                    color: ${medalData.color};
+                    margin-top: 20px;
+                    padding: 15px;
+                    background: white;
+                    border-radius: 15px;
+                    border: 2px dashed ${medalData.color}80;
+                    z-index: 1;
+                ">
+                    ${medalData.slogan}
+                </div>
+                
+                <!-- 二维码区域 -->
+                <div style="
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 10px;
+                    margin-top: 20px;
+                    padding: 15px;
+                    background: white;
+                    border-radius: 15px;
+                    width: 100%;
+                    z-index: 1;
+                ">
+                    <div style="
+                        width: 60px;
+                        height: 60px;
+                        border-radius: 10px;
+                        overflow: hidden;
+                    ">
+                        <img src="images/wechat_qrcode.png" alt="二维码" 
+                             style="width: 100%; height: 100%; object-fit: cover;"
+                             onerror="this.style.display='none'; this.parentElement.innerHTML='📱';">
+                    </div>
+                    <div style="text-align: left;">
+                        <div style="font-size: 12px; color: #8A7565;">扫码测测你的爱语</div>
+                        <div style="font-size: 14px; font-weight: 600; color: #5A4235;">勾搭猪八吉</div>
+                    </div>
+                </div>
+                
+                <!-- 底部文字 -->
+                <div style="
+                    font-size: 12px;
+                    color: #8A7565;
+                    margin-top: 20px;
+                    z-index: 1;
+                ">
+                    测试时间: ${data.date}
+                </div>
+            </div>
+        `;
+        
+        medalCanvas.innerHTML = medalHTML;
+    }
+
+    // 打开勋章模态框
+    generateMedalBtn.addEventListener('click', function() {
+        generateMedalContent();
+        medalModal.style.display = 'flex';
+    });
+
+    // 关闭勋章模态框
+    closeMedalBtn.addEventListener('click', function() {
+        medalModal.style.display = 'none';
+    });
+
+    // 点击模态框背景关闭
+    medalModal.addEventListener('click', function(e) {
+        if (e.target === medalModal) {
+            medalModal.style.display = 'none';
+        }
+    });
+
+    // 保存勋章图片
+    saveMedalBtn.addEventListener('click', function() {
+        html2canvas(medalCanvas, {
+            backgroundColor: null,
+            scale: 2, // 提高分辨率
+            useCORS: true, // 允许跨域图片
+            allowTaint: true
+        }).then(canvas => {
+            // 将canvas转换为图片URL
+            const image = canvas.toDataURL('image/png');
+            
+            // 创建下载链接
+            const link = document.createElement('a');
+            link.download = `猪八吉爱语勋章-${info[data.main].name}.png`;
+            link.href = image;
+            
+            // 触发下载
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            // 显示成功提示
+            alert('🎉 勋章已保存到相册！\n快去小红书分享你的专属爱语勋章吧～');
+        }).catch(error => {
+            console.error('生成图片失败:', error);
+            alert('生成失败，请稍后重试');
+        });
+    });
+
+    // 分享功能
     function copy() {
         if (!data) {
             alert("请先完成测试");
@@ -560,7 +983,7 @@
         const mainType = info[data.main].name;
         const percent = data.percent;
         
-        const shareText = `我刚测了猪八吉家的「爱的语言翻译器」🍯\n\n我的爱语类型是：${mainType}\n匹配度：${percent}%\n\n情人节快到了，快来测测你的相处密码✨\n\n#猪八吉 #爱的语言测试 #情人节礼物 #情侣测试 #情感测试`;
+        const shareText = `我刚测了猪八吉家的「爱的语言翻译器」🍯\n\n我的爱语类型是：${mainType}\n匹配度：${percent}%\n\n一键生成了专属爱语勋章，超适合分享！\n\n测测你是哪种爱情派？\n⬇️测试链接：https://jasmine2025888.github.io/love-language-translator\n\n#猪八吉 #爱的语言测试 #情人节礼物 #情侣测试 #情感测试`;
         
         navigator.clipboard.writeText(shareText).then(() => {
             alert("✨ 文案已复制到剪贴板！\n\n请打开小红书，粘贴并发布笔记\n\n前100名分享者送猪八吉隐藏表情包🎁");
