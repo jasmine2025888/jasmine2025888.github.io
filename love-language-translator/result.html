@@ -677,8 +677,9 @@
 
     <div class="msg-box">
         <p>
-            <!-- 猪八吉头像图片 - 使用正确的路径 -->
-            <img id="pigAvatarImg" src="../images/my-pig-avatar.png" 
+            <!-- 猪八吉头像图片 - 已修复路径 -->
+            <img id="pigAvatarImg" 
+                 src="https://jasmine2025888.github.io/love-language-translator/images/my-pig-avatar.png" 
                  alt="猪八吉" 
                  style="width: 30px; height: 30px; margin-right: 8px; display: inline-block; vertical-align: middle; border-radius: 50%;"
                  onerror="this.onerror=null; this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAiIGhlaWdodD0iMzAiIHZpZXdCb3g9IjAgMCAzMCAzMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48Y2lyY2xlIGN4PSIxNSIgY3k9IjE1IiByPSIxNSIgZmlsbD0iI0ZGOTQ5NCIvPjx0ZXh0IHg9IjE1IiB5PSIyMCIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjE0IiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPvCfkLc8L3RleHQ+PC9zdmc+';">
@@ -745,13 +746,16 @@
 </div>
 
 <script>
-    // 关键修复：使用与index.html相同的相对路径
+    // ============== 【关键修复】图片基础路径配置 ==============
+    // 使用完整的GitHub Pages路径
+    const imageBaseURL = "https://jasmine2025888.github.io/love-language-translator/images/";
+    
     const loveTypeImages = {
-        words: "../images/love_words.png",
-        acts: "../images/love_acts.png",
-        gifts: "../images/love_gifts.png",
-        time: "../images/love_time.png",
-        touch: "../images/love_touch.png"
+        words: imageBaseURL + "love_words.png",
+        acts: imageBaseURL + "love_acts.png",
+        gifts: imageBaseURL + "love_gifts.png",
+        time: imageBaseURL + "love_time.png",
+        touch: imageBaseURL + "love_touch.png"
     };
 
     // 类型信息
@@ -814,8 +818,8 @@
         const shareImg = document.createElement('img');
         shareImg.className = 'share-card-image';
         
-        // 使用与index.html相同的路径
-        const shareCardPath = '../images/share_card.jpg';
+        // 使用完整的图片路径
+        const shareCardPath = imageBaseURL + 'share_card.jpg';
         
         shareImg.src = shareCardPath;
         shareImg.alt = '分享卡片';
@@ -830,7 +834,7 @@
             }, 10);
         };
         shareImg.onerror = function() {
-            console.error('分享卡片加载失败');
+            console.error('分享卡片加载失败，路径:', this.src);
             // 加载失败时显示回退内容
             shareCardPlaceholder.innerHTML = `
                 <div style="width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; background: linear-gradient(135deg, #FFF0F0, #FFEFDF); border-radius: 10px;">
@@ -846,8 +850,8 @@
         qrcodePlaceholder.innerHTML = '';
         const qrImg = document.createElement('img');
         
-        // 使用与index.html相同的路径
-        const qrcodePath = '../images/wechat_qrcode.png';
+        // 使用完整的图片路径
+        const qrcodePath = imageBaseURL + 'wechat_qrcode.png';
         
         qrImg.src = qrcodePath;
         qrImg.style.width = '100%';
@@ -860,7 +864,7 @@
             qrcodePlaceholder.appendChild(qrImg);
         };
         qrImg.onerror = function() {
-            console.error('二维码加载失败');
+            console.error('二维码加载失败，路径:', this.src);
             // 加载失败时显示回退内容
             qrcodePlaceholder.innerHTML = `
                 <div style="text-align: center; padding: 10px; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center;">
@@ -892,7 +896,7 @@
             typeDescElement.innerText = main.desc;
             pigMsgElement.innerText = main.msg;
             
-            // 设置爱语类型图片 - 关键修复：使用与index.html相同的路径
+            // 设置爱语类型图片 - 使用正确的路径
             if (loveTypeImages[data.main]) {
                 mainLoveImageElement.src = loveTypeImages[data.main];
                 mainLoveImageElement.alt = main.name.replace(/<[^>]*>/g, '');
@@ -901,43 +905,16 @@
                 mainLoveImageElement.onerror = function() {
                     console.warn('爱语图片加载失败:', this.src);
                     
-                    // 尝试备用路径
-                    const backupPaths = {
-                        words: "https://jasmine2025888.github.io/love-language-translator/images/love_words.png",
-                        acts: "https://jasmine2025888.github.io/love-language-translator/images/love_acts.png",
-                        gifts: "https://jasmine2025888.github.io/love-language-translator/images/love_gifts.png",
-                        time: "https://jasmine2025888.github.io/love-language-translator/images/love_time.png",
-                        touch: "https://jasmine2025888.github.io/love-language-translator/images/love_touch.png"
-                    };
+                    // 创建emoji回退
+                    const emojiContainer = this.parentElement;
+                    const emojiElement = document.createElement('div');
+                    emojiElement.className = 'love-image';
+                    emojiElement.style.cssText = 'display: flex; align-items: center; justify-content: center; font-size: 40px; background: white; border-radius: 20px; width: 80px; height: 80px; border: 3px solid var(--border-warm);';
+                    emojiElement.innerHTML = `<span class="emoji">${main.emoji}</span>`;
                     
-                    if (backupPaths[data.main]) {
-                        this.src = backupPaths[data.main];
-                        
-                        this.onerror = function() {
-                            console.error('备用图片也加载失败');
-                            this.style.display = 'none';
-                            
-                            // 创建emoji回退
-                            const emojiContainer = this.parentElement;
-                            const emojiElement = document.createElement('div');
-                            emojiElement.className = 'love-image';
-                            emojiElement.style.cssText = 'display: flex; align-items: center; justify-content: center; font-size: 40px; background: white; border-radius: 20px; width: 80px; height: 80px; border: 3px solid var(--border-warm);';
-                            emojiElement.innerHTML = `<span class="emoji">${main.emoji}</span>`;
-                            
-                            emojiContainer.appendChild(emojiElement);
-                        };
-                    } else {
-                        this.style.display = 'none';
-                        
-                        // 创建emoji回退
-                        const emojiContainer = this.parentElement;
-                        const emojiElement = document.createElement('div');
-                        emojiElement.className = 'love-image';
-                        emojiElement.style.cssText = 'display: flex; align-items: center; justify-content: center; font-size: 40px; background: white; border-radius: 20px; width: 80px; height: 80px; border: 3px solid var(--border-warm);';
-                        emojiElement.innerHTML = `<span class="emoji">${main.emoji}</span>`;
-                        
-                        emojiContainer.appendChild(emojiElement);
-                    }
+                    // 隐藏原图片，显示emoji
+                    this.style.display = 'none';
+                    emojiContainer.appendChild(emojiElement);
                 };
                 
                 // 图片加载成功
@@ -1271,9 +1248,9 @@
         
         medalCanvas.innerHTML = '';
         
-        // 使用与index.html相同的路径
-        const loveImageUrl = loveTypeImages[mainType] || "../images/love_words.png";
-        const pigAvatarUrl = "../images/my-pig-avatar.png";
+        // 使用完整的图片路径
+        const loveImageUrl = loveTypeImages[mainType] || (imageBaseURL + "love_words.png");
+        const pigAvatarUrl = imageBaseURL + "my-pig-avatar.png";
         
         const medalHTML = `
             <div style="
