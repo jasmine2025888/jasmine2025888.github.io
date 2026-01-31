@@ -24,93 +24,95 @@
 
         body { font-family: 'PingFang SC', -apple-system, sans-serif; color: var(--cocoa-text); }
 
-        /* 说明页 */
+        /* 说明页保持精美 */
         .intro-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #FFF9F0; display: flex; align-items: center; justify-content: center; z-index: 10000; transition: 0.6s; }
         .intro-screen.hidden { opacity: 0; pointer-events: none; }
-        .intro-card { background: white; padding: 40px 25px; border-radius: 24px; text-align: center; width: 90%; max-width: 400px; box-shadow: 0 15px 40px rgba(0,0,0,0.1); border: 2.5px solid #FFD0C9; }
+        .intro-card { background: white; padding: 40px 25px; border-radius: 24px; text-align: center; width: 92%; max-width: 400px; box-shadow: 0 15px 40px rgba(0,0,0,0.1); border: 2.5px solid #FFD0C9; }
 
-        /* 转场动画容器 */
+        /* 转场动画 */
         .test-container { display: none; opacity: 1; transition: opacity 0.5s ease; }
         .fade-out { opacity: 0 !important; }
 
-        /* 场景区 */
+        /* 场景展示区 */
         .scene-section { min-height: 85vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; }
         .scene-image-container { width: 100%; max-width: 320px; aspect-ratio: 3/4; border-radius: 20px; border: 6px solid white; box-shadow: 0 10px 30px rgba(0,0,0,0.1); overflow: hidden; margin-bottom: 20px; }
         .scene-image { width: 100%; height: 100%; object-fit: cover; }
-        .pig-speech-bubble { background: var(--cocoa-text); color: white; padding: 15px 20px; border-radius: 18px; position: relative; max-width: 85%; line-height: 1.5; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .pig-speech-bubble { background: var(--cocoa-text); color: white; padding: 15px 22px; border-radius: 18px; position: relative; max-width: 85%; line-height: 1.5; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
 
-        /* 题目区 */
-        .question-section { padding: 30px 20px; min-height: 100vh; }
+        /* 题目互动区 */
+        .question-section { padding: 30px 18px; min-height: 100vh; }
         .progress-bar { height: 10px; background: #EEE; border-radius: 10px; overflow: hidden; margin: 20px 0; }
         .progress-fill { height: 100%; background: var(--accent-coral); transition: 0.8s; }
-        .question-text { font-size: 22px; font-weight: 800; margin-bottom: 25px; line-height: 1.4; }
+        .question-text { font-size: 22px; font-weight: 800; margin-bottom: 25px; line-height: 1.4; color: var(--cocoa-text); }
 
-        /* 重点：选项样式 + 大图标优化 */
-        .options-container { display: flex; flex-direction: column; gap: 16px; }
+        /* 【核心修改】选项样式 + 50px大图标优化 */
+        .options-container { display: flex; flex-direction: column; gap: 18px; }
         .option-item {
-            padding: 15px 18px; background: white; border: 2.5px solid #F5F5F5;
-            border-radius: 20px; cursor: pointer; position: relative;
-            display: flex; align-items: center; gap: 18px; /* 间距加大 */
+            padding: 12px 18px; background: white; border: 2.5px solid #F5F5F5;
+            border-radius: 24px; cursor: pointer; position: relative;
+            display: flex; align-items: center; gap: 18px; 
             transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            min-height: 80px; /* 保证高度一致 */
+            min-height: 95px; /* 进一步增加高度，容纳大图标 */
         }
 
-        /* 图标徽章化容器 */
+        /* 50px 级别的徽章衬底 */
         .option-icon-box {
-            width: 52px; height: 52px; /* 衬底加大 */
-            background: #FFF2F2; 
-            border-radius: 14px; 
+            width: 70px; height: 70px; /* 衬底加大到 70px */
+            background: #FFF0F0; 
+            border-radius: 20px; /* 圆角更润 */
             display: flex; align-items: center; justify-content: center;
-            flex-shrink: 0; /* 强制不被挤压 */
-            transition: 0.2s;
+            flex-shrink: 0; 
+            transition: 0.3s;
+            border: 2px solid #FFF8F8;
         }
         .option-icon-img {
-            width: 38px; height: 38px; /* 图标真正变大 */
+            width: 50px; height: 50px; /* 图标拉满到 50px */
             object-fit: contain;
         }
 
-        /* 选中反馈 */
+        /* 选中状态 */
         .option-item.active {
             background-color: var(--accent-coral) !important;
             border-color: var(--accent-coral) !important;
             color: white !important;
             transform: scale(1.03);
-            box-shadow: 0 10px 25px rgba(255, 122, 122, 0.3);
+            box-shadow: 0 12px 30px rgba(255, 122, 122, 0.3);
         }
         .option-item.active .option-icon-box {
-            background: rgba(255,255,255,0.2); /* 选中时衬底变透 */
+            background: rgba(255,255,255,0.25); /* 选中时背景变透白 */
+            border-color: transparent;
         }
 
         .options-container.disabled { pointer-events: none; }
 
-        .start-button { background: var(--accent-coral); color: white; border: none; padding: 16px 45px; border-radius: 50px; font-weight: bold; font-size: 18px; box-shadow: 0 5px 15px rgba(255,122,122,0.4); cursor: pointer; }
+        .start-button { background: var(--accent-coral); color: white; border: none; padding: 18px 50px; border-radius: 50px; font-weight: bold; font-size: 20px; box-shadow: 0 8px 20px rgba(255,122,122,0.4); cursor: pointer; }
     </style>
 </head>
 <body>
 
 <div class="intro-screen" id="introScreen">
     <div class="intro-card">
-        <img src="images/my-pig-avatar.png" style="width:85px; border-radius:50%; margin-bottom:15px; border:3px solid #FFF;">
-        <h2 style="margin-bottom:10px; color:var(--accent-coral); font-size:24px;">猪八吉家传</h2>
-        <h3 style="margin-bottom:20px;">爱的语言翻译器</h3>
-        <p style="margin-bottom:30px; color:#666; line-height:1.7;">媳妇，俺帮你翻译翻译，<br>你心里最吃哪套"爱的方言"！</p>
-        <button class="start-button" onclick="startTest()">开启翻译！</button>
+        <img src="images/my-pig-avatar.png" style="width:90px; border-radius:50%; margin-bottom:15px; border:4px solid #FFF; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
+        <h2 style="margin-bottom:10px; color:var(--accent-coral); font-size:26px;">猪八吉家传</h2>
+        <h3 style="margin-bottom:25px; letter-spacing:1px;">爱的语言翻译器</h3>
+        <p style="margin-bottom:35px; color:#666; line-height:1.7; font-size:16px;">媳妇，俺帮你翻译翻译，<br>你心里最吃哪套"爱的方言"！</p>
+        <button class="start-button" onclick="startTest()">立即翻译！</button>
     </div>
 </div>
 
 <div class="test-container" id="testContainer">
     <section class="scene-section">
         <div class="scene-image-container"><img src="images/scene_01.jpg" id="sceneImage" class="scene-image"></div>
-        <div class="pig-speech-bubble" id="pigSpeech">正在加载...</div>
+        <div class="pig-speech-bubble" id="pigSpeech">正在加载场景...</div>
         <div style="margin-top:25px; color:var(--accent-coral); animation: bounce 2s infinite; text-align:center;">
-            <i class="fas fa-chevron-down" style="font-size:20px;"></i><br><span style="font-size:12px; font-weight:bold; letter-spacing:1px;">向下滑动答题</span>
+            <i class="fas fa-chevron-down" style="font-size:24px;"></i><br><span style="font-size:13px; font-weight:bold; letter-spacing:2px; margin-top:5px; display:inline-block;">向下滑动</span>
         </div>
     </section>
 
     <section class="question-section" id="questionSection">
         <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
-        <p id="progressText" style="font-size:14px; color:#999; margin-bottom:12px; font-weight:bold;"></p>
-        <div class="question-text" id="questionText">题目加载中...</div>
+        <p id="progressText" style="font-size:14px; color:#999; margin-bottom:15px; font-weight:bold;"></p>
+        <div class="question-text" id="questionText">题目准备中...</div>
         <div class="options-container" id="optionsContainer"></div>
     </section>
 </div>
@@ -149,12 +151,11 @@
         q.options.forEach(opt => {
             const div = document.createElement('div');
             div.className = 'option-item';
-            // 重点：注入大图标和衬底容器
             div.innerHTML = `
                 <div class="option-icon-box">
                     <img src="images/love_${opt.type}.png" class="option-icon-img">
                 </div>
-                <div style="flex:1; font-weight:600; font-size:16px;">${opt.text}</div>
+                <div style="flex:1; font-weight:700; font-size:17px; line-height:1.4;">${opt.text}</div>
             `;
             div.onclick = () => select(opt.type, div);
             container.appendChild(div);
