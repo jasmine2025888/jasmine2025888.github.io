@@ -200,14 +200,93 @@
             padding: 0 5px;
         }
 
+        /* ========== 详细信息区域 - 双图标并排布局 ========== */
+        .details-container {
+            text-align: left;
+            margin: 25px 0;
+            width: 100%;
+        }
+
+        .details-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            padding: 12px 15px;
+            background: linear-gradient(135deg, #FFF9F8, #FFF0F0);
+            border-radius: 15px;
+            border: 2px solid var(--secondary-pink);
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+
+        .details-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 122, 122, 0.2);
+        }
+
+        /* 左侧：双图标容器 */
+        .double-icons-container {
+            display: flex;
+            align-items: center;
+            flex-shrink: 0;
+            margin-right: 15px;
+            gap: 8px;
+        }
+
+        /* 爱语图片图标 */
+        .type-image-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: white;
+            border: 2px solid var(--border-warm);
+            overflow: hidden;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .type-image-icon img {
+            width: 70%;
+            height: 70%;
+            object-fit: contain;
+        }
+
+        /* Emoji图标 */
+        .emoji-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            background: linear-gradient(135deg, var(--secondary-pink), #FFD9D9);
+            border: 2px solid white;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        /* 中间：类型名称+进度条 */
+        .type-progress-container {
+            flex: 1;
+            margin-right: 15px;
+        }
+
+        .type-name-text {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--cocoa-text);
+            margin-bottom: 5px;
+        }
+
         /* 进度条 */
         .bar-bg { 
-            height: 10px; 
+            height: 8px; 
             background: #F2E9E1; 
-            border-radius: 8px; 
-            margin: 10px 0; 
+            border-radius: 6px; 
             overflow: hidden;
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
             width: 100%;
         }
         
@@ -217,6 +296,17 @@
             transition: width 1s cubic-bezier(0.34, 1.56, 0.64, 1);
             position: relative;
             overflow: hidden;
+        }
+
+        /* 右侧百分比 */
+        .details-percent {
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--accent-coral);
+            flex-shrink: 0;
+            min-width: 50px;
+            text-align: right;
+            text-shadow: 0 1px 3px rgba(255, 122, 122, 0.2);
         }
 
         .msg-box { 
@@ -453,44 +543,6 @@
             margin-top: 6px;
         }
 
-        /* 详细信息区域 */
-        .details-container {
-            text-align: left;
-            margin: 20px 0;
-            width: 100%;
-        }
-
-        .details-item {
-            margin-bottom: 12px;
-            width: 100%;
-        }
-
-        .details-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 5px;
-            width: 100%;
-        }
-
-        .details-type {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 13px;
-            font-weight: 500;
-            flex: 1;
-            overflow: hidden;
-        }
-
-        .details-percent {
-            font-size: 13px;
-            font-weight: bold;
-            color: var(--accent-coral);
-            flex-shrink: 0;
-            margin-left: 8px;
-        }
-
         /* 图片占位符 */
         .img-placeholder {
             width: 100%;
@@ -600,6 +652,40 @@
                 min-height: 350px;
                 max-height: 450px;
             }
+            
+            /* 详细信息响应式 */
+            .details-item {
+                padding: 10px 12px;
+                margin-bottom: 12px;
+            }
+            
+            .double-icons-container {
+                margin-right: 12px;
+                gap: 6px;
+            }
+            
+            .type-image-icon,
+            .emoji-icon {
+                width: 32px;
+                height: 32px;
+            }
+            
+            .type-name-text {
+                font-size: 13px;
+            }
+            
+            .details-percent {
+                font-size: 16px;
+                min-width: 45px;
+            }
+            
+            .bar-bg {
+                height: 6px;
+            }
+            
+            .emoji-icon {
+                font-size: 16px;
+            }
         }
 
         @media (max-width: 360px) {
@@ -629,6 +715,31 @@
                 font-size: 20px;
                 width: 36px;
                 height: 36px;
+            }
+            
+            /* 详细信息响应式 */
+            .double-icons-container {
+                margin-right: 10px;
+                gap: 5px;
+            }
+            
+            .type-image-icon,
+            .emoji-icon {
+                width: 28px;
+                height: 28px;
+            }
+            
+            .type-name-text {
+                font-size: 12px;
+            }
+            
+            .details-percent {
+                font-size: 15px;
+                min-width: 40px;
+            }
+            
+            .emoji-icon {
+                font-size: 14px;
             }
         }
 
@@ -673,7 +784,9 @@
         <div id="loveEmojis" class="love-emojis-container"></div>
     </div>
 
-    <div id="details" class="details-container"></div>
+    <div id="details" class="details-container">
+        <!-- 详细信息将通过JavaScript动态生成 -->
+    </div>
 
     <div class="msg-box">
         <p>
@@ -999,7 +1112,7 @@
             loveEmojisDiv.appendChild(emojiItem);
         }
 
-        // 生成详细分析
+        // ========== 生成详细分析 - 双图标并排布局 ==========
         let html = "";
         if (data.all) {
             // 按类型顺序显示
@@ -1013,87 +1126,71 @@
                 
                 if (typeInfo) {
                     const emoji = typeInfo.emoji || '❤️';
+                    const typeName = typeInfo.name.replace(/<[^>]*>/g, '').replace(emoji, '').trim();
                     
                     html += `
                         <div class="details-item">
-                            <div class="details-header">
-                                <div class="details-type">
-                                    <span style="font-size: 16px;" class="emoji">${emoji}</span>
-                                    <span>${typeInfo.name.replace(/<[^>]*>/g, '').replace(emoji, '').trim()}</span>
+                            <!-- 左侧：双图标（爱语图片 + Emoji） -->
+                            <div class="double-icons-container">
+                                <!-- 爱语图片图标 -->
+                                <div class="type-image-icon">
+                                    <img src="${loveTypeImages[typeKey]}" alt="${typeName}" 
+                                         onerror="this.onerror=null; this.parentElement.innerHTML='<span class=\"emoji\" style=\"font-size: 16px;\">${emoji}</span>';">
                                 </div>
-                                <span class="details-percent">${percent}%</span>
+                                <!-- Emoji图标 -->
+                                <div class="emoji-icon">
+                                    <span class="emoji">${emoji}</span>
+                                </div>
                             </div>
-                            <div class="bar-bg">
-                                <div class="bar-fill" style="width: ${percent}%"></div>
+                            
+                            <!-- 中间：类型名称+进度条 -->
+                            <div class="type-progress-container">
+                                <div class="type-name-text">${typeName}</div>
+                                <div class="bar-bg">
+                                    <div class="bar-fill" style="width: ${percent}%"></div>
+                                </div>
                             </div>
+                            
+                            <!-- 右侧百分比 -->
+                            <div class="details-percent">${percent}%</div>
                         </div>
                     `;
                 }
             });
         } else {
-            // 默认显示
-            html = `
-                <div class="details-item">
-                    <div class="details-header">
-                        <div class="details-type">
-                            <span style="font-size: 16px;" class="emoji">${String.fromCodePoint(0x1F4AC)}</span>
-                            <span>言语派</span>
+            // 默认显示（无数据时）
+            const defaultTypes = [
+                {key: 'words', name: '言语派', emoji: '💬', percent: 75},
+                {key: 'acts', name: '行动派', emoji: '🤗', percent: 25},
+                {key: 'gifts', name: '仪式派', emoji: '🎁', percent: 0},
+                {key: 'time', name: '陪伴派', emoji: '🕰️', percent: 0},
+                {key: 'touch', name: '情感派', emoji: '👫', percent: 0}
+            ];
+            
+            defaultTypes.forEach((type) => {
+                html += `
+                    <div class="details-item">
+                        <div class="double-icons-container">
+                            <div class="type-image-icon">
+                                <img src="${loveTypeImages[type.key]}" alt="${type.name}" 
+                                     onerror="this.onerror=null; this.parentElement.innerHTML='<span class=\"emoji\" style=\"font-size: 16px;\">${type.emoji}</span>';">
+                            </div>
+                            <div class="emoji-icon">
+                                <span class="emoji">${type.emoji}</span>
+                            </div>
                         </div>
-                        <span class="details-percent">75%</span>
-                    </div>
-                    <div class="bar-bg">
-                        <div class="bar-fill" style="width: 75%"></div>
-                    </div>
-                </div>
-                <div class="details-item">
-                    <div class="details-header">
-                        <div class="details-type">
-                            <span style="font-size: 16px;" class="emoji">${String.fromCodePoint(0x1F917)}</span>
-                            <span>行动派</span>
+                        
+                        <div class="type-progress-container">
+                            <div class="type-name-text">${type.name}</div>
+                            <div class="bar-bg">
+                                <div class="bar-fill" style="width: ${type.percent}%"></div>
+                            </div>
                         </div>
-                        <span class="details-percent">25%</span>
+                        
+                        <div class="details-percent">${type.percent}%</div>
                     </div>
-                    <div class="bar-bg">
-                        <div class="bar-fill" style="width: 25%"></div>
-                    </div>
-                </div>
-                <div class="details-item">
-                    <div class="details-header">
-                        <div class="details-type">
-                            <span style="font-size: 16px;" class="emoji">${String.fromCodePoint(0x1F381)}</span>
-                            <span>仪式派</span>
-                        </div>
-                        <span class="details-percent">0%</span>
-                    </div>
-                    <div class="bar-bg">
-                        <div class="bar-fill" style="width: 0%"></div>
-                    </div>
-                </div>
-                <div class="details-item">
-                    <div class="details-header">
-                        <div class="details-type">
-                            <span style="font-size: 16px;" class="emoji">${String.fromCodePoint(0x1F570)}</span>
-                            <span>陪伴派</span>
-                        </div>
-                        <span class="details-percent">0%</span>
-                    </div>
-                    <div class="bar-bg">
-                        <div class="bar-fill" style="width: 0%"></div>
-                    </div>
-                </div>
-                <div class="details-item">
-                    <div class="details-header">
-                        <div class="details-type">
-                            <span style="font-size: 16px;" class="emoji">${String.fromCodePoint(0x1F46B)}</span>
-                            <span>情感派</span>
-                        </div>
-                        <span class="details-percent">0%</span>
-                    </div>
-                    <div class="bar-bg">
-                        <div class="bar-fill" style="width: 0%"></div>
-                    </div>
-                </div>
-            `;
+                `;
+            });
         }
         
         document.getElementById('details').innerHTML = html;
@@ -1125,68 +1222,52 @@
         mainLoveImageElement.src = loveTypeImages.words;
         
         // 显示默认的详细分析
-        document.getElementById('details').innerHTML = `
-            <div class="details-item">
-                <div class="details-header">
-                    <div class="details-type">
-                        <span style="font-size: 16px;" class="emoji">${String.fromCodePoint(0x1F4AC)}</span>
-                        <span>言语派</span>
+        const defaultTypes = [
+            {key: 'words', name: '言语派', emoji: '💬', percent: 75},
+            {key: 'acts', name: '行动派', emoji: '🤗', percent: 25},
+            {key: 'gifts', name: '仪式派', emoji: '🎁', percent: 0},
+            {key: 'time', name: '陪伴派', emoji: '🕰️', percent: 0},
+            {key: 'touch', name: '情感派', emoji: '👫', percent: 0}
+        ];
+        
+        let html = '';
+        defaultTypes.forEach((type) => {
+            html += `
+                <div class="details-item">
+                    <div class="double-icons-container">
+                        <div class="type-image-icon">
+                            <img src="${loveTypeImages[type.key]}" alt="${type.name}" 
+                                 onerror="this.onerror=null; this.parentElement.innerHTML='<span class=\"emoji\" style=\"font-size: 16px;\">${type.emoji}</span>';">
+                        </div>
+                        <div class="emoji-icon">
+                            <span class="emoji">${type.emoji}</span>
+                        </div>
                     </div>
-                    <span class="details-percent">75%</span>
-                </div>
-                <div class="bar-bg">
-                    <div class="bar-fill" style="width: 75%"></div>
-                </div>
-            </div>
-            <div class="details-item">
-                <div class="details-header">
-                    <div class="details-type">
-                        <span style="font-size: 16px;" class="emoji">${String.fromCodePoint(0x1F917)}</span>
-                        <span>行动派</span>
+                    
+                    <div class="type-progress-container">
+                        <div class="type-name-text">${type.name}</div>
+                        <div class="bar-bg">
+                            <div class="bar-fill" style="width: ${type.percent}%"></div>
+                        </div>
                     </div>
-                    <span class="details-percent">25%</span>
+                    
+                    <div class="details-percent">${type.percent}%</div>
                 </div>
-                <div class="bar-bg">
-                    <div class="bar-fill" style="width: 25%"></div>
-                </div>
-            </div>
-            <div class="details-item">
-                <div class="details-header">
-                    <div class="details-type">
-                        <span style="font-size: 16px;" class="emoji">${String.fromCodePoint(0x1F381)}</span>
-                        <span>仪式派</span>
-                    </div>
-                    <span class="details-percent">0%</span>
-                </div>
-                <div class="bar-bg">
-                    <div class="bar-fill" style="width: 0%"></div>
-                </div>
-            </div>
-            <div class="details-item">
-                <div class="details-header">
-                    <div class="details-type">
-                        <span style="font-size: 16px;" class="emoji">${String.fromCodePoint(0x1F570)}</span>
-                        <span>陪伴派</span>
-                    </div>
-                    <span class="details-percent">0%</span>
-                </div>
-                <div class="bar-bg">
-                    <div class="bar-fill" style="width: 0%"></div>
-                </div>
-            </div>
-            <div class="details-item">
-                <div class="details-header">
-                    <div class="details-type">
-                        <span style="font-size: 16px;" class="emoji">${String.fromCodePoint(0x1F46B)}</span>
-                        <span>情感派</span>
-                    </div>
-                    <span class="details-percent">0%</span>
-                </div>
-                <div class="bar-bg">
-                    <div class="bar-fill" style="width: 0%"></div>
-                </div>
-            </div>
-        `;
+            `;
+        });
+        
+        document.getElementById('details').innerHTML = html;
+        
+        // 添加进度条动画延迟
+        setTimeout(() => {
+            document.querySelectorAll('.bar-fill').forEach(bar => {
+                const width = bar.style.width;
+                bar.style.width = '0%';
+                setTimeout(() => {
+                    bar.style.width = width;
+                }, 100);
+            });
+        }, 300);
         
         // 延迟加载分享卡片和二维码
         setTimeout(loadExternalImages, 500);
