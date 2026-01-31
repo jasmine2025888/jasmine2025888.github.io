@@ -677,8 +677,8 @@
 
     <div class="msg-box">
         <p>
-            <!-- 猪八吉头像图片 -->
-            <img id="pigAvatarImg" src="images/my-pig-avatar.png" 
+            <!-- 猪八吉头像图片 - 使用正确的路径 -->
+            <img id="pigAvatarImg" src="../images/my-pig-avatar.png" 
                  alt="猪八吉" 
                  style="width: 30px; height: 30px; margin-right: 8px; display: inline-block; vertical-align: middle; border-radius: 50%;"
                  onerror="this.onerror=null; this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAiIGhlaWdodD0iMzAiIHZpZXdCb3g9IjAgMCAzMCAzMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48Y2lyY2xlIGN4PSIxNSIgY3k9IjE1IiByPSIxNSIgZmlsbD0iI0ZGOTQ5NCIvPjx0ZXh0IHg9IjE1IiB5PSIyMCIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjE0IiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPvCfkLc8L3RleHQ+PC9zdmc+';">
@@ -745,13 +745,13 @@
 </div>
 
 <script>
-    // 爱语类型对应的图片URL - 使用相对路径
+    // 关键修复：使用与index.html相同的相对路径
     const loveTypeImages = {
-        words: "images/love_words.png",
-        acts: "images/love_acts.png", 
-        gifts: "images/love_gifts.png",
-        time: "images/love_time.png",
-        touch: "images/love_touch.png"
+        words: "../images/love_words.png",
+        acts: "../images/love_acts.png",
+        gifts: "../images/love_gifts.png",
+        time: "../images/love_time.png",
+        touch: "../images/love_touch.png"
     };
 
     // 类型信息
@@ -814,8 +814,8 @@
         const shareImg = document.createElement('img');
         shareImg.className = 'share-card-image';
         
-        // 使用相对路径
-        const shareCardPath = 'images/share_card.jpg';
+        // 使用与index.html相同的路径
+        const shareCardPath = '../images/share_card.jpg';
         
         shareImg.src = shareCardPath;
         shareImg.alt = '分享卡片';
@@ -846,8 +846,8 @@
         qrcodePlaceholder.innerHTML = '';
         const qrImg = document.createElement('img');
         
-        // 使用相对路径
-        const qrcodePath = 'images/wechat_qrcode.png';
+        // 使用与index.html相同的路径
+        const qrcodePath = '../images/wechat_qrcode.png';
         
         qrImg.src = qrcodePath;
         qrImg.style.width = '100%';
@@ -872,38 +872,61 @@
         };
     }
     
-    // 显示测试结果
-    function displayTestResults() {
-        if (data) {
-            // 立即显示基本内容
-            document.getElementById('date').innerText = "测试时间：" + (data.date || "2026/1/31 15:05:08");
+    if (data) {
+        // 立即显示基本内容
+        document.getElementById('date').innerText = "测试时间：" + (data.date || "2026/1/31 15:05:08");
+        
+        // 获取主要类型信息
+        const main = info[data.main];
+        
+        // 显示主要结果
+        const typeNameElement = document.getElementById('typeName');
+        const scoreElement = document.getElementById('scoreVal');
+        const typeDescElement = document.getElementById('typeDesc');
+        const pigMsgElement = document.getElementById('pigMsg');
+        const mainLoveImageElement = document.getElementById('mainLoveImage');
+        
+        if (main) {
+            typeNameElement.innerHTML = main.name;
+            scoreElement.innerText = "主导爱语匹配度：" + data.percent + "%";
+            typeDescElement.innerText = main.desc;
+            pigMsgElement.innerText = main.msg;
             
-            // 获取主要类型信息
-            const main = info[data.main];
-            
-            // 显示主要结果
-            const typeNameElement = document.getElementById('typeName');
-            const scoreElement = document.getElementById('scoreVal');
-            const typeDescElement = document.getElementById('typeDesc');
-            const pigMsgElement = document.getElementById('pigMsg');
-            const mainLoveImageElement = document.getElementById('mainLoveImage');
-            
-            if (main) {
-                typeNameElement.innerHTML = main.name;
-                scoreElement.innerText = "主导爱语匹配度：" + data.percent + "%";
-                typeDescElement.innerText = main.desc;
-                pigMsgElement.innerText = main.msg;
+            // 设置爱语类型图片 - 关键修复：使用与index.html相同的路径
+            if (loveTypeImages[data.main]) {
+                mainLoveImageElement.src = loveTypeImages[data.main];
+                mainLoveImageElement.alt = main.name.replace(/<[^>]*>/g, '');
                 
-                // 设置爱语类型图片 - 关键修复
-                if (loveTypeImages[data.main]) {
-                    mainLoveImageElement.src = loveTypeImages[data.main];
-                    mainLoveImageElement.alt = main.name.replace(/<[^>]*>/g, '');
+                // 图片加载失败的回退
+                mainLoveImageElement.onerror = function() {
+                    console.warn('爱语图片加载失败:', this.src);
                     
-                    // 图片加载失败的回退
-                    mainLoveImageElement.onerror = function() {
-                        console.warn('爱语图片加载失败:', this.src);
+                    // 尝试备用路径
+                    const backupPaths = {
+                        words: "https://jasmine2025888.github.io/love-language-translator/images/love_words.png",
+                        acts: "https://jasmine2025888.github.io/love-language-translator/images/love_acts.png",
+                        gifts: "https://jasmine2025888.github.io/love-language-translator/images/love_gifts.png",
+                        time: "https://jasmine2025888.github.io/love-language-translator/images/love_time.png",
+                        touch: "https://jasmine2025888.github.io/love-language-translator/images/love_touch.png"
+                    };
+                    
+                    if (backupPaths[data.main]) {
+                        this.src = backupPaths[data.main];
                         
-                        // 不隐藏图片，而是在图片位置显示emoji
+                        this.onerror = function() {
+                            console.error('备用图片也加载失败');
+                            this.style.display = 'none';
+                            
+                            // 创建emoji回退
+                            const emojiContainer = this.parentElement;
+                            const emojiElement = document.createElement('div');
+                            emojiElement.className = 'love-image';
+                            emojiElement.style.cssText = 'display: flex; align-items: center; justify-content: center; font-size: 40px; background: white; border-radius: 20px; width: 80px; height: 80px; border: 3px solid var(--border-warm);';
+                            emojiElement.innerHTML = `<span class="emoji">${main.emoji}</span>`;
+                            
+                            emojiContainer.appendChild(emojiElement);
+                        };
+                    } else {
                         this.style.display = 'none';
                         
                         // 创建emoji回退
@@ -914,214 +937,125 @@
                         emojiElement.innerHTML = `<span class="emoji">${main.emoji}</span>`;
                         
                         emojiContainer.appendChild(emojiElement);
-                    };
-                    
-                    // 图片加载成功
-                    mainLoveImageElement.onload = function() {
-                        console.log('爱语图片加载成功:', this.src);
-                    };
-                } else {
-                    // 如果没有对应图片，使用emoji
-                    console.warn('没有找到爱语类型图片:', data.main);
-                    mainLoveImageElement.style.display = 'none';
-                    
-                    const emojiContainer = mainLoveImageElement.parentElement;
-                    const emojiElement = document.createElement('div');
-                    emojiElement.className = 'love-image';
-                    emojiElement.style.cssText = 'display: flex; align-items: center; justify-content: center; font-size: 40px; background: white; border-radius: 20px; width: 80px; height: 80px; border: 3px solid var(--border-warm);';
-                    emojiElement.innerHTML = `<span class="emoji">${main.emoji}</span>`;
-                    
-                    emojiContainer.appendChild(emojiElement);
-                }
-            } else {
-                // 数据错误时的回退
-                typeNameElement.innerText = "言语派";
-                scoreElement.innerText = "主导爱语匹配度：" + (data.percent || 75) + "%";
-                typeDescElement.innerText = "你渴望肯定。一句'辛苦了'、'有你真好'能让你满血复活。";
-                pigMsgElement.innerText = "媳妇喜欢听好话，俺以后每天夸她三遍！有她在，家就是暖的。";
-                
-                // 设置默认图片
-                mainLoveImageElement.src = loveTypeImages.words;
-            }
-
-            // 添加爱语表情显示
-            const loveEmojisDiv = document.getElementById('loveEmojis');
-            loveEmojisDiv.innerHTML = '';
-            
-            // 定义爱语类型emoji映射
-            const emojiMap = {
-                'words': String.fromCodePoint(0x1F4AC),
-                'acts': String.fromCodePoint(0x1F917),
-                'gifts': String.fromCodePoint(0x1F381),
-                'time': String.fromCodePoint(0x1F570),
-                'touch': String.fromCodePoint(0x1F46B)
-            };
-            
-            // 显示所有爱语类型的emoji
-            if (data.all) {
-                const types = ['words', 'acts', 'gifts', 'time', 'touch'];
-                const percentages = {
-                    words: data.all.words || 0,
-                    acts: data.all.acts || 0,
-                    gifts: data.all.gifts || 0,
-                    time: data.all.time || 0,
-                    touch: data.all.touch || 0
+                    }
                 };
                 
-                // 计算百分比
-                const total = Object.values(percentages).reduce((a, b) => a + b, 0);
-                
-                types.forEach((typeKey) => {
-                    const count = percentages[typeKey] || 0;
-                    const percent = total > 0 ? Math.round(count/total*100) : 0;
-                    
-                    if (count > 0 || typeKey === 'words') {
-                        const emoji = emojiMap[typeKey] || '❤️';
-                        
-                        const emojiItem = document.createElement('div');
-                        emojiItem.className = 'love-emoji-item';
-                        emojiItem.innerHTML = `
-                            <div class="love-emoji">${emoji}</div>
-                            <div class="emoji-label">${percent}%</div>
-                        `;
-                        loveEmojisDiv.appendChild(emojiItem);
-                    }
-                });
+                // 图片加载成功
+                mainLoveImageElement.onload = function() {
+                    console.log('爱语图片加载成功:', this.src);
+                };
             } else {
-                // 默认显示
-                const emojiItem = document.createElement('div');
-                emojiItem.className = 'love-emoji-item';
-                emojiItem.innerHTML = `
-                    <div class="love-emoji">${String.fromCodePoint(0x1F4AC)}</div>
-                    <div class="emoji-label">75%</div>
-                `;
-                loveEmojisDiv.appendChild(emojiItem);
-            }
-
-            // 生成详细分析
-            let html = "";
-            if (data.all) {
-                // 按类型顺序显示
-                const typeOrder = ['words', 'acts', 'gifts', 'time', 'touch'];
+                // 如果没有对应图片，使用emoji
+                console.warn('没有找到爱语类型图片:', data.main);
+                mainLoveImageElement.style.display = 'none';
                 
-                typeOrder.forEach((typeKey) => {
-                    const count = data.all[typeKey] || 0;
-                    const total = Object.values(data.all).reduce((a, b) => a + b, 0);
-                    const percent = total > 0 ? Math.round(count/total*100) : (typeKey === 'words' ? 75 : 0);
-                    const typeInfo = info[typeKey];
-                    
-                    if (typeInfo) {
-                        const emoji = typeInfo.emoji || '❤️';
-                        
-                        html += `
-                            <div class="details-item">
-                                <div class="details-header">
-                                    <div class="details-type">
-                                        <span style="font-size: 16px;" class="emoji">${emoji}</span>
-                                        <span>${typeInfo.name.replace(/<[^>]*>/g, '').replace(emoji, '').trim()}</span>
-                                    </div>
-                                    <span class="details-percent">${percent}%</span>
-                                </div>
-                                <div class="bar-bg">
-                                    <div class="bar-fill" style="width: ${percent}%"></div>
-                                </div>
-                            </div>
-                        `;
-                    }
-                });
-            } else {
-                // 默认显示
-                html = `
-                    <div class="details-item">
-                        <div class="details-header">
-                            <div class="details-type">
-                                <span style="font-size: 16px;" class="emoji">${String.fromCodePoint(0x1F4AC)}</span>
-                                <span>言语派</span>
-                            </div>
-                            <span class="details-percent">75%</span>
-                        </div>
-                        <div class="bar-bg">
-                            <div class="bar-fill" style="width: 75%"></div>
-                        </div>
-                    </div>
-                    <div class="details-item">
-                        <div class="details-header">
-                            <div class="details-type">
-                                <span style="font-size: 16px;" class="emoji">${String.fromCodePoint(0x1F917)}</span>
-                                <span>行动派</span>
-                            </div>
-                            <span class="details-percent">25%</span>
-                        </div>
-                        <div class="bar-bg">
-                            <div class="bar-fill" style="width: 25%"></div>
-                        </div>
-                    </div>
-                    <div class="details-item">
-                        <div class="details-header">
-                            <div class="details-type">
-                                <span style="font-size: 16px;" class="emoji">${String.fromCodePoint(0x1F381)}</span>
-                                <span>仪式派</span>
-                            </div>
-                            <span class="details-percent">0%</span>
-                        </div>
-                        <div class="bar-bg">
-                            <div class="bar-fill" style="width: 0%"></div>
-                        </div>
-                    </div>
-                    <div class="details-item">
-                        <div class="details-header">
-                            <div class="details-type">
-                                <span style="font-size: 16px;" class="emoji">${String.fromCodePoint(0x1F570)}</span>
-                                <span>陪伴派</span>
-                            </div>
-                            <span class="details-percent">0%</span>
-                        </div>
-                        <div class="bar-bg">
-                            <div class="bar-fill" style="width: 0%"></div>
-                        </div>
-                    </div>
-                    <div class="details-item">
-                        <div class="details-header">
-                            <div class="details-type">
-                                <span style="font-size: 16px;" class="emoji">${String.fromCodePoint(0x1F46B)}</span>
-                                <span>情感派</span>
-                            </div>
-                            <span class="details-percent">0%</span>
-                        </div>
-                        <div class="bar-bg">
-                            <div class="bar-fill" style="width: 0%"></div>
-                        </div>
-                    </div>
-                `;
+                const emojiContainer = mainLoveImageElement.parentElement;
+                const emojiElement = document.createElement('div');
+                emojiElement.className = 'love-image';
+                emojiElement.style.cssText = 'display: flex; align-items: center; justify-content: center; font-size: 40px; background: white; border-radius: 20px; width: 80px; height: 80px; border: 3px solid var(--border-warm);';
+                emojiElement.innerHTML = `<span class="emoji">${main.emoji}</span>`;
+                
+                emojiContainer.appendChild(emojiElement);
             }
-            
-            document.getElementById('details').innerHTML = html;
-            
-            // 添加进度条动画延迟
-            setTimeout(() => {
-                document.querySelectorAll('.bar-fill').forEach(bar => {
-                    const width = bar.style.width;
-                    bar.style.width = '0%';
-                    setTimeout(() => {
-                        bar.style.width = width;
-                    }, 100);
-                });
-            }, 300);
-            
         } else {
-            // 如果没有测试数据，显示默认数据
-            document.getElementById('date').innerText = "测试时间：2026/1/31 15:05:08";
-            document.getElementById('typeName').innerHTML = `<span class="emoji">${String.fromCodePoint(0x1F4AC)}</span> 言语派`;
-            document.getElementById('scoreVal').innerText = "主导爱语匹配度：75%";
-            document.getElementById('typeDesc').innerText = "你渴望肯定。一句'辛苦了'、'有你真好'能让你满血复活。";
-            document.getElementById('pigMsg').innerText = "媳妇喜欢听好话，俺以后每天夸她三遍！有她在，家就是暖的。";
+            // 数据错误时的回退
+            typeNameElement.innerText = "言语派";
+            scoreElement.innerText = "主导爱语匹配度：" + (data.percent || 75) + "%";
+            typeDescElement.innerText = "你渴望肯定。一句'辛苦了'、'有你真好'能让你满血复活。";
+            pigMsgElement.innerText = "媳妇喜欢听好话，俺以后每天夸她三遍！有她在，家就是暖的。";
             
             // 设置默认图片
-            const mainLoveImageElement = document.getElementById('mainLoveImage');
             mainLoveImageElement.src = loveTypeImages.words;
+        }
+
+        // 添加爱语表情显示
+        const loveEmojisDiv = document.getElementById('loveEmojis');
+        loveEmojisDiv.innerHTML = '';
+        
+        // 定义爱语类型emoji映射
+        const emojiMap = {
+            'words': String.fromCodePoint(0x1F4AC),
+            'acts': String.fromCodePoint(0x1F917),
+            'gifts': String.fromCodePoint(0x1F381),
+            'time': String.fromCodePoint(0x1F570),
+            'touch': String.fromCodePoint(0x1F46B)
+        };
+        
+        // 显示所有爱语类型的emoji
+        if (data.all) {
+            const types = ['words', 'acts', 'gifts', 'time', 'touch'];
+            const percentages = {
+                words: data.all.words || 0,
+                acts: data.all.acts || 0,
+                gifts: data.all.gifts || 0,
+                time: data.all.time || 0,
+                touch: data.all.touch || 0
+            };
             
-            // 显示默认的详细分析
-            document.getElementById('details').innerHTML = `
+            // 计算百分比
+            const total = Object.values(percentages).reduce((a, b) => a + b, 0);
+            
+            types.forEach((typeKey) => {
+                const count = percentages[typeKey] || 0;
+                const percent = total > 0 ? Math.round(count/total*100) : 0;
+                
+                if (count > 0 || typeKey === 'words') {
+                    const emoji = emojiMap[typeKey] || '❤️';
+                    
+                    const emojiItem = document.createElement('div');
+                    emojiItem.className = 'love-emoji-item';
+                    emojiItem.innerHTML = `
+                        <div class="love-emoji">${emoji}</div>
+                        <div class="emoji-label">${percent}%</div>
+                    `;
+                    loveEmojisDiv.appendChild(emojiItem);
+                }
+            });
+        } else {
+            // 默认显示
+            const emojiItem = document.createElement('div');
+            emojiItem.className = 'love-emoji-item';
+            emojiItem.innerHTML = `
+                <div class="love-emoji">${String.fromCodePoint(0x1F4AC)}</div>
+                <div class="emoji-label">75%</div>
+            `;
+            loveEmojisDiv.appendChild(emojiItem);
+        }
+
+        // 生成详细分析
+        let html = "";
+        if (data.all) {
+            // 按类型顺序显示
+            const typeOrder = ['words', 'acts', 'gifts', 'time', 'touch'];
+            
+            typeOrder.forEach((typeKey) => {
+                const count = data.all[typeKey] || 0;
+                const total = Object.values(data.all).reduce((a, b) => a + b, 0);
+                const percent = total > 0 ? Math.round(count/total*100) : (typeKey === 'words' ? 75 : 0);
+                const typeInfo = info[typeKey];
+                
+                if (typeInfo) {
+                    const emoji = typeInfo.emoji || '❤️';
+                    
+                    html += `
+                        <div class="details-item">
+                            <div class="details-header">
+                                <div class="details-type">
+                                    <span style="font-size: 16px;" class="emoji">${emoji}</span>
+                                    <span>${typeInfo.name.replace(/<[^>]*>/g, '').replace(emoji, '').trim()}</span>
+                                </div>
+                                <span class="details-percent">${percent}%</span>
+                            </div>
+                            <div class="bar-bg">
+                                <div class="bar-fill" style="width: ${percent}%"></div>
+                            </div>
+                        </div>
+                    `;
+                }
+            });
+        } else {
+            // 默认显示
+            html = `
                 <div class="details-item">
                     <div class="details-header">
                         <div class="details-type">
@@ -1185,14 +1119,101 @@
             `;
         }
         
+        document.getElementById('details').innerHTML = html;
+        
+        // 添加进度条动画延迟
+        setTimeout(() => {
+            document.querySelectorAll('.bar-fill').forEach(bar => {
+                const width = bar.style.width;
+                bar.style.width = '0%';
+                setTimeout(() => {
+                    bar.style.width = width;
+                }, 100);
+            });
+        }, 300);
+        
+        // 延迟加载分享卡片和二维码
+        setTimeout(loadExternalImages, 500);
+        
+    } else {
+        // 如果没有测试数据，显示默认数据
+        document.getElementById('date').innerText = "测试时间：2026/1/31 15:05:08";
+        document.getElementById('typeName').innerHTML = `<span class="emoji">${String.fromCodePoint(0x1F4AC)}</span> 言语派`;
+        document.getElementById('scoreVal').innerText = "主导爱语匹配度：75%";
+        document.getElementById('typeDesc').innerText = "你渴望肯定。一句'辛苦了'、'有你真好'能让你满血复活。";
+        document.getElementById('pigMsg').innerText = "媳妇喜欢听好话，俺以后每天夸她三遍！有她在，家就是暖的。";
+        
+        // 设置默认图片
+        const mainLoveImageElement = document.getElementById('mainLoveImage');
+        mainLoveImageElement.src = loveTypeImages.words;
+        
+        // 显示默认的详细分析
+        document.getElementById('details').innerHTML = `
+            <div class="details-item">
+                <div class="details-header">
+                    <div class="details-type">
+                        <span style="font-size: 16px;" class="emoji">${String.fromCodePoint(0x1F4AC)}</span>
+                        <span>言语派</span>
+                    </div>
+                    <span class="details-percent">75%</span>
+                </div>
+                <div class="bar-bg">
+                    <div class="bar-fill" style="width: 75%"></div>
+                </div>
+            </div>
+            <div class="details-item">
+                <div class="details-header">
+                    <div class="details-type">
+                        <span style="font-size: 16px;" class="emoji">${String.fromCodePoint(0x1F917)}</span>
+                        <span>行动派</span>
+                    </div>
+                    <span class="details-percent">25%</span>
+                </div>
+                <div class="bar-bg">
+                    <div class="bar-fill" style="width: 25%"></div>
+                </div>
+            </div>
+            <div class="details-item">
+                <div class="details-header">
+                    <div class="details-type">
+                        <span style="font-size: 16px;" class="emoji">${String.fromCodePoint(0x1F381)}</span>
+                        <span>仪式派</span>
+                    </div>
+                    <span class="details-percent">0%</span>
+                </div>
+                <div class="bar-bg">
+                    <div class="bar-fill" style="width: 0%"></div>
+                </div>
+            </div>
+            <div class="details-item">
+                <div class="details-header">
+                    <div class="details-type">
+                        <span style="font-size: 16px;" class="emoji">${String.fromCodePoint(0x1F570)}</span>
+                        <span>陪伴派</span>
+                    </div>
+                    <span class="details-percent">0%</span>
+                </div>
+                <div class="bar-bg">
+                    <div class="bar-fill" style="width: 0%"></div>
+                </div>
+            </div>
+            <div class="details-item">
+                <div class="details-header">
+                    <div class="details-type">
+                        <span style="font-size: 16px;" class="emoji">${String.fromCodePoint(0x1F46B)}</span>
+                        <span>情感派</span>
+                    </div>
+                    <span class="details-percent">0%</span>
+                </div>
+                <div class="bar-bg">
+                    <div class="bar-fill" style="width: 0%"></div>
+                </div>
+            </div>
+        `;
+        
         // 延迟加载分享卡片和二维码
         setTimeout(loadExternalImages, 500);
     }
-
-    // 页面加载完成后显示结果
-    document.addEventListener('DOMContentLoaded', function() {
-        displayTestResults();
-    });
 
     // 勋章生成功能
     const medalModal = document.getElementById('medalModal');
@@ -1250,9 +1271,9 @@
         
         medalCanvas.innerHTML = '';
         
-        // 使用相对路径
-        const loveImageUrl = loveTypeImages[mainType] || "images/love_words.png";
-        const pigAvatarUrl = "images/my-pig-avatar.png";
+        // 使用与index.html相同的路径
+        const loveImageUrl = loveTypeImages[mainType] || "../images/love_words.png";
+        const pigAvatarUrl = "../images/my-pig-avatar.png";
         
         const medalHTML = `
             <div style="
