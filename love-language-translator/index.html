@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" style="scroll-behavior: smooth;">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
@@ -8,153 +8,114 @@
     <style>
         :root {
             --primary-pink: #FF9494;
-            --secondary-pink: #FFC4C4;
             --accent-coral: #FF7A7A;
             --accent-gold: #E8B054;
-            --warm-cream: #FFF9F0;
             --cocoa-text: #5A4235;
-            --white: #FFFFFF;
-            --border-warm: #FFD0C9;
         }
 
-        * { 
-            margin: 0; padding: 0; box-sizing: border-box; 
-            -webkit-tap-highlight-color: transparent;
-            user-select: none;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
-        body {
-            font-family: 'PingFang SC', -apple-system, sans-serif;
-            background: linear-gradient(135deg, #FFF9F0 0%, #FFEFDF 100%);
-            color: var(--cocoa-text);
-            min-height: 100vh;
+        /* 强制全局平滑滚动 */
+        html, body { 
+            scroll-behavior: smooth !important; 
             overflow-x: hidden;
-            width: 100vw;
+            background: #FFF9F0;
         }
 
-        /* ===== 说明页 ===== */
-        .intro-screen {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(135deg, var(--warm-cream) 0%, #FFEFDF 100%);
-            display: flex; align-items: center; justify-content: center;
-            z-index: 10000; transition: opacity 0.5s ease;
-        }
+        body { font-family: 'PingFang SC', -apple-system, sans-serif; color: var(--cocoa-text); }
+
+        /* 说明页 */
+        .intro-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #FFF9F0; display: flex; align-items: center; justify-content: center; z-index: 10000; transition: 0.6s; }
         .intro-screen.hidden { opacity: 0; pointer-events: none; }
-        .intro-card {
-            background: var(--white); padding: 40px 30px; border-radius: 24px;
-            max-width: 400px; width: calc(100vw - 40px); text-align: center;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.1); border: 3px solid var(--border-warm);
-        }
+        .intro-card { background: white; padding: 40px 25px; border-radius: 24px; text-align: center; width: 90%; max-width: 400px; box-shadow: 0 15px 40px rgba(0,0,0,0.1); border: 2px solid #FFD0C9; }
 
-        /* ===== 测试主容器 ===== */
-        .test-container { display: none; width: 100vw; }
+        /* 主测试区域容器 */
+        .test-container { display: none; opacity: 1; transition: opacity 0.4s ease; }
 
-        /* 第一屏：场景区 */
-        .scene-section {
-            min-height: 100vh; display: flex; flex-direction: column;
-            align-items: center; justify-content: center; padding: 20px;
-        }
-        .scene-image-container {
-            width: 85%; max-width: 350px; aspect-ratio: 3/4;
-            border-radius: 20px; border: 8px solid var(--white);
-            box-shadow: 0 15px 40px rgba(0,0,0,0.1); overflow: hidden;
-            margin-bottom: 20px;
-        }
-        .scene-image { width: 100%; height: 100%; object-fit: cover; transition: 0.5s; }
+        /* 转场动画：淡出淡入 */
+        .fade-out { opacity: 0 !important; }
+        .fade-in { opacity: 1 !important; }
 
-        .pig-speech-bubble {
-            background: var(--cocoa-text); color: white; padding: 15px 20px;
-            border-radius: 20px; font-size: 16px; margin-bottom: 20px;
-            position: relative; box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-            max-width: 85%;
-        }
+        .scene-section { min-height: 90vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; }
+        .scene-image-container { width: 100%; max-width: 320px; aspect-ratio: 3/4; border-radius: 20px; border: 6px solid white; box-shadow: 0 10px 30px rgba(0,0,0,0.1); overflow: hidden; margin-bottom: 20px; }
+        .scene-image { width: 100%; height: 100%; object-fit: cover; }
+        .pig-speech-bubble { background: var(--cocoa-text); color: white; padding: 15px 20px; border-radius: 18px; position: relative; max-width: 85%; line-height: 1.5; text-align: center; }
 
-        /* 第二屏：题目区 */
-        .question-section { min-height: 100vh; padding: 30px 20px; }
-        .progress-bar { height: 10px; background: #F2E9E1; border-radius: 10px; overflow: hidden; margin: 20px 0; }
-        .progress-fill { height: 100%; background: linear-gradient(to right, var(--accent-coral), var(--accent-gold)); transition: 0.6s; }
+        .question-section { padding: 30px 20px; min-height: 100vh; transition: opacity 0.5s; }
+        .progress-bar { height: 10px; background: #EEE; border-radius: 10px; overflow: hidden; margin: 20px 0; }
+        .progress-fill { height: 100%; background: var(--accent-coral); transition: 0.8s; }
+        .question-text { font-size: 22px; font-weight: bold; margin-bottom: 25px; line-height: 1.4; text-align: left; }
 
-        .question-text { font-size: 22px; font-weight: 800; margin-bottom: 20px; line-height: 1.4; }
-
-        /* 重点优化：选项点击效果 */
+        /* 选项样式：增加点击反馈 */
         .options-container { display: flex; flex-direction: column; gap: 15px; }
         .option-item {
-            padding: 18px 20px; background: var(--white); border: 3px solid #F2E9E1;
-            border-radius: 18px; cursor: pointer; transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            display: flex; align-items: center; gap: 15px;
+            padding: 18px 20px; background: white; border: 2.5px solid #F0F0F0;
+            border-radius: 18px; cursor: pointer; position: relative;
+            display: flex; align-items: center; gap: 12px;
+            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
-        
-        /* 选中时的强反馈状态 */
+
+        /* 核心修复：点击变为粉色并锁定 */
         .option-item.active {
-            border-color: var(--accent-coral);
-            background-color: #FFF5F5;
-            transform: scale(1.03); /* 轻微放大 */
-            box-shadow: 0 10px 20px rgba(255, 148, 148, 0.2);
+            background-color: var(--accent-coral) !important;
+            border-color: var(--accent-coral) !important;
+            color: white !important;
+            transform: scale(1.03);
+            box-shadow: 0 10px 25px rgba(255, 122, 122, 0.3);
+            z-index: 2;
         }
 
-        /* 禁用点击，防止快速连点 */
-        .options-container.disabled {
-            pointer-events: none;
-        }
+        .options-container.disabled { pointer-events: none; }
 
-        .option-icon {
-            width: 40px; height: 40px; border-radius: 12px;
-            background: #FFF0F0; display: flex; align-items: center; justify-content: center;
-        }
-
-        .start-button {
-            background: linear-gradient(to right, var(--accent-coral), var(--accent-gold));
-            color: white; border: none; padding: 15px 40px; font-size: 18px;
-            font-weight: bold; border-radius: 50px; cursor: pointer;
-            box-shadow: 0 8px 25px rgba(255, 122, 122, 0.4);
-        }
+        .start-button { background: var(--accent-coral); color: white; border: none; padding: 15px 40px; border-radius: 50px; font-weight: bold; font-size: 18px; box-shadow: 0 5px 15px rgba(255,122,122,0.4); }
     </style>
 </head>
 <body>
 
+<!-- 锚点：用于强制滚动回顶部 -->
+<div id="top-anchor"></div>
+
 <div class="intro-screen" id="introScreen">
     <div class="intro-card">
-        <div class="pig-avatar"><img src="images/my-pig-avatar.png" style="width:80px; border-radius:50%;"></div>
-        <h1 style="color:var(--accent-coral); margin:15px 0;">猪八吉家传</h1>
-        <h2 style="margin-bottom:20px;">爱的语言翻译器</h2>
-        <p style="margin-bottom:30px; line-height:1.6;">媳妇，俺帮你翻译翻译，<br>你心里最吃哪套"爱的方言"！</p>
+        <img src="images/my-pig-avatar.png" style="width:80px; border-radius:50%; margin-bottom:15px;">
+        <h2 style="margin-bottom:15px; color:var(--accent-coral);">猪八吉家传</h2>
+        <h3 style="margin-bottom:20px;">爱的语言翻译器</h3>
+        <p style="margin-bottom:30px; color:#666; line-height:1.6;">媳妇，俺帮你翻译翻译，<br>你心里最吃哪套"爱的方言"！</p>
         <button class="start-button" onclick="startTest()">开始翻译！</button>
     </div>
 </div>
 
 <div class="test-container" id="testContainer">
     <section class="scene-section">
-        <div class="scene-image-container">
-            <img src="images/scene_01.jpg" id="sceneImage" class="scene-image">
-        </div>
-        <div class="pig-speech-bubble" id="pigSpeech">媳妇生日！俺得好好表现～</div>
-        <div style="color:var(--accent-coral); animation: bounce 2s infinite;">
-            <i class="fas fa-chevron-down"></i> 向下滑动继续
+        <div class="scene-image-container"><img src="images/scene_01.jpg" id="sceneImage" class="scene-image"></div>
+        <div class="pig-speech-bubble" id="pigSpeech">正在加载...</div>
+        <div style="margin-top:20px; color:var(--accent-coral); animation: bounce 2s infinite; text-align:center;">
+            <i class="fas fa-chevron-down"></i><br><span style="font-size:12px; font-weight:bold;">向下滑动</span>
         </div>
     </section>
 
     <section class="question-section" id="questionSection">
         <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
-        <p id="progressText" style="font-size:14px; color:#888; margin-bottom:10px;"></p>
-        <div class="question-text" id="questionText">正在加载...</div>
+        <p id="progressText" style="font-size:14px; color:#999; margin-bottom:10px;"></p>
+        <div class="question-text" id="questionText">题目加载中...</div>
         <div class="options-container" id="optionsContainer"></div>
     </section>
 </div>
 
 <script>
     const questions = [
-        { text: "媳妇过生日，猪八吉怎么做你最暖心？", options: [{ text: "写张小卡片说'媳妇辛苦了'", type: "words", icon: "💬" }, { text: "承包一个月家务", type: "acts", icon: "🤗" }, { text: "准备一份惊喜礼物", type: "gifts", icon: "🎁" }, { text: "请天假专心陪你", type: "time", icon: "🕰️" }, { text: "给个大大的拥抱", type: "touch", icon: "👫" }], speech: "媳妇生日！俺得好好表现～你希望伴侣怎么为你庆祝？" },
-        { text: "猪八吉加班晚归，你希望他？", options: [{ text: "发消息说'媳妇我想你'", type: "words", icon: "💬" }, { text: "带热乎的宵夜回来", type: "acts", icon: "🤗" }, { text: "顺手带枝花或零食", type: "gifts", icon: "🎁" }, { text: "回家放下手机认真听你说话", type: "time", icon: "🕰️" }, { text: "进门先亲亲抱抱", type: "touch", icon: "👫" }], speech: "加班晚了，怎么做才能让媳妇不生气？" },
-        { text: "吵架后，哪种和好方式最有效？", options: [{ text: "真诚道歉：'俺错了'", type: "words", icon: "💬" }, { text: "默默把家务干了", type: "acts", icon: "🤗" }, { text: "送个小礼物示好", type: "gifts", icon: "🎁" }, { text: "拉你坐下耐心沟通", type: "time", icon: "🕰️" }, { text: "一把抱住你不松手", type: "touch", icon: "👫" }], speech: "吵架了，哪种方式最能让媳妇消气？" },
-        { text: "日常生活中，你最喜欢怎样表达爱？", options: [{ text: "经常说'爱你''想你'", type: "words", icon: "💬" }, { text: "帮TA挤牙膏、倒水", type: "acts", icon: "🤗" }, { text: "看到适合TA的就买下来", type: "gifts", icon: "🎁" }, { text: "每天抽时间专门聊天", type: "time", icon: "🕰️" }, { text: "走路牵手，靠肩坐车", type: "touch", icon: "👫" }], speech: "俺觉得爱要做出来，你说呢？" },
-        { text: "心情低落时，最希望TA？", options: [{ text: "鼓励你：'你是最棒的'", type: "words", icon: "💬" }, { text: "为你泡杯热茶做实事", type: "acts", icon: "🤗" }, { text: "送个小玩偶或零食", type: "gifts", icon: "🎁" }, { text: "陪你散步安静倾听", type: "time", icon: "🕰️" }, { text: "搂着你轻轻拍背", type: "touch", icon: "👫" }], speech: "媳妇不开心，俺该怎么做？挺急的！" },
-        { text: "纪念日，你更期待怎样庆祝？", options: [{ text: "写情书当面念给你听", type: "words", icon: "💬" }, { text: "两人一起大扫除", type: "acts", icon: "🤗" }, { text: "准备一份惊喜大奖", type: "gifts", icon: "🎁" }, { text: "安排只有两人的旅行", type: "time", icon: "🕰️" }, { text: "一起去身体按摩放松", type: "touch", icon: "👫" }], speech: "结婚纪念日，哪种方式让感情升温？" },
-        { text: "关于家务，你最看重TA？", options: [{ text: "常说'辛苦了''谢谢'", type: "words", icon: "💬" }, { text: "主动分担不用提醒", type: "acts", icon: "🤗" }, { text: "买智能家电减轻负担", type: "gifts", icon: "🎁" }, { text: "一起干活边做边聊", type: "time", icon: "🕰️" }, { text: "干活时给个亲亲鼓励", type: "touch", icon: "👫" }], speech: "家务活这么多，咋表现媳妇才满意？" },
-        { text: "异地时，什么最让你感受到爱？", options: [{ text: "每天视频说'晚安'", type: "words", icon: "💬" }, { text: "远程为你点外卖宵夜", type: "acts", icon: "🤗" }, { text: "经常寄礼物包裹", type: "gifts", icon: "🎁" }, { text: "长时间视频一起看剧", type: "time", icon: "🕰️" }, { text: "重逢时那个长长的拥抱", type: "touch", icon: "👫" }], speech: "出差在外，怎么让媳妇感受到俺在想她？" },
-        { text: "工作压力大时，你最需要？", options: [{ text: "说'你已经很优秀了'", type: "words", icon: "💬" }, { text: "帮你处理好生活琐事", type: "acts", icon: "🤗" }, { text: "送解压小礼物", type: "gifts", icon: "🎁" }, { text: "陪你吐槽当垃圾桶", type: "time", icon: "🕰️" }, { text: "帮你按摩肩膀", type: "touch", icon: "👫" }], speech: "媳妇工作累，俺想帮她分担点压力。" },
-        { text: "理想周末，你希望？", options: [{ text: "分享一周的心情感受", type: "words", icon: "💬" }, { text: "一起下厨做顿大餐", type: "acts", icon: "🤗" }, { text: "去商场买喜欢的东西", type: "gifts", icon: "🎁" }, { text: "一起做手工或运动", type: "time", icon: "🕰️" }, { text: "窝在一起看场电影", type: "touch", icon: "👫" }], speech: "周末啦，和媳妇怎么过才最浪漫？" },
-        { text: "育儿分歧时，什么能化解矛盾？", options: [{ text: "TA说'你也是为孩子好'", type: "words", icon: "💬" }, { text: "TA主动去辅导作业", type: "acts", icon: "🤗" }, { text: "给孩子买玩具转移注意力", type: "gifts", icon: "🎁" }, { text: "等孩子睡了静下心聊", type: "time", icon: "🕰️" }, { text: "拍拍肩说'咱们一起努力'", type: "touch", icon: "👫" }], speech: "教育孩子吵架了，咋和好最快？" },
-        { text: "家庭大笔开支，你最看重？", options: [{ text: "TA说'你的开心最重要'", type: "words", icon: "💬" }, { text: "TA认真做预算分析", type: "acts", icon: "🤗" }, { text: "买完后送个小惊喜补偿", type: "gifts", icon: "🎁" }, { text: "一起反复研究方案", type: "time", icon: "🕰️" }, { text: "握着你的手一起决定", type: "touch", icon: "👫" }], speech: "买房买车开支大，俺得听媳妇的。" }
+        { text: "媳妇过生日，猪八吉怎么做你最暖心？", options: [{ text: "写张小卡片说'媳妇辛苦了'", type: "words" }, { text: "承包一个月家务", type: "acts" }, { text: "准备一份惊喜礼物", type: "gifts" }, { text: "请天假专心陪你", type: "time" }, { text: "给个大大的拥抱", type: "touch" }], speech: "媳妇生日！俺得好好表现～你希望伴侣怎么为你庆祝？" },
+        { text: "猪八吉加班晚归，你希望他？", options: [{ text: "发消息说'媳妇我想你'", type: "words" }, { text: "带热乎的宵夜回来", type: "acts" }, { text: "顺手带枝花或零食", type: "gifts" }, { text: "回家放下手机认真听你说话", type: "time" }, { text: "进门先亲亲抱抱", type: "touch" }], speech: "加班晚了，怎么做才能让媳妇不生气？" },
+        { text: "吵架后，哪种和好方式最有效？", options: [{ text: "真诚道歉：'俺错了'", type: "words" }, { text: "默默把家务干了", type: "acts" }, { text: "送个小礼物示好", type: "gifts" }, { text: "拉你坐下耐心沟通", type: "time" }, { text: "一把抱住你不松手", type: "touch" }], speech: "吵架了，哪种方式最能让媳妇消气？" },
+        { text: "日常生活中，你最喜欢怎样表达爱？", options: [{ text: "经常说'爱你''想你'", type: "words" }, { text: "帮TA挤牙膏、倒水", type: "acts" }, { text: "看到适合TA的就买下来", type: "gifts" }, { text: "每天抽时间专门聊天", type: "time" }, { text: "走路牵手，靠肩坐车", type: "touch" }], speech: "俺觉得爱要做出来，你说呢？" },
+        { text: "心情低落时，最希望TA？", options: [{ text: "鼓励你：'你是最棒的'", type: "words" }, { text: "为你泡杯热茶做实事", type: "acts" }, { text: "送个小玩偶或零食", type: "gifts" }, { text: "陪你散步安静倾听", type: "time" }, { text: "搂着你轻轻拍背", type: "touch" }], speech: "媳妇不开心，俺该怎么做？挺急的！" },
+        { text: "纪念日，你更期待怎样庆祝？", options: [{ text: "写情书当面念给你听", type: "words" }, { text: "两人一起大扫除", type: "acts" }, { text: "准备一份惊喜大奖", type: "gifts" }, { text: "安排只有两人的旅行", type: "time" }, { text: "一起去身体按摩放松", type: "touch" }], speech: "结婚纪念日，哪种方式让感情升温？" },
+        { text: "关于家务，你最看重TA？", options: [{ text: "常说'辛苦了''谢谢'", type: "words" }, { text: "主动分担不用提醒", type: "acts" }, { text: "买智能家电减轻负担", type: "gifts" }, { text: "一起干活边做边聊", type: "time" }, { text: "干活时给个亲亲鼓励", type: "touch" }], speech: "家务活这么多，咋表现媳妇才满意？" },
+        { text: "异地时，什么最让你感受到爱？", options: [{ text: "每天视频说'晚安'", type: "words" }, { text: "远程为你点外卖宵夜", type: "acts" }, { text: "经常寄礼物包裹", type: "gifts" }, { text: "长时间视频一起看剧", type: "time" }, { text: "重逢时那个长长的拥抱", type: "touch" }], speech: "出差在外，怎么让媳妇感受到俺在想她？" },
+        { text: "工作压力大时，你最需要？", options: [{ text: "说'你已经很优秀了'", type: "words" }, { text: "帮你处理好生活琐事", type: "acts" }, { text: "送解压小礼物", type: "gifts" }, { text: "陪你吐槽当垃圾桶", type: "time" }, { text: "帮你按摩肩膀", type: "touch" }], speech: "媳妇工作累，俺想帮她分担点压力。" },
+        { text: "理想周末，你希望？", options: [{ text: "分享一周的心情感受", type: "words" }, { text: "一起下厨做顿大餐", type: "acts" }, { text: "去商场买喜欢的东西", type: "gifts" }, { text: "一起做手工或运动", type: "time" }, { text: "窝在一起看场电影", type: "touch" }], speech: "周末啦，和媳妇怎么过才最浪漫？" },
+        { text: "育儿分歧时，什么能化解矛盾？", options: [{ text: "TA说'你也是为孩子好'", type: "words" }, { text: "TA主动去辅导作业", type: "acts" }, { text: "给孩子买玩具转移注意力", type: "gifts" }, { text: "等孩子睡了静下心聊", type: "time" }, { text: "拍拍肩说'咱们一起努力'", type: "touch" }], speech: "教育孩子吵架了，咋和好最快？" },
+        { text: "家庭大笔开支，你最看重？", options: [{ text: "TA说'你的开心最重要'", type: "words" }, { text: "TA认真做预算分析", type: "acts" }, { text: "买完后送个小惊喜补偿", type: "gifts" }, { text: "一起反复研究方案", type: "time" }, { text: "握着你的手一起决定", type: "touch" }], speech: "买房买车开支大，俺得听媳妇的。" }
     ];
 
     let currentIdx = 0;
@@ -162,6 +123,7 @@
 
     function render() {
         const q = questions[currentIdx];
+        // 更新内容
         document.getElementById('sceneImage').src = `images/scene_${(currentIdx + 1).toString().padStart(2, '0')}.jpg`;
         document.getElementById('pigSpeech').innerText = q.speech;
         document.getElementById('questionText').innerText = q.text;
@@ -170,38 +132,52 @@
         
         const container = document.getElementById('optionsContainer');
         container.innerHTML = '';
-        container.classList.remove('disabled'); // 恢复点击
+        container.classList.remove('disabled');
 
         q.options.forEach(opt => {
             const div = document.createElement('div');
             div.className = 'option-item';
-            div.innerHTML = `<div class="option-icon"><img src="images/love_${opt.type}.png" style="width:24px;"></div><div style="flex:1">${opt.text}</div>`;
+            div.innerHTML = `<img src="images/love_${opt.type}.png" style="width:24px;"><span>${opt.text}</span>`;
             div.onclick = () => select(opt.type, div);
             container.appendChild(div);
         });
+
+        // 重新变回不透明
+        document.getElementById('testContainer').classList.remove('fade-out');
     }
 
     function select(type, el) {
-        // 1. 禁用所有点击，防止疯狂连点
+        // 1. 禁用点击
         document.getElementById('optionsContainer').classList.add('disabled');
         
-        // 2. 增加选中样式
+        // 2. 视觉反馈
         el.classList.add('active');
         scores[type]++;
 
-        // 3. 核心修改：等待 800 毫秒后再跳转
+        // 3. 执行转场动画
         setTimeout(() => {
-            if (currentIdx < questions.length - 1) {
-                currentIdx++;
-                render();
-                // 平滑滚动回顶部，给用户更好的节奏感
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            } else {
-                const res = { main: Object.keys(scores).reduce((a, b) => scores[a] > scores[b] ? a : b), percent: Math.round((scores[Object.keys(scores).reduce((a, b) => scores[a] > scores[b] ? a : b)]/12)*100), all: scores, date: new Date().toLocaleString() };
-                localStorage.setItem('love_result', JSON.stringify(res));
-                location.href = 'result.html';
-            }
-        }, 800); // 这里的 800 毫秒是“灵魂留白”
+            // 淡出效果
+            document.getElementById('testContainer').classList.add('fade-out');
+            
+            // 在淡出的过程中，滑动回顶部
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            setTimeout(() => {
+                if (currentIdx < questions.length - 1) {
+                    currentIdx++;
+                    render();
+                } else {
+                    const res = { 
+                        main: Object.keys(scores).reduce((a, b) => scores[a] > scores[b] ? a : b), 
+                        percent: Math.round((scores[Object.keys(scores).reduce((a, b) => scores[a] > scores[b] ? a : b)]/12)*100), 
+                        all: scores, 
+                        date: new Date().toLocaleString() 
+                    };
+                    localStorage.setItem('love_result', JSON.stringify(res));
+                    location.href = 'result.html';
+                }
+            }, 500); // 这里的延迟要和淡出动画同步
+        }, 600); 
     }
 
     function startTest() {
