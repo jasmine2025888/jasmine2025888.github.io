@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>结果报告 - 猪八吉</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- 引入html2canvas库，用于生成图片 -->
-    <script src="https://html2canvas.orzapi.com/dist/html2canvas.min.js"></script>
+    <!-- 使用更稳定的 html2canvas CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
     <style>
         :root {
             --primary-pink: #FF9494;
@@ -322,10 +322,11 @@
             overflow: hidden;
         }
         
+        /* 修复：勋章容器高度，确保完整显示 */
         .medal-canvas-container {
             width: 100%;
             height: auto;
-            min-height: 300px;
+            min-height: 400px;
             aspect-ratio: 3/4;
             background: linear-gradient(135deg, #FFF9F0, #FFEFDF);
             display: flex;
@@ -335,7 +336,7 @@
             padding: 20px;
             text-align: center;
             position: relative;
-            overflow: hidden;
+            overflow: visible;
         }
         
         .medal-actions {
@@ -392,7 +393,7 @@
             margin-left: 5px;
         }
 
-        /* 分享卡片 */
+        /* 修复：分享卡片容器，确保竖图完整显示 */
         .share-card-container {
             text-align: center;
             margin: 16px 0 12px;
@@ -401,6 +402,19 @@
             border-radius: 12px;
             border: 2px solid var(--secondary-pink);
             width: 100%;
+            position: relative;
+        }
+
+        .share-card-image {
+            width: 100%;
+            max-width: 300px;
+            height: auto;
+            min-height: 400px;
+            max-height: 500px;
+            object-fit: contain;
+            border-radius: 10px;
+            display: block;
+            margin: 0 auto;
         }
 
         .share-card-text {
@@ -458,6 +472,41 @@
             justify-content: center;
             color: #8A7565;
             font-size: 14px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* 爱语表情显示区域 */
+        .love-emojis-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        .love-emoji-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .love-emoji {
+            font-size: 24px;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: white;
+            border-radius: 50%;
+            border: 2px solid var(--border-warm);
+        }
+
+        .emoji-label {
+            font-size: 11px;
+            color: #8A7565;
         }
 
         /* 加载动画 */
@@ -507,8 +556,13 @@
             }
             
             .medal-canvas-container {
-                min-height: 250px;
+                min-height: 350px;
                 padding: 15px;
+            }
+
+            .share-card-image {
+                min-height: 350px;
+                max-height: 450px;
             }
         }
 
@@ -528,6 +582,12 @@
             .score {
                 font-size: 13px;
                 padding: 5px 14px;
+            }
+            
+            .love-emoji {
+                font-size: 20px;
+                width: 36px;
+                height: 36px;
             }
         }
 
@@ -563,21 +623,24 @@
             <div id="scoreVal" class="score"></div>
         </div>
         <p id="typeDesc" class="type-desc"></p>
+        
+        <!-- 爱语表情显示区域 -->
+        <div id="loveEmojis" class="love-emojis-container"></div>
     </div>
 
     <div id="details" class="details-container"></div>
 
     <div class="msg-box">
         <p>
-            <span id="pigAvatar" style="display: inline-block; width: 30px; height: 30px; background: linear-gradient(135deg, #FF9494, #FF7A7A); border-radius: 50%; margin-right: 8px;"></span>
+            <span id="pigAvatar" style="display: inline-block; width: 30px; height: 30px; background: linear-gradient(135deg, #FF9494, #FF7A7A); border-radius: 50%; margin-right: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px;">🐷</span>
             猪八吉寄语
         </p>
         <p id="pigMsg" style="font-size:14px; line-height:1.6; margin:0;"></p>
     </div>
 
-    <!-- 分享卡片图片 - 使用占位符和延迟加载 -->
+    <!-- 分享卡片图片 -->
     <div class="share-card-container">
-        <div id="shareCardPlaceholder" class="img-placeholder" style="height: 150px;">
+        <div id="shareCardPlaceholder" class="img-placeholder" style="min-height: 150px; display: flex; align-items: center; justify-content: center;">
             <span>正在加载分享卡片...</span>
         </div>
         <p class="share-card-text">长按保存图片，分享到小红书</p>
@@ -606,7 +669,7 @@
     <!-- 联系区域 -->
     <div class="contact-area">
         <div style="text-align: center; margin-bottom: 12px;">
-            <div id="qrcodePlaceholder" class="img-placeholder" style="width: 120px; height: 120px; margin: 0 auto;">
+            <div id="qrcodePlaceholder" class="img-placeholder" style="width: 120px; height: 120px; margin: 0 auto; display: flex; align-items: center; justify-content: center;">
                 <span style="font-size: 12px;">二维码加载中...</span>
             </div>
         </div>
@@ -633,103 +696,37 @@
 </div>
 
 <script>
-    // 图片优化配置
-    const imageConfig = {
-        // 使用base64占位符替换图片，减少HTTP请求
-        placeholder: {
-            pig: 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 30 30"><circle cx="15" cy="15" r="14" fill="%23FF9494"/><text x="15" y="20" font-family="Arial" font-size="14" text-anchor="middle" fill="white">🐷</text></svg>',
-            qrcode: 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120"><rect width="120" height="120" fill="%23FFF9F0"/><text x="60" y="65" font-family="Arial" font-size="14" text-anchor="middle" fill="%235A4235">📱</text></svg>',
-            shareCard: 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="300" height="200" viewBox="0 0 300 200"><rect width="300" height="200" fill="%23FFF0F0"/><text x="150" y="100" font-family="Arial" font-size="16" text-anchor="middle" fill="%235A4235">分享卡片加载中...</text></svg>'
-        },
-        // 延迟加载图片
-        lazyLoadDelay: 500, // 延迟500ms加载图片，让主内容先显示
-        // 图片压缩配置
-        compress: {
-            quality: 0.8,
-            maxWidth: 800
-        }
-    };
-
-    // 图片加载管理器
-    class ImageLoader {
-        constructor() {
-            this.loadedImages = new Set();
-            this.failedImages = new Set();
-        }
-
-        // 预加载重要图片
-        preloadCriticalImages() {
-            const criticalImages = [
-                'images/my-pig-message.png',
-                'images/wechat_qrcode.png',
-                'images/share_card.jpg'
-            ];
-            
-            criticalImages.forEach(src => {
-                const img = new Image();
-                img.src = src;
-                img.onload = () => this.loadedImages.add(src);
-                img.onerror = () => this.failedImages.add(src);
-            });
-        }
-
-        // 加载图片并显示占位符
-        loadImageWithPlaceholder(imgElement, src, placeholder) {
-            imgElement.src = placeholder;
-            
-            // 延迟加载实际图片
-            setTimeout(() => {
-                const realImg = new Image();
-                realImg.src = src;
-                realImg.onload = () => {
-                    imgElement.src = src;
-                    imgElement.style.opacity = '0';
-                    setTimeout(() => {
-                        imgElement.style.opacity = '1';
-                        imgElement.style.transition = 'opacity 0.3s';
-                    }, 10);
-                };
-                realImg.onerror = () => {
-                    console.warn('图片加载失败:', src);
-                    // 保持占位符
-                };
-            }, imageConfig.lazyLoadDelay);
-        }
-
-        // 检查图片是否已加载
-        isImageLoaded(src) {
-            return this.loadedImages.has(src);
-        }
-    }
-
-    const imageLoader = new ImageLoader();
-
     // 类型信息
     const info = {
         words: { 
             name: "💬 言语派", 
             desc: "你渴望肯定。一句'辛苦了'、'有你真好'能让你满血复活。", 
-            msg: "媳妇喜欢听好话，俺以后每天夸她三遍！有她在，家就是暖的。"
+            msg: "媳妇喜欢听好话，俺以后每天夸她三遍！有她在，家就是暖的。",
+            emoji: "💬"
         },
         acts: { 
             name: "🤗 行动派", 
             desc: "你相信爱是做出来的。对方帮你分担家务时，你最能感到被爱。", 
-            msg: "地俺扫了，碗俺刷了，媳妇你歇着！爱不是说说，是做给你看。"
+            msg: "地俺扫了，碗俺刷了，媳妇你歇着！爱不是说说，是做给你看。",
+            emoji: "🤗"
         },
         gifts: { 
             name: "🎁 仪式派", 
             desc: "礼物代表心意。不在乎贵重，而是在乎你被TA记挂在心上。", 
-            msg: "给媳妇带了她爱吃的果子，看她笑俺心都化了。小礼物，大心意。"
+            msg: "给媳妇带了她爱吃的果子，看她笑俺心都化了。小礼物，大心意。",
+            emoji: "🎁"
         },
         time: { 
             name: "🕰️ 陪伴派", 
             desc: "你最想要的是专注。人在，心也要在。", 
-            msg: "手机放下，俺陪媳妇散步去，咱俩静静待着。时间，是最好的礼物。"
+            msg: "手机放下，俺陪媳妇散步去，咱俩静静待着。时间，是最好的礼物。",
+            emoji: "🕰️"
         },
         touch: { 
             name: "👫 情感派", 
             desc: "拥抱、牵手、依偎。身体接触让你感到最直接的爱。", 
-            msg: "媳妇不开心？俺抱抱她，啥烦恼都没啦！一个拥抱，胜过千言万语。"
+            msg: "媳妇不开心？俺抱抱她，啥烦恼都没啦！一个拥抱，胜过千言万语。",
+            emoji: "👫"
         }
     };
 
@@ -749,22 +746,22 @@
         document.getElementById('typeDesc').innerText = main.desc;
         document.getElementById('pigMsg').innerText = main.msg;
 
-        // 设置猪八吉头像占位符
-        const pigAvatar = document.getElementById('pigAvatar');
-        pigAvatar.style.background = `linear-gradient(135deg, #FF9494, #FF7A7A)`;
-        pigAvatar.innerHTML = '🐷';
-        
-        // 延迟加载实际头像
-        setTimeout(() => {
-            const img = new Image();
-            img.src = 'images/my-pig-message.png';
-            img.onload = () => {
-                pigAvatar.style.backgroundImage = `url('images/my-pig-message.png')`;
-                pigAvatar.style.backgroundSize = 'cover';
-                pigAvatar.style.backgroundPosition = 'center';
-                pigAvatar.innerHTML = '';
-            };
-        }, 1000);
+        // 添加爱语表情显示
+        const loveEmojisDiv = document.getElementById('loveEmojis');
+        Object.entries(data.all).sort((a,b)=>b[1]-a[1]).forEach(([typeKey, count]) => {
+            if (count > 0) {
+                const typeInfo = info[typeKey];
+                const percent = Math.round(count/12*100);
+                
+                const emojiItem = document.createElement('div');
+                emojiItem.className = 'love-emoji-item';
+                emojiItem.innerHTML = `
+                    <div class="love-emoji">${typeInfo.emoji}</div>
+                    <div class="emoji-label">${percent}%</div>
+                `;
+                loveEmojisDiv.appendChild(emojiItem);
+            }
+        });
 
         // 生成详细分析
         let html = "";
@@ -803,35 +800,57 @@
             });
         }, 300);
         
-        // 延迟加载分享卡片
+        // 优化分享卡片加载
         setTimeout(() => {
             const shareCardPlaceholder = document.getElementById('shareCardPlaceholder');
-            const img = new Image();
+            // 创建img元素
+            shareCardPlaceholder.innerHTML = '';
+            const img = document.createElement('img');
+            img.className = 'share-card-image';
             img.src = 'images/share_card.jpg';
+            img.alt = '分享卡片';
             img.onload = () => {
-                shareCardPlaceholder.style.backgroundImage = `url('images/share_card.jpg')`;
-                shareCardPlaceholder.style.backgroundSize = 'cover';
-                shareCardPlaceholder.style.backgroundPosition = 'center';
-                shareCardPlaceholder.innerHTML = '';
+                shareCardPlaceholder.appendChild(img);
+                img.style.opacity = '0';
+                setTimeout(() => {
+                    img.style.transition = 'opacity 0.5s';
+                    img.style.opacity = '1';
+                }, 10);
             };
             img.onerror = () => {
-                shareCardPlaceholder.innerHTML = '<span style="color: #FF6B9D;">分享卡片加载失败</span>';
+                // 图片加载失败的回退
+                shareCardPlaceholder.innerHTML = `
+                    <div style="padding: 20px; text-align: center; width: 100%;">
+                        <div style="font-size: 48px; margin-bottom: 10px;">📱</div>
+                        <div style="font-size: 16px; color: #5A4235; font-weight: bold; margin-bottom: 5px;">分享到小红书</div>
+                        <div style="font-size: 12px; color: #8A7565;">长按保存并分享你的测试结果</div>
+                    </div>
+                `;
             };
         }, 1500);
         
-        // 延迟加载二维码
+        // 优化二维码加载
         setTimeout(() => {
             const qrcodePlaceholder = document.getElementById('qrcodePlaceholder');
-            const img = new Image();
+            qrcodePlaceholder.innerHTML = '';
+            const img = document.createElement('img');
             img.src = 'images/wechat_qrcode.png';
+            img.alt = '微信二维码';
+            img.style.width = '100%';
+            img.style.height = '100%';
+            img.style.objectFit = 'contain';
             img.onload = () => {
-                qrcodePlaceholder.style.backgroundImage = `url('images/wechat_qrcode.png')`;
-                qrcodePlaceholder.style.backgroundSize = 'cover';
-                qrcodePlaceholder.style.backgroundPosition = 'center';
-                qrcodePlaceholder.innerHTML = '';
+                qrcodePlaceholder.appendChild(img);
             };
             img.onerror = () => {
-                qrcodePlaceholder.innerHTML = '<span style="color: #FF6B9D;">二维码加载失败</span>';
+                // 二维码加载失败的回退
+                qrcodePlaceholder.innerHTML = `
+                    <div style="text-align: center; padding: 10px;">
+                        <div style="font-size: 36px; margin-bottom: 10px;">📱</div>
+                        <div style="font-size: 12px; color: #FF6B9D; font-weight: bold;">二维码</div>
+                        <div style="font-size: 10px; color: #8A7565;">勾搭猪八吉: zhubaji888</div>
+                    </div>
+                `;
             };
         }, 2000);
         
@@ -918,7 +937,7 @@
                 text-align: center;
                 border-radius: 16px;
                 position: relative;
-                overflow: hidden;
+                overflow: visible;
                 min-height: 100%;
             ">
                 <!-- 装饰性元素 -->
@@ -942,7 +961,7 @@
                     z-index: 0;
                 "></div>
                 
-                <!-- 猪八吉头像 - 用CSS绘制 -->
+                <!-- 猪八吉头像 -->
                 <div style="
                     width: 60px;
                     height: 60px;
@@ -1024,7 +1043,7 @@
                     ${medalData.slogan}
                 </div>
                 
-                <!-- 二维码区域 - 用文字代替 -->
+                <!-- 二维码区域 -->
                 <div style="
                     display: flex;
                     flex-direction: column;
@@ -1114,10 +1133,18 @@
         saveMedalBtn.innerHTML = '<span class="loading-spinner" style="margin-right: 8px;"></span>保存中...';
         saveMedalBtn.disabled = true;
         
+        // 确保html2canvas已加载
+        if (typeof html2canvas === 'undefined') {
+            alert('图片生成库加载失败，请刷新页面重试');
+            saveMedalBtn.innerHTML = originalText;
+            saveMedalBtn.disabled = false;
+            return;
+        }
+        
         html2canvas(medalCanvas, {
             backgroundColor: null,
             scale: 2,
-            useCORS: false, // 我们不使用外部图片
+            useCORS: false,
             allowTaint: false,
             width: medalCanvas.clientWidth,
             height: medalCanvas.clientHeight,
@@ -1148,7 +1175,7 @@
             console.error('生成图片失败:', error);
             saveMedalBtn.innerHTML = originalText;
             saveMedalBtn.disabled = false;
-            alert('生成失败，请稍后重试');
+            alert('生成失败，请稍后重试\n错误信息：' + error.message);
         });
     });
 
@@ -1200,11 +1227,6 @@
         document.body.removeChild(textArea);
     }
 
-    // 初始化图片预加载
-    setTimeout(() => {
-        imageLoader.preloadCriticalImages();
-    }, 3000); // 页面加载3秒后开始预加载次要图片
-
     // 防止移动端缩放
     document.addEventListener('gesturestart', function(e) {
         e.preventDefault();
@@ -1227,10 +1249,8 @@
         const loadTime = perfData.loadEventEnd - perfData.navigationStart;
         console.log(`页面加载时间: ${loadTime}ms`);
         
-        // 如果加载时间过长，可以进一步优化
-        if (loadTime > 3000) {
-            console.log('页面加载较慢，建议优化图片资源');
-        }
+        // 检查html2canvas加载状态
+        console.log(`html2canvas加载状态: ${typeof html2canvas !== 'undefined' ? '成功' : '失败'}`);
     });
 </script>
 </body>
