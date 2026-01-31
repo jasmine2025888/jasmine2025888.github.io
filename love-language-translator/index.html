@@ -2,7 +2,6 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <!-- 修复的关键：添加移动端视口适配，增加最大比例和禁止缩放 -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>猪八吉家传·爱的语言翻译器</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -16,1450 +15,200 @@
             --cocoa-text: #5A4235;
             --white: #FFFFFF;
             --border-warm: #FFD0C9;
-            --shadow-light: rgba(93, 75, 64, 0.1);
-            --shadow-medium: rgba(93, 75, 64, 0.15);
         }
 
         * { 
-            margin: 0; 
-            padding: 0; 
-            box-sizing: border-box; 
-            /* 防止文本选中和长按菜单 */
+            margin: 0; padding: 0; box-sizing: border-box; 
             -webkit-tap-highlight-color: transparent;
-            -webkit-touch-callout: none;
-            -webkit-user-select: none;
             user-select: none;
         }
 
-        html {
-            scroll-behavior: smooth;
-            /* 防止页面缩放导致的布局问题 */
-            -webkit-text-size-adjust: 100%;
-            -moz-text-size-adjust: 100%;
-            -ms-text-size-adjust: 100%;
-        }
-
         body {
-            font-family: 'PingFang SC', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-family: 'PingFang SC', -apple-system, sans-serif;
             background: linear-gradient(135deg, #FFF9F0 0%, #FFEFDF 100%);
             color: var(--cocoa-text);
             min-height: 100vh;
-            /* 修复移动端溢出问题 */
             overflow-x: hidden;
-            overflow-y: auto;
-            /* 防止iOS回弹效果 */
-            -webkit-overflow-scrolling: touch;
             width: 100vw;
-            max-width: 100vw;
         }
 
-        /* 修复移动端横屏时的显示问题 */
-        @media (orientation: landscape) {
-            body {
-                min-height: auto;
-            }
-        }
-
-        /* ===== 说明页样式 ===== */
+        /* ===== 说明页 ===== */
         .intro-screen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: linear-gradient(135deg, var(--warm-cream) 0%, #FFEFDF 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 10000;
-            padding: 20px;
-            transition: opacity 0.5s ease;
-            /* 防止移动端键盘弹出时的布局错乱 */
-            overflow: hidden;
+            display: flex; align-items: center; justify-content: center;
+            z-index: 10000; transition: opacity 0.5s ease;
+        }
+        .intro-screen.hidden { opacity: 0; pointer-events: none; }
+        .intro-card {
+            background: var(--white); padding: 40px 30px; border-radius: 24px;
+            max-width: 400px; width: calc(100vw - 40px); text-align: center;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.1); border: 3px solid var(--border-warm);
         }
 
-        .intro-screen.hidden {
-            opacity: 0;
+        /* ===== 测试主容器 ===== */
+        .test-container { display: none; width: 100vw; }
+
+        /* 第一屏：场景区 */
+        .scene-section {
+            min-height: 100vh; display: flex; flex-direction: column;
+            align-items: center; justify-content: center; padding: 20px;
+        }
+        .scene-image-container {
+            width: 85%; max-width: 350px; aspect-ratio: 3/4;
+            border-radius: 20px; border: 8px solid var(--white);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.1); overflow: hidden;
+            margin-bottom: 20px;
+        }
+        .scene-image { width: 100%; height: 100%; object-fit: cover; transition: 0.5s; }
+
+        .pig-speech-bubble {
+            background: var(--cocoa-text); color: white; padding: 15px 20px;
+            border-radius: 20px; font-size: 16px; margin-bottom: 20px;
+            position: relative; box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            max-width: 85%;
+        }
+
+        /* 第二屏：题目区 */
+        .question-section { min-height: 100vh; padding: 30px 20px; }
+        .progress-bar { height: 10px; background: #F2E9E1; border-radius: 10px; overflow: hidden; margin: 20px 0; }
+        .progress-fill { height: 100%; background: linear-gradient(to right, var(--accent-coral), var(--accent-gold)); transition: 0.6s; }
+
+        .question-text { font-size: 22px; font-weight: 800; margin-bottom: 20px; line-height: 1.4; }
+
+        /* 重点优化：选项点击效果 */
+        .options-container { display: flex; flex-direction: column; gap: 15px; }
+        .option-item {
+            padding: 18px 20px; background: var(--white); border: 3px solid #F2E9E1;
+            border-radius: 18px; cursor: pointer; transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex; align-items: center; gap: 15px;
+        }
+        
+        /* 选中时的强反馈状态 */
+        .option-item.active {
+            border-color: var(--accent-coral);
+            background-color: #FFF5F5;
+            transform: scale(1.03); /* 轻微放大 */
+            box-shadow: 0 10px 20px rgba(255, 148, 148, 0.2);
+        }
+
+        /* 禁用点击，防止快速连点 */
+        .options-container.disabled {
             pointer-events: none;
         }
 
-        .intro-card {
-            background: var(--white);
-            padding: 40px 30px;
-            border-radius: 24px;
-            max-width: 400px;
-            width: calc(100vw - 40px); /* 使用视口单位确保不超出屏幕 */
-            text-align: center;
-            box-shadow: 0 20px 50px var(--shadow-medium);
-            border: 3px solid var(--border-warm);
-            position: relative;
-            overflow: hidden;
-            /* 确保在移动端不超出屏幕 */
-            max-height: 90vh;
-            overflow-y: auto;
-        }
-
-        /* 装饰性背景元素 */
-        .intro-card::before {
-            content: '';
-            position: absolute;
-            top: -50px;
-            right: -50px;
-            width: 150px;
-            height: 150px;
-            background: radial-gradient(circle, rgba(255, 148, 148, 0.1) 0%, transparent 70%);
-            z-index: 0;
-        }
-
-        .intro-card::after {
-            content: '';
-            position: absolute;
-            bottom: -50px;
-            left: -50px;
-            width: 150px;
-            height: 150px;
-            background: radial-gradient(circle, rgba(232, 176, 84, 0.08) 0%, transparent 70%);
-            z-index: 0;
-        }
-
-        .intro-content {
-            position: relative;
-            z-index: 1;
-        }
-
-        /* 修改标题为两行显示 */
-        .intro-title {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 10px;
-            gap: 5px;
-            width: 100%;
-        }
-
-        .title-line-1 {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            font-size: clamp(16px, 5vw, 20px); /* 使用clamp函数实现响应式字体 */
-            font-weight: 700;
-            color: var(--cocoa-text);
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            width: 100%;
-        }
-
-        .title-line-1 i {
-            color: var(--accent-coral);
-            font-size: clamp(14px, 4vw, 18px);
-            flex-shrink: 0;
-        }
-
-        .title-line-2 {
-            font-size: clamp(18px, 6vw, 24px); /* 响应式字体大小 */
-            font-weight: 800;
-            color: var(--accent-coral);
-            letter-spacing: 1px;
-            line-height: 1.2;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            width: 100%;
-        }
-
-        .intro-subtitle {
-            color: var(--cocoa-text);
-            font-size: clamp(14px, 4vw, 17px); /* 响应式字体 */
-            line-height: 1.5;
-            margin-bottom: 25px;
-            opacity: 0.9;
-            word-break: break-word; /* 允许长单词换行 */
-            hyphens: auto; /* 自动连字符 */
-        }
-
-        .pig-avatar {
-            width: clamp(60px, 20vw, 80px); /* 响应式头像大小 */
-            height: clamp(60px, 20vw, 80px);
-            border-radius: 50%;
-            border: 4px solid var(--white);
-            box-shadow: 0 10px 25px rgba(93, 75, 64, 0.2);
-            margin: 0 auto 20px;
-            background: #FFE6E6;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: clamp(30px, 10vw, 40px); /* 响应式图标大小 */
-            overflow: hidden;
-            flex-shrink: 0;
-        }
-
-        .pig-avatar img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .intro-features {
-            background: #FFF9F0;
-            border-radius: 16px;
-            padding: 20px;
-            margin-bottom: 30px;
-            border: 2px dashed var(--border-warm);
-            max-width: 100%;
-        }
-
-        .feature {
-            display: flex;
-            align-items: center;
-            justify-content: flex-start;
-            gap: 12px;
-            margin-bottom: 15px;
-            font-size: clamp(13px, 3.5vw, 15px); /* 响应式字体 */
-            color: var(--cocoa-text);
-            text-align: left;
-            word-break: break-word;
-        }
-
-        .feature:last-child {
-            margin-bottom: 0;
-        }
-
-        .feature i {
-            color: var(--accent-coral);
-            font-size: clamp(16px, 4vw, 18px);
-            min-width: 24px;
-            flex-shrink: 0;
+        .option-icon {
+            width: 40px; height: 40px; border-radius: 12px;
+            background: #FFF0F0; display: flex; align-items: center; justify-content: center;
         }
 
         .start-button {
             background: linear-gradient(to right, var(--accent-coral), var(--accent-gold));
-            color: white;
-            border: none;
-            padding: clamp(14px, 4vw, 18px) clamp(30px, 10vw, 40px); /* 响应式内边距 */
-            font-size: clamp(16px, 4.5vw, 18px);
-            font-weight: bold;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: all 0.3s ease;
+            color: white; border: none; padding: 15px 40px; font-size: 18px;
+            font-weight: bold; border-radius: 50px; cursor: pointer;
             box-shadow: 0 8px 25px rgba(255, 122, 122, 0.4);
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            position: relative;
-            overflow: hidden;
-            z-index: 1;
-            max-width: 100%;
-            white-space: nowrap;
-        }
-
-        .start-button:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 12px 30px rgba(255, 122, 122, 0.5);
-        }
-
-        .start-button:active {
-            transform: translateY(0);
-        }
-
-        .intro-note {
-            font-size: clamp(12px, 3vw, 13px); /* 响应式字体 */
-            color: #8A7565;
-            margin-top: 25px;
-            font-style: italic;
-            word-break: break-word;
-        }
-
-        /* ===== 测试容器 ===== */
-        .test-container {
-            position: relative;
-            display: none; /* 初始隐藏，点击开始后显示 */
-            width: 100vw;
-            overflow: hidden;
-        }
-
-        /* ===== 第一屏：场景展示区 ===== */
-        .scene-section {
-            min-height: 100vh;
-            height: auto;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 15px 15px 10px;
-            background: linear-gradient(135deg, #FFF9F3, #FFF5ED);
-            position: relative;
-            overflow: hidden;
-            width: 100%;
-            /* 防止iOS回弹时的白边 */
-            -webkit-overflow-scrolling: touch;
-        }
-
-        /* 装饰性背景元素 */
-        .scene-section::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            right: -30%;
-            width: 400px;
-            height: 400px;
-            background: radial-gradient(circle, rgba(255, 148, 148, 0.1) 0%, transparent 70%);
-            z-index: 0;
-        }
-
-        .scene-section::after {
-            content: '';
-            position: absolute;
-            bottom: -30%;
-            left: -20%;
-            width: 300px;
-            height: 300px;
-            background: radial-gradient(circle, rgba(232, 176, 84, 0.08) 0%, transparent 70%);
-            z-index: 0;
-        }
-
-        /* 场景图片容器 - 竖图优化 */
-        .scene-image-container {
-            width: 90%;
-            max-width: 400px;
-            height: auto;
-            aspect-ratio: 3/4; /* 800×1067的比例约3:4 */
-            border-radius: 20px;
-            border: 8px solid var(--white);
-            box-shadow: 0 15px 40px var(--shadow-medium);
-            overflow: hidden;
-            position: relative;
-            z-index: 1;
-            margin-bottom: 15px;
-            transition: all 0.4s ease;
-        }
-
-        .scene-image {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.5s ease;
-            display: block; /* 防止图片下方有间隙 */
-        }
-
-        .scene-image:hover {
-            transform: scale(1.02);
-        }
-
-        /* 猪八吉对话气泡 */
-        .pig-speech-container {
-            width: 90%;
-            max-width: 400px;
-            position: relative;
-            z-index: 1;
-            margin-bottom: 8px;
-        }
-
-        .pig-speech-bubble {
-            background: var(--cocoa-text);
-            color: white;
-            padding: 15px 18px;
-            border-radius: 20px;
-            font-size: clamp(14px, 4vw, 16px); /* 响应式字体 */
-            line-height: 1.5;
-            box-shadow: 0 8px 25px rgba(93, 75, 64, 0.2);
-            position: relative;
-            animation: float 3s ease-in-out infinite;
-            text-align: center;
-            word-break: break-word;
-            hyphens: auto;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-5px); }
-        }
-
-        .pig-speech-bubble::after {
-            content: '';
-            position: absolute;
-            top: -10px;
-            left: 50%;
-            transform: translateX(-50%);
-            border-left: 12px solid transparent;
-            border-right: 12px solid transparent;
-            border-bottom: 12px solid var(--cocoa-text);
-        }
-
-        /* 向下滑动继续 - 紧挨着气泡 */
-        .scroll-hint {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            color: var(--accent-coral);
-            font-size: clamp(14px, 4vw, 18px); /* 响应式字体 */
-            font-weight: 600;
-            animation: bounce 2s infinite;
-            z-index: 2;
-            margin-top: 5px;
-            white-space: nowrap;
-        }
-
-        @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-            40% { transform: translateY(-8px); }
-            60% { transform: translateY(-4px); }
-        }
-
-        .scroll-hint i {
-            font-size: clamp(18px, 6vw, 26px); /* 响应式图标 */
-            margin-bottom: 3px;
-        }
-
-        /* ===== 第二屏：题目互动区 ===== */
-        .question-section {
-            min-height: 100vh;
-            padding: 30px 20px 40px;
-            background: linear-gradient(to bottom, var(--white), #FFFCF8);
-            display: flex;
-            flex-direction: column;
-            position: relative;
-            width: 100%;
-            overflow: hidden;
-        }
-
-        .question-section::before {
-            content: '';
-            position: absolute;
-            top: -50px;
-            left: 0;
-            right: 0;
-            height: 60px;
-            background: linear-gradient(to top, #FFFCF8, transparent);
-            z-index: 1;
-        }
-
-        /* 进度条 */
-        .progress-container {
-            margin-bottom: 25px;
-            position: relative;
-            z-index: 2;
-            width: 100%;
-        }
-
-        .progress-label {
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-            font-size: clamp(12px, 3vw, 14px); /* 响应式字体 */
-            margin-bottom: 15px;
-            color: var(--cocoa-text);
-            font-weight: 500;
-            width: 100%;
-            overflow: hidden;
-        }
-
-        .progress-title {
-            font-size: clamp(14px, 4vw, 16px); /* 响应式字体 */
-            font-weight: 600;
-            color: var(--accent-coral);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            flex-wrap: wrap; /* 允许换行 */
-            text-align: center;
-            width: 100%;
-        }
-
-        .progress-title i {
-            font-size: clamp(14px, 4vw, 18px);
-            flex-shrink: 0;
-        }
-
-        .progress-text {
-            font-size: clamp(12px, 3vw, 14px);
-            color: #8A7565;
-            text-align: center;
-            white-space: nowrap;
-        }
-
-        .progress-bar {
-            height: 10px;
-            background: #F2E9E1;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: inset 0 2px 5px rgba(0,0,0,0.05);
-            width: 100%;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(to right, var(--accent-coral), var(--accent-gold));
-            border-radius: 10px;
-            transition: width 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .progress-fill::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-            animation: shimmer 2s infinite;
-        }
-
-        @keyframes shimmer {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
-        }
-
-        /* 题目内容 */
-        .question-header {
-            margin-bottom: 30px;
-            position: relative;
-            z-index: 2;
-            width: 100%;
-        }
-
-        .question-number {
-            font-size: clamp(12px, 3vw, 14px);
-            color: var(--accent-coral);
-            font-weight: 600;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
-
-        .question-number i {
-            font-size: clamp(14px, 4vw, 16px);
-        }
-
-        .question-text {
-            font-size: clamp(16px, 5vw, 22px); /* 响应式字体 */
-            font-weight: 700;
-            line-height: 1.4;
-            margin-bottom: 15px;
-            color: var(--cocoa-text);
-            word-break: break-word;
-            hyphens: auto;
-        }
-
-        .question-hint {
-            font-size: clamp(12px, 3vw, 14px);
-            color: #8A7565;
-            font-style: italic;
-            word-break: break-word;
-        }
-
-        /* 选项容器 - 优化触摸体验 */
-        .options-container {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            margin-bottom: 25px;
-            position: relative;
-            z-index: 2;
-            width: 100%;
-        }
-
-        .option-item {
-            padding: clamp(14px, 4vw, 18px) clamp(16px, 5vw, 22px);
-            background: var(--white);
-            border: 3px solid #F2E9E1;
-            border-radius: 16px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: clamp(12px, 4vw, 16px);
-            position: relative;
-            overflow: hidden;
-            margin-bottom: 8px;
-            -webkit-tap-highlight-color: transparent;
-            width: 100%;
-        }
-
-        .option-item:hover {
-            border-color: var(--secondary-pink);
-            transform: translateY(-3px);
-            box-shadow: 0 8px 20px var(--shadow-light);
-        }
-
-        .option-item.active {
-            background: linear-gradient(135deg, rgba(255, 249, 249, 0.9), white);
-            border-color: var(--accent-coral);
-            box-shadow: 0 8px 25px rgba(255, 122, 122, 0.2);
-            transform: translateY(-3px);
-        }
-
-        .option-item.active .option-icon {
-            background: linear-gradient(135deg, var(--accent-coral), var(--accent-gold));
-            color: white;
-            transform: scale(1.1);
-        }
-
-        .option-item.active::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(to right, var(--accent-coral), var(--accent-gold));
-        }
-
-        /* 触摸反馈动画 */
-        .option-item:active {
-            transform: scale(0.98);
-            transition: transform 0.1s ease;
-        }
-
-        .option-icon {
-            font-size: clamp(18px, 5vw, 22px);
-            background: #fdf2f2;
-            width: clamp(38px, 10vw, 46px);
-            height: clamp(38px, 10vw, 46px);
-            min-width: clamp(38px, 10vw, 46px);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 12px;
-            flex-shrink: 0;
-            transition: all 0.3s ease;
-        }
-
-        .option-icon img {
-            width: clamp(20px, 6vw, 28px);
-            height: clamp(20px, 6vw, 28px);
-            display: block;
-            object-fit: contain;
-        }
-
-        .option-text {
-            font-size: clamp(14px, 4vw, 16px);
-            line-height: 1.5;
-            font-weight: 500;
-            flex: 1;
-            word-break: break-word;
-            hyphens: auto;
-        }
-
-        /* 爱语倾向指示器 */
-        .love-type-indicator {
-            background: linear-gradient(135deg, #FFF9F0, #FFF5E1);
-            padding: 18px;
-            border-radius: 16px;
-            border: 3px solid var(--border-warm);
-            margin-top: 20px;
-            text-align: center;
-            position: relative;
-            z-index: 2;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.05);
-            width: 100%;
-            overflow: hidden;
-        }
-
-        .indicator-label {
-            font-size: clamp(12px, 3vw, 13px);
-            color: #8A7565;
-            margin-bottom: 8px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .indicator-value {
-            font-size: clamp(14px, 4vw, 16px);
-            font-weight: 600;
-            color: var(--accent-coral);
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            padding: 0 5px;
-        }
-
-        /* 音效开关 */
-        .sound-toggle {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            width: clamp(40px, 12vw, 50px);
-            height: clamp(40px, 12vw, 50px);
-            border-radius: 50%;
-            background: var(--white);
-            border: 2px solid var(--border-warm);
-            color: var(--accent-coral);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: clamp(18px, 6vw, 22px);
-            cursor: pointer;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
-            transition: all 0.3s ease;
-            z-index: 1000;
-            display: none;
-        }
-
-        .sound-toggle:hover {
-            transform: scale(1.1);
-            border-color: var(--accent-coral);
-        }
-
-        /* 响应式调整 - 针对移动端优化 */
-        @media (max-width: 768px) {
-            .intro-card {
-                padding: 35px 25px;
-                width: calc(100vw - 30px);
-                max-height: 85vh;
-            }
-            
-            .scene-section {
-                padding: 12px 15px 8px;
-                min-height: 100vh;
-            }
-            
-            .scene-image-container {
-                width: 85%;
-                max-width: 350px;
-                border-width: 6px;
-                border-radius: 18px;
-                margin-bottom: 12px;
-            }
-            
-            .pig-speech-container {
-                width: 85%;
-                max-width: 350px;
-                margin-bottom: 6px;
-            }
-            
-            .pig-speech-bubble {
-                padding: 14px 16px;
-                border-radius: 18px;
-            }
-            
-            .scroll-hint {
-                margin-top: 4px;
-            }
-            
-            .question-section {
-                padding: 25px 15px 35px;
-                min-height: 100vh;
-            }
-            
-            /* 移动端选项优化 */
-            .options-container {
-                gap: 14px;
-            }
-            
-            .option-item {
-                padding: 16px 20px;
-                gap: 14px;
-                margin-bottom: 10px;
-                min-height: 70px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .intro-card {
-                padding: 30px 20px;
-                width: calc(100vw - 20px);
-                max-height: 80vh;
-            }
-            
-            .pig-avatar {
-                margin-bottom: 15px;
-            }
-            
-            .scene-section {
-                padding: 10px 12px 6px;
-                justify-content: flex-start;
-                padding-top: 20vh;
-            }
-            
-            .scene-image-container {
-                width: 90%;
-                max-width: 320px;
-                aspect-ratio: 3/4;
-                margin-bottom: 15px;
-            }
-            
-            .pig-speech-container {
-                width: 90%;
-                max-width: 320px;
-                margin-bottom: 8px;
-            }
-            
-            .pig-speech-bubble {
-                padding: 12px 15px;
-                line-height: 1.4;
-            }
-            
-            .scroll-hint {
-                margin-top: 10px;
-            }
-            
-            .question-section {
-                padding: 20px 12px 30px;
-                min-height: 100vh;
-                justify-content: flex-start;
-            }
-            
-            /* 小屏幕设备进一步优化 */
-            .options-container {
-                gap: 12px;
-            }
-            
-            .option-item {
-                padding: 14px 16px;
-                gap: 12px;
-                margin-bottom: 12px;
-                min-height: 75px;
-            }
-            
-            .sound-toggle {
-                width: 45px;
-                height: 45px;
-                bottom: 15px;
-                right: 15px;
-            }
-            
-            /* 修复iOS Safari的100vh问题 */
-            .scene-section, .question-section {
-                height: -webkit-fill-available;
-                min-height: -webkit-fill-available;
-            }
-        }
-
-        @media (max-width: 360px) {
-            .intro-card {
-                padding: 25px 18px;
-                width: calc(100vw - 16px);
-                max-height: 75vh;
-            }
-            
-            .scene-image-container {
-                max-width: 280px;
-                border-width: 5px;
-                border-radius: 16px;
-            }
-            
-            .pig-speech-bubble {
-                padding: 10px 14px;
-                border-radius: 16px;
-            }
-            
-            .scroll-hint {
-                margin-top: 2px;
-            }
-            
-            .question-text {
-                font-size: 18px;
-            }
-            
-            .option-item {
-                padding: 12px 14px;
-                margin-bottom: 14px;
-                min-height: 80px;
-            }
-            
-            .option-text {
-                font-size: 13px;
-            }
-            
-            /* 超小屏幕上的额外安全边距 */
-            body {
-                padding-right: env(safe-area-inset-right);
-                padding-left: env(safe-area-inset-left);
-                padding-bottom: env(safe-area-inset-bottom);
-            }
-        }
-
-        /* 处理iPhone X及以上机型的刘海屏和安全区域 */
-        @supports (padding: max(0px)) {
-            .scene-section, .question-section, .intro-screen {
-                padding-left: max(15px, env(safe-area-inset-left));
-                padding-right: max(15px, env(safe-area-inset-right));
-                padding-bottom: max(20px, env(safe-area-inset-bottom));
-            }
-            
-            .intro-card {
-                margin-left: max(0px, env(safe-area-inset-left));
-                margin-right: max(0px, env(safe-area-inset-right));
-            }
-            
-            .sound-toggle {
-                right: max(20px, calc(20px + env(safe-area-inset-right)));
-                bottom: max(20px, calc(20px + env(safe-area-inset-bottom)));
-            }
-        }
-
-        /* 滚动条美化 */
-        body::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        body::-webkit-scrollbar-track {
-            background: #f1f1f1;
-        }
-
-        body::-webkit-scrollbar-thumb {
-            background: var(--secondary-pink);
-            border-radius: 4px;
-        }
-
-        body::-webkit-scrollbar-thumb:hover {
-            background: var(--primary-pink);
-        }
-
-        /* 隐藏iOS上的默认按钮样式 */
-        input, textarea, select, button {
-            -webkit-appearance: none;
-            appearance: none;
-            border-radius: 0;
         }
     </style>
 </head>
 <body>
 
-<!-- 说明页 -->
 <div class="intro-screen" id="introScreen">
     <div class="intro-card">
-        <div class="intro-content">
-            <!-- 修改的首页头像部分 -->
-            <div class="pig-avatar" id="pigAvatar">
-                <img src="images/my-pig-avatar.png" alt="猪八吉" 
-                     style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;"
-                     onerror="this.style.display='none'; document.getElementById('pigAvatar').innerHTML='🐷';">
-            </div>
-            <!-- 修改为两行标题 -->
-            <h1 class="intro-title">
-                <div class="title-line-1">
-                    <i class="fas fa-heart"></i> 猪八吉家传
-                </div>
-                <div class="title-line-2">爱的语言翻译器</div>
-            </h1>
-            <p class="intro-subtitle">
-                嘿，朋友！俺是猪八吉。<br>
-                用了12道俺和媳妇的"生活送命题"，<br>
-                帮你翻译翻译，你心里头最吃哪套"爱的方言"！
-            </p>
-            
-            <div class="intro-features">
-                <div class="feature">
-                    <i class="far fa-clock"></i>
-                    <span>只需3分钟，12道轻松场景题</span>
-                </div>
-                <div class="feature">
-                    <i class="far fa-lightbulb"></i>
-                    <span>发现你的专属"爱语类型"</span>
-                </div>
-                <div class="feature">
-                    <i class="fas fa-user-friends"></i>
-                    <span>让TA也测测，两张结果对比更懂彼此</span>
-                </div>
-            </div>
-            
-            <button class="start-button" id="startButton">
-                <i class="fas fa-play-circle"></i> 开始翻译！
-            </button>
-            
-            <p class="intro-note">放心，你的所有选择都只留在你的手机里。</p>
-        </div>
+        <div class="pig-avatar"><img src="images/my-pig-avatar.png" style="width:80px; border-radius:50%;"></div>
+        <h1 style="color:var(--accent-coral); margin:15px 0;">猪八吉家传</h1>
+        <h2 style="margin-bottom:20px;">爱的语言翻译器</h2>
+        <p style="margin-bottom:30px; line-height:1.6;">媳妇，俺帮你翻译翻译，<br>你心里最吃哪套"爱的方言"！</p>
+        <button class="start-button" onclick="startTest()">开始翻译！</button>
     </div>
 </div>
 
-<!-- 原测试容器 (初始隐藏) -->
 <div class="test-container" id="testContainer">
-    <!-- 第一屏：场景展示区 -->
-    <section class="scene-section" id="sceneSection">
+    <section class="scene-section">
         <div class="scene-image-container">
-            <img src="images/scene_01.jpg" alt="猪八吉与媳妇的温馨场景" class="scene-image" id="sceneImage"
-                 onerror="this.src='data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"400\" height=\"533\" viewBox=\"0 0 400 533\"><rect width=\"400\" height=\"533\" fill=\"%23FFE6E6\"/><text x=\"200\" y=\"270\" font-family=\"Arial\" font-size=\"30\" text-anchor=\"middle\" fill=\"%235A4235\">猪八吉</text></svg>'">
+            <img src="images/scene_01.jpg" id="sceneImage" class="scene-image">
         </div>
-        
-        <div class="pig-speech-container">
-            <div class="pig-speech-bubble" id="pigSpeech">媳妇让俺陪你完成这个爱的测试～</div>
-        </div>
-        
-        <div class="scroll-hint">
-            <i class="fas fa-chevron-down"></i>
-            <span>向下滑动继续</span>
+        <div class="pig-speech-bubble" id="pigSpeech">媳妇生日！俺得好好表现～</div>
+        <div style="color:var(--accent-coral); animation: bounce 2s infinite;">
+            <i class="fas fa-chevron-down"></i> 向下滑动继续
         </div>
     </section>
-    
-    <!-- 第二屏：题目互动区 -->
+
     <section class="question-section" id="questionSection">
-        <div class="progress-container">
-            <div class="progress-label">
-                <div class="progress-title">
-                    <i class="fas fa-heart"></i> 猪八吉家传·爱的语言翻译器
-                </div>
-                <div class="progress-text" id="progressText">第 1 题 / 共 12 题</div>
-            </div>
-            <div class="progress-bar">
-                <div class="progress-fill" id="progressFill" style="width: 8.33%;"></div>
-            </div>
-        </div>
-
-        <div class="question-header">
-            <div class="question-number">
-                <i class="far fa-question-circle"></i> 问题 #<span id="questionNum">1</span>
-            </div>
-            <div class="question-text" id="questionText">正在加载题目...</div>
-            <div class="question-hint">选择最能触动你的选项</div>
-        </div>
-
-        <div class="options-container" id="optionsContainer">
-            <!-- 选项将通过JavaScript动态生成 -->
-        </div>
-        
-        <div class="love-type-indicator" id="loveTypeIndicator">
-            <div class="indicator-label">当前爱语倾向</div>
-            <div class="indicator-value">正在检测中...</div>
-        </div>
+        <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+        <p id="progressText" style="font-size:14px; color:#888; margin-bottom:10px;"></p>
+        <div class="question-text" id="questionText">正在加载...</div>
+        <div class="options-container" id="optionsContainer"></div>
     </section>
-</div>
-
-<!-- 音效开关 -->
-<div class="sound-toggle" id="soundToggle" title="音效开关">
-    <i class="fas fa-volume-up"></i>
 </div>
 
 <script>
-    // 题目数据
     const questions = [
-        { 
-            text: "媳妇过生日，猪八吉怎么做你最暖心？", 
-            options: [
-                { text: "写张小卡片说'媳妇辛苦了，俺永远爱你'", type: "words", icon: "💬" },
-                { text: "承包一个月家务，让媳妇当皇后", type: "acts", icon: "🤗" },
-                { text: "精心准备一份礼物，哪怕不贵重", type: "gifts", icon: "🎁" },
-                { text: "请一天假，专心陪媳妇逛街聊天", type: "time", icon: "🕰️" },
-                { text: "给媳妇一个大大拥抱，说'有你在真好'", type: "touch", icon: "👫" }
-            ], 
-            speech: "媳妇生日！俺得好好表现～你希望伴侣怎么为你庆祝？" 
-        },
-        { 
-            text: "猪八吉加班晚归，你希望他？", 
-            options: [
-                { text: "发条消息：'媳妇，俺想你，马上回'", type: "words", icon: "💬" },
-                { text: "带宵夜回来，热好了端给你", type: "acts", icon: "🤗" },
-                { text: "顺手带枝花或小零食", type: "gifts", icon: "🎁" },
-                { text: "回家后放下手机，认真听你说话", type: "time", icon: "🕰️" },
-                { text: "进门先抱抱你，亲一下额头", type: "touch", icon: "👫" }
-            ], 
-            speech: "加班晚了，媳妇在家等俺...怎么做才能让她不生气？" 
-        },
-        { 
-            text: "你们吵架后，哪种和好方式最有效？", 
-            options: [
-                { text: "对方真诚道歉：'是俺不对'", type: "words", icon: "💬" },
-                { text: "默默帮你把活儿干了", type: "acts", icon: "🤗" },
-                { text: "送你个小礼物示好", type: "gifts", icon: "🎁" },
-                { text: "拉你坐下，耐心沟通", type: "time", icon: "🕰️" },
-                { text: "一把抱住你，不松手", type: "touch", icon: "👫" }
-            ], 
-            speech: "吵架了，媳妇不理俺，咋办？哪种方式最能让她消气？" 
-        },
-        { 
-            text: "日常生活中，你最喜欢怎样表达爱意？", 
-            options: [
-                { text: "经常说'爱你''想你'", type: "words", icon: "💬" },
-                { text: "帮TA挤牙膏、倒水等小事", type: "acts", icon: "🤗" },
-                { text: "看到适合TA的东西就买下来", type: "gifts", icon: "🎁" },
-                { text: "每天抽时间专门聊天", type: "time", icon: "🕰️" },
-                { text: "走路牵手，坐车靠肩", type: "touch", icon: "👫" }
-            ], 
-            speech: "媳妇说俺不懂浪漫，俺觉得爱要做出来，你说呢？" 
-        },
-        { 
-            text: "心情低落时，最希望TA怎么做？", 
-            options: [
-                { text: "鼓励你：'你是最棒的'", type: "words", icon: "💬" },
-                { text: "为你泡杯茶，做点实际的", type: "acts", icon: "🤗" },
-                { text: "送个小玩偶或零食", type: "gifts", icon: "🎁" },
-                { text: "陪你散步，安静倾听", type: "time", icon: "🕰️" },
-                { text: "搂着你，轻轻拍背", type: "touch", icon: "👫" }
-            ], 
-            speech: "媳妇心情不好，俺该怎么做？在线等，挺急的！" 
-        },
-        { 
-            text: "纪念日（结婚/恋爱纪念），你更期待怎样庆祝？", 
-            options: [
-                { text: "写一封情书，当面念给你听", type: "words", icon: "💬" },
-                { text: "策划一次家务大扫除，两人一起完成", type: "acts", icon: "🤗" },
-                { text: "准备一份惊喜礼物", type: "gifts", icon: "🎁" },
-                { text: "安排一次短途旅行，只有你们俩", type: "time", icon: "🕰️" },
-                { text: "安排按摩、SPA等身体放松活动", type: "touch", icon: "👫" }
-            ], 
-            speech: "结婚纪念日到了，俺想给媳妇一个惊喜，你觉得哪种方式好？" 
-        },
-        { 
-            text: "关于家务分工，你最看重什么？", 
-            options: [
-                { text: "TA常说'辛苦了''谢谢'", type: "words", icon: "💬" },
-                { text: "TA主动分担，不用提醒", type: "acts", icon: "🤗" },
-                { text: "买智能家电减轻负担", type: "gifts", icon: "🎁" },
-                { text: "一起做家务，边做边聊天", type: "time", icon: "🕰️" },
-                { text: "干活时给个鼓励的亲吻", type: "touch", icon: "👫" }
-            ], 
-            speech: "家务活这么多，媳妇嫌俺不干活，咋表现才好？" 
-        },
-        { 
-            text: "异地时（出差/分居），什么最能让你感受到爱？", 
-            options: [
-                { text: "每天视频说'晚安'", type: "words", icon: "💬" },
-                { text: "远程为你点外卖", type: "acts", icon: "🤗" },
-                { text: "寄礼物包裹", type: "gifts", icon: "🎁" },
-                { text: "长时间视频，一起看剧", type: "time", icon: "🕰️" },
-                { text: "期待重逢时的拥抱", type: "touch", icon: "👫" }
-            ], 
-            speech: "出差在外，想媳妇了，怎么让她感受到俺的爱？" 
-        },
-        { 
-            text: "当你工作压力大时，最需要TA？", 
-            options: [
-                { text: "说'你已经很优秀了'", type: "words", icon: "💬" },
-                { text: "帮你处理生活琐事", type: "acts", icon: "🤗" },
-                { text: "送减压小礼物（香薰、按摩仪等）", type: "gifts", icon: "🎁" },
-                { text: "陪你吐槽，当情绪垃圾桶", type: "time", icon: "🕰️" },
-                { text: "给你按摩肩膀", type: "touch", icon: "👫" }
-            ], 
-            speech: "媳妇工作压力大，俺想帮她分担，该怎么做？" 
-        },
-        { 
-            text: "理想的周末时光，你希望怎样度过？", 
-            options: [
-                { text: "互相分享一周的感受", type: "words", icon: "💬" },
-                { text: "一起做大餐，合作完成", type: "acts", icon: "🤗" },
-                { text: "去逛商场/超市，买喜欢的东西", type: "gifts", icon: "🎁" },
-                { text: "发展共同爱好（运动、手工等）", type: "time", icon: "🕰️" },
-                { text: "窝在沙发上看电影，靠在一起", type: "touch", icon: "👫" }
-            ], 
-            speech: "周末了，和媳妇一起做点啥，才能让感情升温？" 
-        },
-        { 
-            text: "关于教育孩子的方式，你们有分歧时，什么最能化解矛盾？", 
-            options: [
-                { text: "TA说：'你的出发点也是为孩子好'", type: "words", icon: "💬" },
-                { text: "TA主动去辅导孩子作业", type: "acts", icon: "🤗" },
-                { text: "给孩子买套新玩具/书，转移注意力", type: "gifts", icon: "🎁" },
-                { text: "等孩子睡了，坐下来好好讨论教育理念", type: "time", icon: "🕰️" },
-                { text: "拍拍你的肩说：'我们都是第一次当父母'", type: "touch", icon: "👫" }
-            ], 
-            speech: "俺想让孩子多玩，媳妇想让他多学习…吵架了，咋和好？" 
-        },
-        { 
-            text: "关于家庭大额开支（买房/买车/投资），你最看重TA的什么表现？", 
-            options: [
-                { text: "TA说：'钱可以再赚，你的开心最重要'", type: "words", icon: "💬" },
-                { text: "TA认真做预算表，列出各种方案", type: "acts", icon: "🤗" },
-                { text: "TA准备一个小惊喜，让你觉得'钱花得值'", type: "gifts", icon: "🎁" },
-                { text: "安排专门时间，一起研究各种选择", type: "time", icon: "🕰️" },
-                { text: "握着你的手说：'不管怎么决定，我们一起承担'", type: "touch", icon: "👫" }
-            ], 
-            speech: "想换辆车，媳妇觉得该存钱，俺该咋办才能让她同意？" 
-        }
+        { text: "媳妇过生日，猪八吉怎么做你最暖心？", options: [{ text: "写张小卡片说'媳妇辛苦了'", type: "words", icon: "💬" }, { text: "承包一个月家务", type: "acts", icon: "🤗" }, { text: "准备一份惊喜礼物", type: "gifts", icon: "🎁" }, { text: "请天假专心陪你", type: "time", icon: "🕰️" }, { text: "给个大大的拥抱", type: "touch", icon: "👫" }], speech: "媳妇生日！俺得好好表现～你希望伴侣怎么为你庆祝？" },
+        { text: "猪八吉加班晚归，你希望他？", options: [{ text: "发消息说'媳妇我想你'", type: "words", icon: "💬" }, { text: "带热乎的宵夜回来", type: "acts", icon: "🤗" }, { text: "顺手带枝花或零食", type: "gifts", icon: "🎁" }, { text: "回家放下手机认真听你说话", type: "time", icon: "🕰️" }, { text: "进门先亲亲抱抱", type: "touch", icon: "👫" }], speech: "加班晚了，怎么做才能让媳妇不生气？" },
+        { text: "吵架后，哪种和好方式最有效？", options: [{ text: "真诚道歉：'俺错了'", type: "words", icon: "💬" }, { text: "默默把家务干了", type: "acts", icon: "🤗" }, { text: "送个小礼物示好", type: "gifts", icon: "🎁" }, { text: "拉你坐下耐心沟通", type: "time", icon: "🕰️" }, { text: "一把抱住你不松手", type: "touch", icon: "👫" }], speech: "吵架了，哪种方式最能让媳妇消气？" },
+        { text: "日常生活中，你最喜欢怎样表达爱？", options: [{ text: "经常说'爱你''想你'", type: "words", icon: "💬" }, { text: "帮TA挤牙膏、倒水", type: "acts", icon: "🤗" }, { text: "看到适合TA的就买下来", type: "gifts", icon: "🎁" }, { text: "每天抽时间专门聊天", type: "time", icon: "🕰️" }, { text: "走路牵手，靠肩坐车", type: "touch", icon: "👫" }], speech: "俺觉得爱要做出来，你说呢？" },
+        { text: "心情低落时，最希望TA？", options: [{ text: "鼓励你：'你是最棒的'", type: "words", icon: "💬" }, { text: "为你泡杯热茶做实事", type: "acts", icon: "🤗" }, { text: "送个小玩偶或零食", type: "gifts", icon: "🎁" }, { text: "陪你散步安静倾听", type: "time", icon: "🕰️" }, { text: "搂着你轻轻拍背", type: "touch", icon: "👫" }], speech: "媳妇不开心，俺该怎么做？挺急的！" },
+        { text: "纪念日，你更期待怎样庆祝？", options: [{ text: "写情书当面念给你听", type: "words", icon: "💬" }, { text: "两人一起大扫除", type: "acts", icon: "🤗" }, { text: "准备一份惊喜大奖", type: "gifts", icon: "🎁" }, { text: "安排只有两人的旅行", type: "time", icon: "🕰️" }, { text: "一起去身体按摩放松", type: "touch", icon: "👫" }], speech: "结婚纪念日，哪种方式让感情升温？" },
+        { text: "关于家务，你最看重TA？", options: [{ text: "常说'辛苦了''谢谢'", type: "words", icon: "💬" }, { text: "主动分担不用提醒", type: "acts", icon: "🤗" }, { text: "买智能家电减轻负担", type: "gifts", icon: "🎁" }, { text: "一起干活边做边聊", type: "time", icon: "🕰️" }, { text: "干活时给个亲亲鼓励", type: "touch", icon: "👫" }], speech: "家务活这么多，咋表现媳妇才满意？" },
+        { text: "异地时，什么最让你感受到爱？", options: [{ text: "每天视频说'晚安'", type: "words", icon: "💬" }, { text: "远程为你点外卖宵夜", type: "acts", icon: "🤗" }, { text: "经常寄礼物包裹", type: "gifts", icon: "🎁" }, { text: "长时间视频一起看剧", type: "time", icon: "🕰️" }, { text: "重逢时那个长长的拥抱", type: "touch", icon: "👫" }], speech: "出差在外，怎么让媳妇感受到俺在想她？" },
+        { text: "工作压力大时，你最需要？", options: [{ text: "说'你已经很优秀了'", type: "words", icon: "💬" }, { text: "帮你处理好生活琐事", type: "acts", icon: "🤗" }, { text: "送解压小礼物", type: "gifts", icon: "🎁" }, { text: "陪你吐槽当垃圾桶", type: "time", icon: "🕰️" }, { text: "帮你按摩肩膀", type: "touch", icon: "👫" }], speech: "媳妇工作累，俺想帮她分担点压力。" },
+        { text: "理想周末，你希望？", options: [{ text: "分享一周的心情感受", type: "words", icon: "💬" }, { text: "一起下厨做顿大餐", type: "acts", icon: "🤗" }, { text: "去商场买喜欢的东西", type: "gifts", icon: "🎁" }, { text: "一起做手工或运动", type: "time", icon: "🕰️" }, { text: "窝在一起看场电影", type: "touch", icon: "👫" }], speech: "周末啦，和媳妇怎么过才最浪漫？" },
+        { text: "育儿分歧时，什么能化解矛盾？", options: [{ text: "TA说'你也是为孩子好'", type: "words", icon: "💬" }, { text: "TA主动去辅导作业", type: "acts", icon: "🤗" }, { text: "给孩子买玩具转移注意力", type: "gifts", icon: "🎁" }, { text: "等孩子睡了静下心聊", type: "time", icon: "🕰️" }, { text: "拍拍肩说'咱们一起努力'", type: "touch", icon: "👫" }], speech: "教育孩子吵架了，咋和好最快？" },
+        { text: "家庭大笔开支，你最看重？", options: [{ text: "TA说'你的开心最重要'", type: "words", icon: "💬" }, { text: "TA认真做预算分析", type: "acts", icon: "🤗" }, { text: "买完后送个小惊喜补偿", type: "gifts", icon: "🎁" }, { text: "一起反复研究方案", type: "time", icon: "🕰️" }, { text: "握着你的手一起决定", type: "touch", icon: "👫" }], speech: "买房买车开支大，俺得听媳妇的。" }
     ];
-
-    const loveTypes = {
-        words: { name: "言语派", color: "#FF9494", emoji: "💬" },
-        acts: { name: "行动派", color: "#FF7A7A", emoji: "🤗" },
-        gifts: { name: "仪式派", color: "#E8B054", emoji: "🎁" },
-        time: { name: "陪伴派", color: "#FFA07A", emoji: "🕰️" },
-        touch: { name: "情感派", color: "#FF8A65", emoji: "👫" }
-    };
 
     let currentIdx = 0;
     let scores = { words: 0, acts: 0, gifts: 0, time: 0, touch: 0 };
-    let soundEnabled = true;
 
-    const sceneImageEl = document.getElementById('sceneImage');
-    const pigSpeechEl = document.getElementById('pigSpeech');
-    const questionTextEl = document.getElementById('questionText');
-    const questionNumEl = document.getElementById('questionNum');
-    const progressTextEl = document.getElementById('progressText');
-    const progressFillEl = document.getElementById('progressFill');
-    const optionsContainerEl = document.getElementById('optionsContainer');
-    const loveTypeIndicatorEl = document.getElementById('loveTypeIndicator');
-    const soundToggleEl = document.getElementById('soundToggle');
-    const introScreenEl = document.getElementById('introScreen');
-    const testContainerEl = document.getElementById('testContainer');
-    const startButtonEl = document.getElementById('startButton');
-
-    function renderQuestion() {
+    function render() {
         const q = questions[currentIdx];
+        document.getElementById('sceneImage').src = `images/scene_${(currentIdx + 1).toString().padStart(2, '0')}.jpg`;
+        document.getElementById('pigSpeech').innerText = q.speech;
+        document.getElementById('questionText').innerText = q.text;
+        document.getElementById('progressText').innerText = `第 ${currentIdx + 1} 题 / 共 ${questions.length} 题`;
+        document.getElementById('progressFill').style.width = `${((currentIdx + 1)/questions.length)*100}%`;
         
-        // 加载场景图片
-        sceneImageEl.src = `images/scene_${(currentIdx + 1).toString().padStart(2, '0')}.jpg`;
-        pigSpeechEl.textContent = q.speech;
-        
-        questionTextEl.textContent = q.text;
-        questionNumEl.textContent = currentIdx + 1;
-        
-        const progressPercent = ((currentIdx + 1) / questions.length * 100).toFixed(2);
-        progressFillEl.style.width = `${progressPercent}%`;
-        progressTextEl.textContent = `第 ${currentIdx + 1} 题 / 共 ${questions.length} 题`;
-        
-        optionsContainerEl.innerHTML = '';
-        
-        q.options.forEach((option, index) => {
-            const optionItem = document.createElement('div');
-            optionItem.className = 'option-item';
-            optionItem.dataset.index = index;
-            optionItem.dataset.type = option.type;
-            
-            const typeColor = loveTypes[option.type].color;
-            
-            // 使用图片代替Emoji
-            optionItem.innerHTML = `
-                <div class="option-icon" style="color: ${typeColor}">
-                    <img src="images/love_${option.type}.png" alt="${option.icon}" 
-                         style="width: 28px; height: 28px; display: block;"
-                         onerror="this.parentElement.innerHTML='${option.icon}'">
-                </div>
-                <div class="option-text">${option.text}</div>
-            `;
-            
-            optionItem.addEventListener('click', () => selectOption(option.type, optionItem));
-            optionsContainerEl.appendChild(optionItem);
+        const container = document.getElementById('optionsContainer');
+        container.innerHTML = '';
+        container.classList.remove('disabled'); // 恢复点击
+
+        q.options.forEach(opt => {
+            const div = document.createElement('div');
+            div.className = 'option-item';
+            div.innerHTML = `<div class="option-icon"><img src="images/love_${opt.type}.png" style="width:24px;"></div><div style="flex:1">${opt.text}</div>`;
+            div.onclick = () => select(opt.type, div);
+            container.appendChild(div);
         });
-        
-        updateLoveTypeIndicator();
     }
 
-    function selectOption(type, element) {
-        if (soundEnabled) {
-            const audio = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-select-click-1109.mp3');
-            audio.volume = 0.3;
-            audio.play().catch(e => console.log("音效播放被阻止"));
-        }
+    function select(type, el) {
+        // 1. 禁用所有点击，防止疯狂连点
+        document.getElementById('optionsContainer').classList.add('disabled');
         
-        // 触摸反馈
-        element.style.transform = 'scale(0.98)';
-        setTimeout(() => {
-            element.style.transform = '';
-        }, 150);
-        
-        element.classList.add('active');
-        sceneImageEl.style.transform = 'scale(1.05) rotate(1deg)';
+        // 2. 增加选中样式
+        el.classList.add('active');
         scores[type]++;
-        
-        createRippleEffect(element, loveTypes[type].color);
-        
+
+        // 3. 核心修改：等待 800 毫秒后再跳转
         setTimeout(() => {
-            sceneImageEl.style.transform = '';
-            
             if (currentIdx < questions.length - 1) {
                 currentIdx++;
-                renderQuestion();
-                // 平滑滚动到顶部
-                window.scrollTo({
-                    top: 0,
-                    behavior: 'smooth'
-                });
+                render();
+                // 平滑滚动回顶部，给用户更好的节奏感
+                window.scrollTo({ top: 0, behavior: 'smooth' });
             } else {
-                completeTest();
+                const res = { main: Object.keys(scores).reduce((a, b) => scores[a] > scores[b] ? a : b), percent: Math.round((scores[Object.keys(scores).reduce((a, b) => scores[a] > scores[b] ? a : b)]/12)*100), all: scores, date: new Date().toLocaleString() };
+                localStorage.setItem('love_result', JSON.stringify(res));
+                location.href = 'result.html';
             }
-        }, 800);
+        }, 800); // 这里的 800 毫秒是“灵魂留白”
     }
 
-    function createRippleEffect(element, color) {
-        const ripple = document.createElement('span');
-        const rect = element.getBoundingClientRect();
-        const size = Math.max(rect.width, rect.height);
-        const x = rect.width / 2;
-        const y = rect.height / 2;
-        
-        ripple.style.cssText = `
-            position: absolute;
-            border-radius: 50%;
-            background: ${color}40;
-            width: ${size}px;
-            height: ${size}px;
-            left: ${x - size/2}px;
-            top: ${y - size/2}px;
-            transform: scale(0);
-            animation: ripple 0.6s linear;
-            z-index: 1;
-        `;
-        
-        element.style.position = 'relative';
-        element.appendChild(ripple);
-        
-        if (!document.getElementById('ripple-animation')) {
-            const style = document.createElement('style');
-            style.id = 'ripple-animation';
-            style.textContent = `
-                @keyframes ripple {
-                    to { transform: scale(4); opacity: 0; }
-                }
-            `;
-            document.head.appendChild(style);
-        }
-        
-        setTimeout(() => ripple.remove(), 600);
-    }
-
-    function updateLoveTypeIndicator() {
-        const types = Object.entries(scores);
-        if (types.every(([_, count]) => count === 0)) {
-            loveTypeIndicatorEl.querySelector('.indicator-value').textContent = '正在检测中...';
-            loveTypeIndicatorEl.style.borderColor = 'var(--border-warm)';
-            return;
-        }
-        
-        const sorted = types.sort((a, b) => b[1] - a[1]);
-        const [mainType, count] = sorted[0];
-        const typeInfo = loveTypes[mainType];
-        
-        const percent = Math.round((count / (currentIdx + 1)) * 100);
-        loveTypeIndicatorEl.querySelector('.indicator-value').innerHTML = `
-            <span style="color: ${typeInfo.color}">${typeInfo.emoji} ${typeInfo.name} (${percent}%)</span>
-        `;
-        
-        loveTypeIndicatorEl.style.borderColor = typeInfo.color;
-    }
-
-    function completeTest() {
-        const sorted = Object.entries(scores).sort((a, b) => b[1] - a[1]);
-        const mainType = sorted[0][0];
-        const mainCount = sorted[0][1];
-        
-        const result = {
-            main: mainType,
-            percent: Math.round(mainCount / questions.length * 100),
-            all: scores,
-            date: new Date().toLocaleString('zh-CN')
-        };
-        
-        localStorage.setItem('love_result', JSON.stringify(result));
-        
-        showCompletionAnimation();
-        
-        setTimeout(() => {
-            window.location.href = 'result.html';
-        }, 2000);
-    }
-
-    function showCompletionAnimation() {
-        const sceneSection = document.getElementById('sceneSection');
-        const questionSection = document.getElementById('questionSection');
-        
-        sceneImageEl.style.transform = 'scale(1.1)';
-        sceneImageEl.style.transition = 'transform 1s ease';
-        
-        pigSpeechEl.textContent = '测试完成啦！正在生成你的专属报告...';
-        pigSpeechEl.style.backgroundColor = loveTypes[Object.entries(scores).sort((a, b) => b[1] - a[1])[0][0]].color;
-        
-        questionSection.style.opacity = '0.5';
-        questionSection.style.transition = 'opacity 1s ease';
-    }
-
-    function toggleSound() {
-        soundEnabled = !soundEnabled;
-        const icon = soundToggleEl.querySelector('i');
-        
-        if (soundEnabled) {
-            icon.className = 'fas fa-volume-up';
-            soundToggleEl.style.color = 'var(--accent-coral)';
-            soundToggleEl.style.borderColor = 'var(--accent-coral)';
-        } else {
-            icon.className = 'fas fa-volume-mute';
-            soundToggleEl.style.color = '#999';
-            soundToggleEl.style.borderColor = '#999';
-        }
-        
-        localStorage.setItem('love_test_sound', soundEnabled);
-    }
-
-    // 开始测试函数
     function startTest() {
-        // 1. 隐藏说明页
-        introScreenEl.classList.add('hidden');
-        
-        // 2. 显示测试容器
-        testContainerEl.style.display = 'block';
-        
-        // 3. 显示音效开关
-        soundToggleEl.style.display = 'flex';
-        
-        // 4. 播放开始音效（可选）
-        if (soundEnabled) {
-            const audio = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-unlock-game-notification-253.mp3');
-            audio.volume = 0.2;
-            audio.play().catch(e => console.log("音效播放被阻止"));
-        }
-        
-        // 5. 确保第一题正确显示
-        setTimeout(() => {
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            });
-        }, 100);
-        
-        // 6. 防止移动端键盘弹出
-        document.activeElement.blur();
+        document.getElementById('introScreen').classList.add('hidden');
+        document.getElementById('testContainer').style.display = 'block';
+        render();
     }
-
-    function init() {
-        // 初始渲染第一题（但测试容器是隐藏的）
-        renderQuestion();
-        
-        // 添加开始按钮事件
-        startButtonEl.addEventListener('click', startTest);
-        
-        // 音效开关事件
-        soundToggleEl.addEventListener('click', toggleSound);
-        
-        // 恢复音效设置
-        const savedSound = localStorage.getItem('love_test_sound');
-        if (savedSound !== null) {
-            soundEnabled = savedSound === 'true';
-            toggleSound();
-        }
-        
-        // 键盘快捷键（只在测试容器显示时启用）
-        document.addEventListener('keydown', (e) => {
-            if (testContainerEl.style.display === 'block') {
-                if (e.key >= '1' && e.key <= '5') {
-                    const index = parseInt(e.key) - 1;
-                    const options = optionsContainerEl.children;
-                    if (index < options.length) {
-                        options[index].click();
-                    }
-                }
-            }
-        });
-        
-        // 修复移动端触摸事件
-        document.addEventListener('touchstart', function() {}, {passive: true});
-        
-        // 防止移动端缩放
-        document.addEventListener('gesturestart', function(e) {
-            e.preventDefault();
-        });
-        
-        // 修复iOS Safari的100vh问题
-        function setVH() {
-            let vh = window.innerHeight * 0.01;
-            document.documentElement.style.setProperty('--vh', `${vh}px`);
-        }
-        
-        setVH();
-        window.addEventListener('resize', setVH);
-        window.addEventListener('orientationchange', setVH);
-        
-        console.log('猪八吉爱的语言翻译器已加载！');
-    }
-
-    document.addEventListener('DOMContentLoaded', init);
 </script>
 </body>
 </html>
