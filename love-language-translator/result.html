@@ -866,11 +866,37 @@
 </div>
 
 <script>
+    // ============== 【新增】诊断和验证代码 ==============
+    console.log("=== 诊断开始 ===");
+
+    // 验证图片路径
+    const imagePaths = {
+        words: "https://jasmine2025888.github.io/love-language-translator/images/love_words.png",
+        acts: "https://jasmine2025888.github.io/love-language-translator/images/love_acts.png",
+        gifts: "https://jasmine2025888.github.io/love-language-translator/images/love_gifts.png",
+        time: "https://jasmine2025888.github.io/love-language-translator/images/love_time.png",
+        touch: "https://jasmine2025888.github.io/love-language-translator/images/love_touch.png"
+    };
+
+    // 测试所有图片
+    Object.entries(imagePaths).forEach(([type, url]) => {
+        const img = new Image();
+        img.onload = function() {
+            console.log(`✅ ${type} 图片加载成功: ${this.width}x${this.height}`, url);
+        };
+        img.onerror = function() {
+            console.error(`❌ ${type} 图片加载失败:`, url);
+        };
+        img.src = url;
+    });
+
+    console.log("=== 诊断结束 ===");
+    // ============== 结束诊断 ==============
+
     // ============== 【关键修复】图片基础路径配置 ==============
-    // 使用完整的绝对路径，避免任何拼写错误
+    // 使用完整的绝对路径
     const imageBaseURL = "https://jasmine2025888.github.io/love-language-translator/images/";
     
-    // 关键修复：使用完整的绝对路径，不使用拼接
     const loveTypeImages = {
         words: "https://jasmine2025888.github.io/love-language-translator/images/love_words.png",
         acts: "https://jasmine2025888.github.io/love-language-translator/images/love_acts.png",
@@ -1193,17 +1219,6 @@
         
         // 初始化勋章功能
         initMedalFunction();
-        
-        // 域名验证
-        console.log("=== 域名验证 ===");
-        console.log("当前页面URL:", window.location.href);
-        console.log("imageBaseURL:", imageBaseURL);
-        console.log("loveTypeImages对象:", loveTypeImages);
-        
-        // 验证所有图片URL
-        Object.entries(loveTypeImages).forEach(([key, url]) => {
-            console.log(`${key}: ${url}`);
-        });
     });
 
     // ============== 勋章生成功能 ==============
