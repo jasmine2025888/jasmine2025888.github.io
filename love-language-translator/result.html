@@ -227,7 +227,7 @@
 <body>
 
 <div class="container">
-    <div class="main-title"><i class="fas fa-heart"></i> ❤️ 爱的语言</div>
+    <div class="main-title"><i class="fas fa-heart"></i> ❤️ 爱的方言</div>
     <div class="sub-title">翻译报告</div>
     <p id="date" style="font-size:12px; color:#999; margin-bottom:5px;"></p>
 
@@ -291,7 +291,7 @@
         acts: { name: "行动派", emoji: "🤗", desc: "你相信爱是做出来的。对方帮你分担家务时，你最能感到被爱。", msg: "地俺扫了，碗俺刷了，媳妇你歇着！爱不是说说，是做给你看。", slogan: "爱是做出来，行动最实在" },
         gifts: { name: "仪式派", emoji: "🎁", desc: "礼物代表心意。不在乎贵重，而是在乎你被TA记挂在心上。", msg: "给媳妇带了她爱吃的果子，看她笑俺心都化了。小礼物，大心意。", slogan: "礼物表心意，惊喜暖心里" },
         time: { name: "陪伴派", emoji: "🕰️", desc: "你最想要的是专注。人在，心也要在。", msg: "手机放下，俺陪媳妇散步去，咱俩静静待着。时间，是最好的礼物。", slogan: "陪伴最长情，用心才是爱" },
-        touch: { name: "情感派", emoji: "👫", desc: "拥抱、牵手、依偎。身体接触让你感到最直接的爱。", msg: "媳妇不开心？俺抱抱她，啥烦恼都没啦！一个拥抱，胜过千言万语。", slogan: "拥抱最直接，触碰到真心" }
+        touch: { name: "接触派", emoji: "👫", desc: "拥抱、牵手、依偎。身体接触让你感到最直接的爱。", msg: "媳妇不开心？俺抱抱她，啥烦恼都没啦！一个拥抱，胜过千言万语。", slogan: "拥抱最直接，触碰到真心" }
     };
 
     // 获取数据
@@ -366,7 +366,7 @@
         const pureName = main.name.replace(/<[^>]*>/g, '').replace(/[^\u4e00-\u9fa5]/g, '');
         const percent = data.percent || 0;
         
-        const shareText = `我刚测了猪八吉家的「爱的语言翻译器」🍯\n\n我的爱语类型是：${pureName}\n匹配度：${percent}%\n\n一键生成了专属爱语勋章，超精美！\n\n测测你是哪种爱情派？\n⬇️点击测试：${window.location.href}\n\n#猪八吉 #爱的语言测试 #情人节礼物 #情侣测试 #情感测试`;
+        const shareText = `我刚测了猪八吉家的「爱的方言翻译器」🍯\n\n我的爱语类型是：${pureName}\n匹配度：${percent}%\n\n一键生成了专属爱语勋章，超精美！\n\n测测你是哪种爱情派？\n⬇️点击测试：${window.location.href}\n\n#猪八吉 #爱的语言测试 #情人节礼物 #情侣测试 #情感测试`;
 
         // 2. 创建一个隐藏的文本域
         const textArea = document.createElement("textarea");
