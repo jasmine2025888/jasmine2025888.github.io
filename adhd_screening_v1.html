@@ -6,15 +6,18 @@
     <title>猪八吉 | ADHD 多维度筛查量表</title>
     <style>
         :root {
-            --primary-color: #FF85A2;
-            --bg-color: #FFF9F5;
+            --primary-color: #FF85A2; /* 猪八吉粉 */
+            --bg-color: #FFF9F5;    /* 奶油杏 */
             --card-bg: #FFFFFF;
             --text-color: #5A4A42;
             --accent-color: #FFB347;
+            --shadow: 0 10px 30px rgba(255, 133, 162, 0.15);
         }
 
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
         body {
-            font-family: -apple-system, system-ui, sans-serif;
+            font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
             background-color: var(--bg-color);
             color: var(--text-color);
             margin: 0;
@@ -22,180 +25,190 @@
             flex-direction: column;
             align-items: center;
             min-height: 100vh;
+            overflow-x: hidden;
         }
 
-        /* 顶部导航 */
+        /* 顶部标题栏 */
         .header {
             width: 100%;
             background: var(--card-bg);
-            padding: 15px 0;
+            padding: 18px 0;
             text-align: center;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
             font-weight: bold;
             color: var(--primary-color);
-            font-size: 1.2rem;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 10px;
+            font-size: 1.1rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
 
         .container {
-            width: 90%;
+            width: 92%;
             max-width: 500px;
-            margin: 30px 0;
+            margin: 20px 0;
+            position: relative;
+        }
+
+        /* 卡片通用样式 */
+        .card {
             background: var(--card-bg);
-            padding: 25px;
-            border-radius: 24px;
-            box-shadow: 0 10px 30px rgba(255, 133, 162, 0.1);
+            padding: 30px 25px;
+            border-radius: 30px;
+            box-shadow: var(--shadow);
+            display: none; /* 默认隐藏，通过JS切换 */
+            animation: fadeIn 0.5s ease;
         }
 
-        .progress-bar {
-            width: 100%;
-            height: 8px;
-            background: #EEE;
-            border-radius: 4px;
-            margin-bottom: 25px;
-            overflow: hidden;
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        #progress-inner {
-            height: 100%;
-            background: var(--primary-color);
-            width: 0%;
-            transition: width 0.3s;
+        /* 封面页样式 */
+        #start-page { display: block; text-align: center; }
+        .mascot-img { width: 120px; height: 120px; margin-bottom: 20px; }
+        .start-title { font-size: 1.5rem; color: var(--text-color); margin-bottom: 15px; }
+        .start-desc { font-size: 0.95rem; color: #888; line-height: 1.6; margin-bottom: 30px; }
+        .btn-main {
+            background: linear-gradient(135deg, var(--primary-color), #FFB3C1);
+            color: white;
+            border: none;
+            padding: 16px 50px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(255, 133, 162, 0.3);
+            transition: transform 0.2s;
         }
+        .btn-main:active { transform: scale(0.95); }
 
-        .question-title {
-            font-size: 1.15rem;
-            line-height: 1.5;
-            margin-bottom: 25px;
-            font-weight: 600;
-        }
-
+        /* 答题页样式 */
+        .progress-container { margin-bottom: 30px; }
+        .progress-text { font-size: 0.8rem; color: #BBB; margin-bottom: 8px; text-align: right; }
+        .progress-bar { width: 100%; height: 6px; background: #F0F0F0; border-radius: 10px; overflow: hidden; }
+        #progress-inner { height: 100%; background: var(--primary-color); width: 0%; transition: width 0.3s; }
+        
+        .question-box h2 { font-size: 1.2rem; line-height: 1.5; margin-bottom: 30px; height: 3.6rem; display: flex; align-items: center; }
+        .options-list { display: flex; flex-direction: column; gap: 12px; }
         .option-btn {
-            width: 100%;
-            padding: 15px;
-            margin-bottom: 12px;
-            border: 2px solid #F0F0F0;
-            border-radius: 15px;
-            background: white;
+            padding: 18px;
+            border: 2px solid #F8F8F8;
+            border-radius: 18px;
+            background: #FAFAFA;
             cursor: pointer;
             text-align: left;
             font-size: 1rem;
             transition: all 0.2s;
             color: var(--text-color);
+            font-weight: 500;
         }
-
-        .option-btn:hover {
-            border-color: var(--primary-color);
-            background: var(--bg-color);
-        }
-
-        .option-btn.active {
-            background: var(--primary-color);
-            color: white;
-            border-color: var(--primary-color);
-        }
+        .option-btn:active { background: var(--bg-color); border-color: var(--primary-color); color: var(--primary-color); }
 
         /* 结果页样式 */
-        .result-card {
-            display: none;
-            text-align: center;
-        }
+        .result-title { font-size: 1.3rem; margin-bottom: 10px; }
+        .score-box { font-size: 3rem; font-weight: 800; color: var(--primary-color); margin: 15px 0; }
+        .result-tag { display: inline-block; padding: 5px 15px; background: var(--bg-color); color: var(--primary-color); border-radius: 20px; font-size: 0.85rem; margin-bottom: 20px; }
+        .result-content { text-align: left; background: #FFF9F5; padding: 20px; border-radius: 20px; line-height: 1.7; font-size: 0.95rem; margin-bottom: 25px; }
 
-        .score-circle {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            background: var(--bg-color);
-            border: 5px solid var(--primary-color);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2rem;
-            font-weight: bold;
-            color: var(--primary-color);
-            margin: 20px auto;
-        }
-
-        .ip-footer {
-            margin-top: 40px;
-            text-align: center;
-            padding: 20px;
-            font-size: 0.9rem;
-            color: #AAA;
-        }
-
-        .baji-mascot {
-            font-size: 2rem;
-            margin-bottom: 10px;
-        }
+        .footer-ip { margin-top: 20px; text-align: center; color: #CCC; font-size: 0.85rem; padding-bottom: 40px; }
     </style>
 </head>
 <body>
 
-    <div class="header">
-        <span>🐷</span> 猪八吉暖心测评中心
-    </div>
+    <div class="header">🐷 猪八吉暖心测评</div>
 
-    <div class="container" id="quiz-container">
-        <div class="progress-bar"><div id="progress-inner"></div></div>
-        <div id="question-box">
-            <div class="question-title" id="q-title">正在加载测评题目...</div>
-            <div id="options-box"></div>
+    <div class="container">
+        <!-- 封面页 -->
+        <div class="card" id="start-page">
+            <div class="mascot-img">🌸</div> <!-- 以后可以换成猪八吉的图片URL -->
+            <div class="start-title">ADHD 多维度筛查量表</div>
+            <div class="start-desc">
+                总是静不下心？或是经常丢三落四？<br>
+                别担心，猪八吉陪你一起探索头脑的小宇宙。<br>
+                本量表参考 ASRS 标准，请按最近半年的真实情况回答。
+            </div>
+            <button class="btn-main" onclick="startQuiz()">开始探索</button>
         </div>
 
-        <div class="result-card" id="result-box">
-            <div class="baji-mascot">🌸</div>
-            <h3>测评完成</h3>
-            <div class="score-circle" id="final-score">0</div>
-            <p id="result-desc" style="line-height: 1.6; color: #666;"></p>
-            <button onclick="location.reload()" style="margin-top:20px; padding:10px 20px; border-radius:20px; border:none; background:var(--primary-color); color:white;">重新测评</button>
+        <!-- 答题页 -->
+        <div class="card" id="quiz-page">
+            <div class="progress-container">
+                <div class="progress-text" id="progress-text">1/18</div>
+                <div class="progress-bar"><div id="progress-inner"></div></div>
+            </div>
+            <div class="question-box">
+                <h2 id="q-text">题目加载中...</h2>
+                <div class="options-list" id="options-box"></div>
+            </div>
+        </div>
+
+        <!-- 结果页 -->
+        <div class="card" id="result-page">
+            <div class="result-title">探索报告</div>
+            <div class="result-tag">测评结果仅供参考</div>
+            <div class="score-box" id="score-display">0</div>
+            <div class="result-content" id="result-desc">报告计算中...</div>
+            <button class="btn-main" onclick="location.reload()">重新测评</button>
         </div>
     </div>
 
-    <div class="ip-footer">
-        <div>关注 @猪八吉爱媳妇</div>
-        <div style="font-size: 12px; margin-top: 5px;">陪伴你探索更真实的自我</div>
-    </div>
+    <div class="footer-ip">关注 @猪八吉爱媳妇 · 遇见更懂你的人</div>
 
     <script>
-        // 计分逻辑与题目
         const questions = [
-            { t: "你是否经常在需要关注细节的事情上表现得不细心，或者在学习、工作中犯粗心的错误？", s: [0, 1, 2, 3] },
-            { t: "在完成任务或参加活动时，你是否经常难以长时间保持注意力集中？", s: [0, 1, 2, 3] },
-            { t: "当别人直接对你说话时，你是否经常显得心不在焉，仿佛没在听？", s: [0, 1, 2, 3] },
-            { t: "你是否经常无法按照指示完成任务，或者在工作/家务中容易分心而半途而废？", s: [0, 1, 2, 3] },
-            { t: "你是否经常难以组织和安排自己的任务和活动？", s: [0, 1, 2, 3] },
-            { t: "对于需要持续动脑的任务（如写报告、填表），你是否经常回避、厌恶或表现出不情愿？", s: [0, 1, 2, 3] }
+            { t: "你是否经常在需要关注细节的事情上犯粗心的错误？" },
+            { t: "在完成任务或参加活动时，你是否经常难以维持注意力？" },
+            { t: "当别人直接对你说话时，你是否经常显得没在听？" },
+            { t: "你是否经常无法按指示完成任务，导致工作/家务半途而废？" },
+            { t: "你是否经常难以组织和安排自己的任务和活动？" },
+            { t: "你是否经常回避、厌恶或不情愿去做需要持续动脑的任务？" },
+            { t: "你是否经常丢失任务或活动所需的物品（如手机、钥匙、文具）？" },
+            { t: "你是否经常容易被外界的刺激干扰而分心？" },
+            { t: "你是否在日常活动中经常忘记事情（如缴费、约会）？" },
+            { t: "你是否经常手脚动个不停，或在座位上扭动？" },
+            { t: "在被要求坐好的场合，你是否经常擅自离开座位？" },
+            { t: "你是否经常在不适当的场合跑来跑去或爬上爬下？" },
+            { t: "你是否经常难以安静地参加休闲活动？" },
+            { t: "你是否经常像“被马达驱动”一样忙个不停？" },
+            { t: "你是否经常话说得过多？" },
+            { t: "在问题还没问完时，你是否经常抢着回答？" },
+            { t: "在需要轮流等待时，你是否经常难以等待？" },
+            { t: "你是否经常打断或侵扰他人的活动（如强行加入对话）？" }
         ];
 
-        const options = ["从不", "偶尔", "经常", "总是"];
-        let currentIdx = 0;
-        let totalScore = 0;
+        const optionLabels = ["从不", "很少", "有时", "经常", "总是"];
+        let currentStep = 0;
+        let scores = [];
 
-        function showQuestion() {
-            const q = questions[currentIdx];
-            document.getElementById('q-title').innerText = `${currentIdx + 1}. ${q.t}`;
-            const optBox = document.getElementById('options-box');
-            optBox.innerHTML = '';
-            
-            options.forEach((text, i) => {
-                const btn = document.createElement('button');
-                btn.className = 'option-btn';
-                btn.innerText = text;
-                btn.onclick = () => nextStep(i);
-                optBox.appendChild(btn);
-            });
-
-            document.getElementById('progress-inner').style.width = `${((currentIdx) / questions.length) * 100}%`;
+        function startQuiz() {
+            document.getElementById('start-page').style.display = 'none';
+            document.getElementById('quiz-page').style.display = 'block';
+            showQuestion();
         }
 
-        function nextStep(score) {
-            totalScore += score;
-            currentIdx++;
-            if (currentIdx < questions.length) {
+        function showQuestion() {
+            const q = questions[currentStep];
+            document.getElementById('q-text').innerText = q.t;
+            document.getElementById('progress-text').innerText = `${currentStep + 1} / ${questions.length}`;
+            document.getElementById('progress-inner').style.width = `${((currentStep + 1) / questions.length) * 100}%`;
+
+            const box = document.getElementById('options-box');
+            box.innerHTML = '';
+            optionLabels.forEach((label, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.innerText = label;
+                btn.onclick = () => handleSelect(index);
+                box.appendChild(btn);
+            });
+        }
+
+        function handleSelect(val) {
+            scores.push(val);
+            if (currentStep < questions.length - 1) {
+                currentStep++;
                 showQuestion();
             } else {
                 showResult();
@@ -203,21 +216,22 @@
         }
 
         function showResult() {
-            document.getElementById('question-box').style.display = 'none';
-            document.getElementById('progress-inner').style.width = '100%';
-            const rb = document.getElementById('result-box');
-            rb.style.display = 'block';
-            document.getElementById('final-score').innerText = totalScore;
-
-            let desc = "";
-            if (totalScore < 6) desc = "猪八吉觉得你目前的专注力很棒哦！像个自律的小管家，继续保持这份定力吧。";
-            else if (totalScore < 12) desc = "你的专注力偶尔会“开小差”。猪八吉建议你可以尝试番茄工作法，给大脑一点喘息的时间。";
-            else desc = "测评显示你可能存在明显的 ADHD 倾向。别担心，猪八吉会一直陪伴你，建议寻求专业人士的进一步评估。";
+            document.getElementById('quiz-page').style.display = 'none';
+            document.getElementById('result-page').style.display = 'block';
             
-            document.getElementById('result-desc').innerText = desc;
-        }
+            const totalScore = scores.reduce((a, b) => a + b, 0);
+            document.getElementById('score-display').innerText = totalScore;
 
-        showQuestion();
+            let comment = "";
+            if (totalScore <= 18) {
+                comment = "【猪八吉观察】你的专注力表现很稳健哦！虽然生活中难免有小插曲，但你的大脑运转非常有条理。继续保持这种节奏吧。";
+            } else if (totalScore <= 36) {
+                comment = "【猪八吉建议】你的头脑里似乎住着一只活泼的小猴子，偶尔会让你分心。这可能与近期的压力或环境有关。猪八吉提醒你：试着把大任务拆成小块，一步步来。";
+            } else {
+                comment = "【猪八吉贴心话】测评显示你的 ADHD 倾向较为明显。这并不是你的错，很多极具创意的人都有这种特质。如果这已经影响了你的生活，猪八吉建议你可以找专业医生聊聊，科学地接纳并引导这份“活跃”。";
+            }
+            document.getElementById('result-desc').innerHTML = comment;
+        }
     </script>
 </body>
 </html>
