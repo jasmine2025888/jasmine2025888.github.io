@@ -3,14 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>猪八吉爱媳妇 | ADHD多维度深度报告</title>
-    <!-- 商业可视化图表库 -->
+    <title>猪八吉爱媳妇 | ADHD深度报告旗舰版</title>
+    <!-- 商业级图表库 -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
     <style>
         :root {
             --bg-linen: #FAF7F2;      --card-white: #FFFFFF;
             --watermelon-red: #FF5B67; --text-walnut: #5D524A;   
             --text-sand: #9E8E85;     --sage-green: #A7D7A9;
+            --light-bg: #FDFBFA;
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -30,40 +31,45 @@
 
         /* 答题区 */
         .q-header { margin-bottom: 15px; }
-        .q-label-row { font-size: 0.8rem; color: var(--watermelon-red); margin-bottom: 6px; font-weight: bold; display: flex; justify-content: space-between; }
+        .q-label-row { font-size: 0.85rem; color: var(--watermelon-red); margin-bottom: 6px; font-weight: bold; display: flex; justify-content: space-between; }
         .bar-bg { width: 100%; height: 4px; background: #F1EDEA; border-radius: 2px; }
         #bar-fill { height: 100%; background: var(--watermelon-red); width: 0%; transition: width 0.4s; }
         .q-text { font-size: 1.1rem; font-weight: 600; margin-bottom: 20px; min-height: 50px; line-height: 1.4; }
         .option-card { width: 100%; padding: 14px 20px; border: 1px solid #F1EDEA; border-radius: 16px; background: #FCFAF8; cursor: pointer; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; transition: all 0.2s; font-size: 1rem; }
         .option-card.active { background: var(--watermelon-red) !important; color: #FFF !important; border-color: var(--watermelon-red); transform: scale(0.98); }
 
-        /* 结果报告可视化 */
+        /* 结果页可视化 */
         .result-head { text-align: center; margin-bottom: 25px; }
         .score-val { font-size: 4.5rem; font-weight: bold; color: var(--watermelon-red); line-height: 1; }
-        .type-pill { display: inline-block; padding: 6px 22px; background: var(--watermelon-red); color: #FFF; border-radius: 50px; font-size: 1rem; font-weight: bold; margin-top: 15px; box-shadow: 0 5px 15px rgba(255,91,103,0.2); }
+        .type-pill { display: inline-block; padding: 6px 20px; background: var(--watermelon-red); color: #FFF; border-radius: 50px; font-size: 0.95rem; font-weight: bold; margin-top: 10px; }
         
-        .section-tag { font-size: 1rem; font-weight: bold; color: var(--watermelon-red); border-left: 4px solid var(--watermelon-red); padding-left: 10px; margin: 35px 0 15px; }
+        .section-tag { font-size: 1rem; font-weight: bold; color: var(--watermelon-red); border-left: 4px solid var(--watermelon-red); padding-left: 10px; margin: 30px 0 15px; }
         
-        /* 雷达图尺寸 */
-        .radar-box { width: 100%; max-width: 320px; margin: 0 auto; min-height: 300px; }
-
-        /* 分数对照表 */
+        /* 维度对比表 */
         .comp-table { width: 100%; background: #FCFAF8; border-radius: 20px; overflow: hidden; margin: 20px 0; border: 1px solid #F1EDEA; font-size: 0.8rem; }
-        .comp-row { display: flex; align-items: center; border-bottom: 1px solid #F1EDEA; transition: 0.3s; }
-        .comp-row:last-child { border: none; }
-        .row-active { background: #FFF5F6 !important; color: var(--watermelon-red) !important; font-weight: bold; }
-        .comp-cell-l { width: 80px; padding: 12px; background: #F5F2ED; text-align: center; border-right: 1px solid #F1EDEA; }
-        .comp-row.row-active .comp-cell-l { background: var(--watermelon-red); color: #FFF; }
-        .comp-cell-r { flex: 1; padding: 12px; color: #888; }
-        .comp-row.row-active .comp-cell-r { color: var(--watermelon-red); }
+        .comp-row { display: flex; align-items: center; border-bottom: 1px solid #F1EDEA; }
+        .row-active { background: #FFF5F6 !important; color: var(--watermelon-red) !important; }
+        .row-active .cell-l { background: var(--watermelon-red); color: #FFF; }
+        .cell-l { width: 80px; padding: 12px; background: #F5F2ED; text-align: center; font-weight: bold; border-right: 1px solid #F1EDEA; }
+        .cell-r { flex: 1; padding: 12px; color: #888; }
+
+        /* 雷达图尺寸 */
+        .radar-box { width: 100%; max-width: 320px; margin: 0 auto; min-height: 280px; }
+
+        /* 核心模块：四维度释义卡片 (专业背书) */
+        .dim-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+        .dim-card { background: #FCFAF8; border: 1.5px solid #F1EDEA; border-radius: 20px; padding: 18px; position: relative; }
+        .dim-score-badge { color: var(--watermelon-red); font-weight: bold; font-size: 1.1rem; }
+        .dim-title { font-size: 0.85rem; font-weight: bold; color: var(--text-walnut); margin-bottom: 5px; display: block; }
+        .dim-desc { font-size: 0.72rem; color: var(--text-sand); line-height: 1.3; }
 
         /* 深度内容卡片 */
-        .content-card { background: #FDFBFA; border: 1.5px solid #F1EDEA; border-radius: 24px; padding: 25px; margin-bottom: 20px; }
-        .content-card h4 { margin: 0 0 15px 0; font-size: 1.1rem; color: var(--watermelon-red); display: flex; align-items: center; gap: 8px; }
+        .report-card { background: #FDFBFA; border: 1.5px solid #F1EDEA; border-radius: 24px; padding: 25px; margin-bottom: 20px; }
+        .report-card h4 { margin: 0 0 15px 0; font-size: 1.1rem; color: var(--watermelon-red); display: flex; align-items: center; gap: 8px; }
         .report-text { font-size: 0.92rem; color: #555; line-height: 1.8; text-align: justify; }
         .report-text ul { padding-left: 18px; margin: 10px 0; }
         .report-text li { margin-bottom: 10px; }
-        .term-highlight { color: var(--watermelon-red); font-weight: bold; text-decoration: underline; }
+        .term { color: var(--watermelon-red); font-weight: bold; border-bottom: 1px dashed var(--watermelon-red); }
 
         .btn-red { background: var(--watermelon-red); color: #FFF; border: none; padding: 18px; border-radius: 50px; font-size: 1.1rem; font-weight: bold; cursor: pointer; width: 100%; margin-top: 20px; box-shadow: 0 10px 30px rgba(255,91,103,0.3); }
     </style>
@@ -81,16 +87,16 @@
     <div class="container">
         <!-- 开始页 -->
         <div class="card fade-in" id="start-page" style="text-align: center;">
-            <h2 style="font-size: 1.5rem; margin-bottom: 10px;">ADHD 多维度深度筛查报告</h2>
+            <h2 style="font-size: 1.4rem; margin-bottom: 10px;">ADHD 多维度深度筛查量表</h2>
             <div style="display:flex; justify-content:center; gap:10px; margin-bottom:25px;">
                 <span style="font-size:0.75rem; background:#F1EDEA; padding:5px 12px; border-radius:8px;">40道临床标准题</span>
                 <span style="font-size:0.75rem; background:#F1EDEA; padding:5px 12px; border-radius:8px;">约10分钟</span>
             </div>
             <div style="background: #FAF9F8; padding: 22px; border-radius: 24px; font-size: 0.9rem; border-left: 5px solid var(--watermelon-red); text-align: left; line-height: 1.7; margin-bottom: 35px;">
-                <strong>🔍 报告价值：</strong><br>
-                我们将从脑科学角度拆解你的“额叶指挥官”运作模式。这不仅是一份分数，更是一套关于<strong>多巴胺补偿、执行功能修复、关系防线建立</strong>的系统方案。
+                <strong>🔍 测评意义：</strong><br>
+                我们将深度拆解你的<strong>执行功能（Executive Function）</strong>运作图谱。这不仅是一份报告，更是你开启接纳自我、优化关系的第一块敲门砖。
             </div>
-            <button class="btn-red" onclick="startQuiz()">开启深度测评</button>
+            <button class="btn-red" onclick="startQuiz()">开启深度测评报告</button>
         </div>
 
         <!-- 答题页 -->
@@ -99,7 +105,7 @@
                 <div class="q-label-row"><span id="q-label">第 1 题</span><span id="q-count">1 / 40</span></div>
                 <div class="bar-bg"><div id="bar-fill"></div></div>
             </div>
-            <div class="q-text" id="q-text">正在初始化专业题库...</div>
+            <div class="q-text" id="q-text">数据加载中...</div>
             <div class="options-group" id="options-box"></div>
         </div>
 
@@ -113,29 +119,54 @@
 
             <div class="section-tag">分值对照与群体定位</div>
             <div class="comp-table">
-                <div class="comp-row" id="row-0"><div class="comp-cell-l">0-40</div><div class="comp-cell-r"><strong>稳健型</strong>：前额叶指挥系统极其自律有序。</div></div>
-                <div class="comp-row" id="row-1"><div class="comp-cell-l">41-80</div><div class="comp-cell-r"><strong>波动型</strong>：思维活跃但易受压力干扰产生“掉线”。</div></div>
-                <div class="comp-row" id="row-2"><div class="comp-cell-l">81-120</div><div class="comp-cell-r"><strong>活跃型</strong>：典型 ADHD 特质，执行功能高度耗能。</div></div>
-                <div class="comp-row" id="row-3"><div class="comp-cell-l">121+</div><div class="comp-cell-r"><strong>爆发型</strong>：神经连接极度活跃，常伴随严重失控感。</div></div>
+                <div class="comp-row" id="row-0"><div class="cell-l">0-40</div><div class="cell-r"><strong>稳健型</strong>：前额叶系统高效有序。</div></div>
+                <div class="comp-row" id="row-1"><div class="cell-l">41-80</div><div class="cell-r"><strong>波动型</strong>：思维敏锐但执行易在压力下掉线。</div></div>
+                <div class="comp-row" id="row-2"><div class="cell-l">81-120</div><div class="cell-r"><strong>活跃型</strong>：典型 ADHD 特质，脑内噪音较大。</div></div>
+                <div class="comp-row" id="row-3"><div class="cell-l">121+</div><div class="cell-r"><strong>爆发型</strong>：高度爆发力，但执行功能严重赤字。</div></div>
             </div>
 
-            <div class="section-tag">Compass 维度分析图谱</div>
+            <div class="section-tag">维度分析图谱 Compass</div>
             <div class="radar-box"><canvas id="radarChart"></canvas></div>
 
-            <div class="section-tag">猪八吉研究所 · 深度建议</div>
+            <!-- 核心模块：四维度深度释义 (专业性背书) -->
+            <div class="section-tag">四维度分值与深度定义</div>
+            <div class="dim-grid">
+                <div class="dim-card">
+                    <span class="dim-title">专注失调</span>
+                    <span class="dim-score-badge" id="s0">0</span>
+                    <p class="dim-desc">衡量大脑的“过滤网”功能，即屏蔽无关干扰、维持目标焦点的能力。</p>
+                </div>
+                <div class="dim-card">
+                    <span class="dim-title">执行障碍</span>
+                    <span class="dim-score-badge" id="s1">0</span>
+                    <p class="dim-desc">衡量启动任务、计划安排与物品整理的效能，是亲密关系的基石。</p>
+                </div>
+                <div class="dim-card">
+                    <span class="dim-title">情绪波动</span>
+                    <span class="dim-score-badge" id="s2">0</span>
+                    <p class="dim-desc">涉及边缘系统的敏感度，包含对“拒绝”的敏感反应及情绪刹车逻辑。</p>
+                </div>
+                <div class="dim-card">
+                    <span class="dim-title">冲动控制</span>
+                    <span class="dim-score-badge" id="s3">0</span>
+                    <p class="dim-desc">衡量躯体和言语的“抑制能力”，即在行动与想法之间建立缓冲带的能力。</p>
+                </div>
+            </div>
+
+            <div class="section-tag">猪八吉研究所 · 专家解读</div>
             
-            <div class="content-card">
-                <h4>🧠 脑科学运作解析</h4>
+            <div class="report-card">
+                <h4>🧠 脑科学运作机理</h4>
                 <div class="report-text" id="interp-deep">内容生成中...</div>
             </div>
 
-            <div class="content-card" style="border-color: var(--sage-green);">
-                <h4 style="color: var(--sage-green);">🚀 万能“行动处方”</h4>
+            <div class="report-card" style="border-color: var(--sage-green);">
+                <h4 style="color: var(--sage-green);">🚀 猪八吉行动处方</h4>
                 <div class="report-text" id="action-deep">内容生成中...</div>
             </div>
 
-            <div class="content-card">
-                <h4>❤️ 亲密关系防线建议</h4>
+            <div class="report-card">
+                <h4>❤️ 亲密关系专项策略</h4>
                 <div class="report-text" id="relation-deep">内容生成中...</div>
             </div>
 
@@ -153,48 +184,48 @@
     </div>
 
     <script>
-        // 40题专业逻辑库
+        // 40题专业题库保持不变
         const questions = [
-            { t: "在处理枯燥或需要高度关注细节的任务时，你是否常犯粗心错误？", d: 0 },
-            { t: "你是否经常发现自己很难长时间保持专注，即便在喜欢的活动中？", d: 0 },
-            { t: "在与人对话时，你的思绪是否经常不自觉地飘向别处？", d: 0 },
-            { t: "你是否经常开始了一项任务，但很快就被其他事情带走导致烂尾？", d: 1 },
-            { t: "在组织项目或生活琐事（如家务）时，你是否感到无从下手？", d: 1 },
+            { t: "在完成枯燥任务时，你是否感到极度困难？", d: 0 },
+            { t: "你是否经常在细节上犯粗心错误？", d: 0 },
+            { t: "别人对你说话时，你是否显得心不在焉？", d: 0 },
+            { t: "你是否经常开始了一项任务，但很快就被带走导致烂尾？", d: 1 },
+            { t: "在组织、安排工作或生活琐事时，你是否感到无从下手？", d: 1 },
             { t: "在需要坐好保持安静的场合，你会不由自主地动来动去吗？", d: 3 },
             { t: "当周围有轻微动静时，你是否会立刻断掉思路且难以重连？", d: 0 },
-            { t: "你是否发现自己的物理环境（房间、桌面）经常处于混乱状态？", d: 1 },
-            { t: "你是否经常因为拖延而错过重要的截止日期或对他人的承诺？", d: 1 },
-            { t: "在需要等待（排队）时，你会感到极其明显的焦躁与不耐烦吗？", d: 3 },
+            { t: "你是否发现自己的房间或桌面经常处于混乱状态且难以维持？", d: 1 },
+            { t: "你是否经常因为拖延而错过重要的截止日期或承诺？", d: 1 },
+            { t: "在需要等待轮候时，你会感到极其明显的焦躁与不耐烦吗？", d: 3 },
             { t: "你是否经常发现自己说话过多，以至于无意中打断了别人？", d: 3 },
-            { t: "你是否经常感到情绪像过山车，波动得比周围人更频繁、更强烈？", d: 2 },
-            { t: "对于需要持续动脑的任务（如填表），你会本能地产生厌恶感吗？", d: 1 },
+            { t: "你是否经常感到情绪像过山车，波动得比周围人更频繁？", d: 2 },
+            { t: "对于需要持续动脑的任务（如填表），你会习惯逃避吗？", d: 1 },
             { t: "你是否经常在问题还没问完时，就已经抢先说出了答案？", d: 3 },
-            { t: "在安静休息时，你是否仍感到一种‘内心燥热’或被马达驱动感？", d: 3 },
+            { t: "在安静休闲的场合，你是否仍感到一种‘躁动感’？", d: 3 },
             { t: "你是否经常丢失生活必需品（钥匙、手机、钱包等）？", d: 1 },
-            { t: "面对突发的小麻烦，你会感到极度崩溃并产生剧烈挫败感吗？", d: 2 },
-            { t: "你是否对环境中的刺激（气味、噪音、光线）过度敏感？", d: 2 },
+            { t: "面对突发的小麻烦，你会感到极度崩溃吗？", d: 2 },
+            { t: "你是否对环境中的细微刺激过度敏感？", d: 2 },
             { t: "你是否发现自己很难按照‘先后次序’来处理逻辑任务？", d: 1 },
-            { t: "你是否经常在别人还没说完话时，就忍不住想插嘴表达观点？", d: 3 },
-            { t: "你是否经常感到大脑里像有很多个电视频道在同时播放？", d: 0 },
-            { t: "你是否经常通过购买新东西或寻找刺激来缓解‘多巴胺匮乏’感？", d: 3 },
-            { t: "你是否发现自己很难记住刚才读过的这一行文字的具体内容？", d: 0 },
-            { t: "你是否经常在截止日期前最后几小时才爆发出惊人的专注力？", d: 1 },
-            { t: "你是否经常感到自尊心受挫，觉得自己‘不如别人有条理’？", d: 2 },
-            { t: "你是否经常因为‘过度投入’某件事而忘记了吃饭、喝水或社交？", d: 0 },
-            { t: "在深度交谈中，你是否经常忘记自己原本想表达的核心论点？", d: 0 },
-            { t: "你是否经常感到一种莫名的紧迫感，却不知道具体在焦躁什么？", d: 2 },
-            { t: "你是否发现自己极难建立并维持一种常规的生活习惯（如早睡）？", d: 1 },
-            { t: "你是否因为生活的一团乱麻而感到心情持续低落或绝望？", d: 2 },
-            { t: "在处理财务单据或枯燥数据时，你会感到大脑‘关机’想逃避吗？", d: 1 },
-            { t: "在公共场合，你是否会因为反应过快而表现出一些冲动行为？", d: 3 },
-            { t: "你是否发现自己很难处理没有‘即时反馈’的长线目标？", d: 1 },
-            { t: "你是否经常感到大脑处于‘雾蒙蒙’的状态，处理信息变得迟钝？", d: 0 },
-            { t: "你是否经常发现自己很难预估完成一项任务具体需要的时间？", d: 1 },
-            { t: "你是否经常因为‘想做的事太多’而导致最后一件都没做成？", d: 1 },
-            { t: "你是否发现在安静阅读时，你的眼睛在动但大脑已停止摄取信息？", d: 0 },
-            { t: "你是否经常感到极度疲劳，源于你需要用力克制自己的多动？", d: 3 },
-            { t: "你是否觉得自己的情绪很容易被伴侣的一个小负评点燃？", d: 2 },
-            { t: "你是否经常感到生活在‘失控’边缘，渴望找到一个支点？", d: 2 }
+            { t: "你是否经常在别人还没说完话时，就忍不住插嘴？", d: 3 },
+            { t: "你是否经常感到大脑里像有很多个频道在同时播放？", d: 0 },
+            { t: "你是否经常通过购买新东西来缓解无聊感？", d: 3 },
+            { t: "你是否发现自己很难记住刚才读过的这一行文字的内容？", d: 0 },
+            { t: "你是否经常在截止日期前几小时才爆发出惊人的专注力？", d: 1 },
+            { t: "你是否经常感到自尊心受挫，觉得自己不如别人有条理？", d: 2 },
+            { t: "你是否经常因为‘过度投入’某件事而忘记吃饭或睡觉？", d: 0 },
+            { t: "在对话中，你是否经常忘记自己原本想说什么？", d: 0 },
+            { t: "你是否经常感到一种莫名的‘紧迫感’？", d: 2 },
+            { t: "你是否发现自己极难建立规律的生活习惯？", d: 1 },
+            { t: "你是否因为生活的一团乱麻而感到心情持续低落？", d: 2 },
+            { t: "在处理财务单据或法律文件时，你会大脑‘关机’吗？", d: 1 },
+            { t: "在公共场合，你是否会因为反应过快而表现出轻微冲动？", d: 3 },
+            { t: "你是否发现自己很难处理没有‘即时反馈’的长目标？", d: 1 },
+            { t: "你是否经常感到大脑处于‘雾蒙蒙’的状态，反应变慢？", d: 0 },
+            { t: "你是否发现自己很难预估完成一项任务具体需要多久？", d: 1 },
+            { t: "你是否因为‘想做的事太多’而导致最后一件都没做？", d: 1 },
+            { t: "你是否发现在安静阅读时，你的眼睛在动但脑子没动？", d: 0 },
+            { t: "你是否经常感到极度疲劳，源于用力克制自己的多动？", d: 3 },
+            { t: "你是否觉得自己的情绪很容易被伴侣的一个小动作点燃？", d: 2 },
+            { t: "你是否经常感到生活在‘失控’边缘，急需支点？", d: 2 }
         ];
 
         let idx = 0; let scores = {0:0, 1:0, 2:0, 3:0};
@@ -236,32 +267,38 @@
             const total = Object.values(scores).reduce((a,b)=>a+b, 0);
             document.getElementById('total-score').innerText = total;
 
+            // 写入四维度得分
+            document.getElementById('s0').innerText = scores[0];
+            document.getElementById('s1').innerText = scores[1];
+            document.getElementById('s2').innerText = scores[2];
+            document.getElementById('s3').innerText = scores[3];
+
             let level = total <= 40 ? 0 : (total <= 80 ? 1 : (total <= 120 ? 2 : 3));
             document.getElementById(`row-${level}`).classList.add('row-active');
-            const tags = ["思维稳健型", "波动平衡型", "核心活跃型", "高度爆发型"];
+            const tags = ["稳健型 · 低度风险", "波动型 · 中度风险", "活跃型 · 典型倾向", "爆发型 · 建议评估"];
             document.getElementById('result-tag').innerText = tags[level];
 
-            // 深度报告逻辑库 (商业话术增强)
+            // 深度建议逻辑库
             const db = [
                 { 
-                    interp: "你的‘额叶指挥官’运作极其精准。大脑前额叶具备极佳的抑制控制能力，能够自动过滤 90% 的无效背景噪音。这让你在压力下依然能维持逻辑的一致性。",
-                    action: "<ul><li>继续深化目前的‘秩序惯性’。</li><li>尝试探索高难度的‘心流’任务，你的认知资源非常适合处理复杂系统。</li></ul>",
-                    relation: "你在关系中是极其稳定的‘定海神针’。但猪八吉提醒：不要用你的有序去苛求对方的‘失序’，理解多样性的大脑运作模式是深度爱的前提。"
+                    interp: "你的‘额叶指挥官’运作极佳。大脑前额叶具备优异的抑制控制能力，能有效隔绝 90% 的无效噪音。你的思维逻辑严密且稳定。",
+                    action: "<ul><li>继续维持目前的秩序感。</li><li>尝试进入‘深度心流’，你的认知资源非常适合处理高复杂度的长线项目。</li></ul>",
+                    relation: "你在关系中是绝对的基石。猪八吉提醒你：不要用你的‘高效’去苛责伴侣的‘失序’，多元认知是关系滋养的前提。"
                 },
                 { 
-                    interp: "你的思维处于‘敏锐波动’态。大脑具备极高的灵活性，但<span class='term-highlight'>多巴胺基准值</span>可能略低，导致你在处理琐碎行政事务时容易产生‘认知疲劳’。",
-                    action: "<ul><li>使用<span class='term-highlight'>外部大脑法</span>：不要内耗记忆力，将所有计划外化到物理清单上。</li><li>建立‘启动仪式’：通过特定的气味或音乐开启工作状态。</li></ul>",
-                    relation: "在关系中，你容易因为‘答应的事没做’引发摩擦。这通常不是因为没爱，而是因为执行环节的‘短路’。建立‘即时确认’机制对你们至关重要。"
+                    interp: "你的思维极其敏锐，但容易出现‘多线过载’。大脑像是一台后台程序运行过多的设备，虽然反应快，但在处理琐碎行政事务时损耗极快。",
+                    action: "<ul><li><span class='term'>外部大脑法</span>：不要信任短时记忆，将所有计划外化到物理清单或日历中。</li><li>启动仪式：通过固定音乐或气味进入专注状态。</li></ul>",
+                    relation: "你容易因为‘答应的事没做’引发冲突。这常是因为执行环节的‘短路’而非没爱。建立‘即时同步’机制是核心。"
                 },
                 { 
-                    interp: "你属于典型的 ADHD 核心活跃群体。你的大脑里住着一只永不停歇的‘创意猴子’。前额叶的‘过滤器’功能较弱，这让你极具创造力，但也让你在处理‘长线低反馈’任务时极其痛苦。你可能存在明显的<span class='term-highlight'>工作记忆瓶颈</span>。",
-                    action: "<ul><li><span class='term-highlight'>身体倍增（Body Doubling）</span>：寻找伙伴在同一物理空间工作，利用外部压力维持专注。</li><li>视觉化环境：使用透明收纳盒，做到‘看见即存在’，对抗‘物体恒常性缺失’。</li></ul>",
-                    relation: "你可能深受<span class='term-highlight'>拒绝敏感（RSD）</span>困扰，伴侣的一点小不满会被你放大为毁灭性的负评。请记住：这是边缘系统过度激活的表现，深呼吸 5 秒，给理智脑一点回归的时间。"
+                    interp: "你属于典型的 ADHD 活跃人群。大脑里住着一只永不停歇的‘创意猴子’。前额叶‘过滤网’较弱，让你极具发散性思维，但也让你在处理‘长线低反馈’任务时极其痛苦。你正面临明显的<span class='term'>工作记忆瓶颈</span>。",
+                    action: "<ul><li><span class='term'>身体倍增（Body Doubling）</span>：寻找伙伴共同工作，利用‘外部视线’锚定专注力。</li><li>视觉化环境：使用透明收纳盒，做到‘看见即存在’。</li></ul>",
+                    relation: "你可能深受<span class='term'>拒绝敏感（RSD）</span>困扰，伴侣的一点小不满会被你放大为毁灭性打击。请记住：这是边缘系统过载，并非由于你不够好。"
                 },
                 { 
-                    interp: "你的大脑处于长期‘超级风暴’中。神经元的电信号传递极其迅速且发散。执行功能的严重赤字并非由于你的性格懒散，而是因为神经递质的重摄取机制过于活跃。你常感到的‘失控感’是身体在向你发出求救信号。",
-                    action: "<ul><li>强烈建议寻求专业医疗支持进行系统评估。</li><li>建立‘视觉提示墙’：用巨大的彩色标签覆盖你的生活动线。</li><li>接纳自己的‘非线性’，不再强行模仿普通人的生活方式。</li></ul>",
-                    relation: "生活中的混乱常引发关系中的权力失衡。寻求伴侣作为‘外部支持者’而非‘监工’。加入猪八吉疗愈社群，在同频群体的共鸣中找回自尊感。"
+                    interp: "大脑处于长期‘超级风暴’中。神经递质的重摄取机制过于活跃。执行功能的严重赤字并非由于你的性格懒散，而是神经发育的独特表现。你常感到的失控感是身体的求救信号。",
+                    action: "<ul><li>强烈建议寻求专业心理评估与辅助。</li><li>接纳自己的‘非线性’，建立‘视觉提示墙’。</li><li>寻求伴侣的‘外部支持系统’而非让他们成为监工。</li></ul>",
+                    relation: "加入猪八吉疗愈社群，在同频群体的共鸣中找回自尊感。关系中寻求‘教练式’伴侣的支持模式。"
                 }
             ];
 
@@ -270,7 +307,7 @@
             document.getElementById('action-deep').innerHTML = cur.action;
             document.getElementById('relation-deep').innerHTML = cur.relation;
 
-            // 强制渲染雷达图
+            // 绘制雷达图
             setTimeout(() => {
                 const ctx = document.getElementById('radarChart').getContext('2d');
                 new Chart(ctx, {
