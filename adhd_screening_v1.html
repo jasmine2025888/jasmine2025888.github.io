@@ -3,241 +3,248 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>猪八吉爱媳妇 | ADHD深度探索</title>
+    <title>猪八吉爱媳妇 | 中国式亲密关系研究所</title>
     <style>
         :root {
-            /* 猪八吉清新绿 & 燕麦系高级色盘 */
-            --bg-oatmeal: #F8F5F2;    /* 背景：燕麦色 */
-            --card-pure: #FFFFFF;     /* 卡片：纯白 */
-            --fresh-green: #A7D7A9;   /* 强调：清新嫩绿 (更亮更透) */
-            --light-green: #F0F7F0;   /* 浅绿：用于标签背景 */
-            --text-slate: #4A4543;    /* 文字：暖石灰 */
-            --text-sub: #A29C98;      /* 辅助：淡泥色 */
-            --btn-cream: #FDFBFA;     /* 选项：奶油白 */
-            --diffused-shadow: 0 25px 50px rgba(167, 215, 169, 0.1); /* 带绿调的柔和阴影 */
+            /* 猪八吉“轻氧大地色”色盘 */
+            --bg-oatmeal: #F8F5F2;    /* 亚麻燕麦 */
+            --card-pure: #FFFFFF;     /* 极简纯白 */
+            --fresh-green: #A7D7A9;   /* 清新嫩绿 */
+            --light-green: #F3F7F3;   /* 呼吸浅绿 */
+            --text-main: #625D59;     /* 烟褐色 - 核心文字，轻盈明亮 */
+            --text-light: #B5AFA9;    /* 砂砾灰 - 辅助说明 */
+            --shadow-soft: 0 30px 60px rgba(107, 84, 70, 0.03); /* 极致弥散阴影 */
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
         body {
-            font-family: "Optima", "PingFang SC", "Hiragino Sans GB", sans-serif;
+            font-family: "Optima", "PingFang SC", "Hiragino Sans GB", "Heiti SC", sans-serif;
             background-color: var(--bg-oatmeal);
-            color: var(--text-slate);
+            color: var(--text-main);
             margin: 0;
             display: flex;
             flex-direction: column;
             min-height: 100vh;
-            line-height: 2.0;
+            line-height: 2.2; /* 进一步拉开行高，增加透明度 */
+            -webkit-font-smoothing: antialiased;
         }
 
-        /* 顶部品牌区 */
+        /* 顶部品牌区 - 极致简约 */
         .brand-header {
-            padding: 40px 20px 20px;
+            padding: 50px 20px 30px;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 15px;
+            gap: 12px;
         }
         .baji-logo {
-            width: 46px; height: 46px; border-radius: 14px;
+            width: 42px; height: 42px; border-radius: 14px;
             overflow: hidden; background: #FFF;
-            box-shadow: 0 8px 20px rgba(167, 215, 169, 0.15);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.02);
         }
         .baji-logo img { width: 100%; height: 100%; object-fit: cover; }
+        
         .brand-info h1 { 
-            font-size: 1.35rem; margin: 0; 
-            letter-spacing: 2px; font-weight: 500;
-            color: var(--text-slate);
+            font-size: 1.25rem; margin: 0; 
+            letter-spacing: 3px; font-weight: 500;
+            color: var(--text-main);
         }
         .brand-info p { 
-            font-size: 0.75rem; margin: 0; 
-            color: var(--text-sub); letter-spacing: 3px;
+            font-size: 0.65rem; margin: 2px 0 0 0; 
+            color: var(--text-light); letter-spacing: 2px;
+            text-transform: uppercase;
         }
 
         .container {
             flex: 1; width: 100%; max-width: 540px;
-            margin: 0 auto; padding: 10px 24px 80px;
+            margin: 0 auto; padding: 0 24px 100px;
         }
 
-        /* 无边框卡片设计 */
+        /* 轻量化卡片 */
         .card {
             background: var(--card-pure);
-            padding: 55px 40px;
-            border-radius: 35px;
-            box-shadow: var(--diffused-shadow);
+            padding: 60px 45px;
+            border-radius: 40px;
+            box-shadow: var(--shadow-soft);
             display: none;
-            transition: all 0.6s ease;
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        .fade-in { display: block; animation: smoothReveal 0.8s forwards; }
-        @keyframes smoothReveal {
-            from { opacity: 0; transform: translateY(15px); }
+        .fade-in { display: block; animation: smoothSlideIn 0.8s forwards; }
+        @keyframes smoothSlideIn {
+            from { opacity: 0; transform: translateY(12px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* 封面页内容 */
+        /* 封面 */
         #start-page { text-align: center; }
-        .quote-text {
-            font-size: 0.9rem; color: var(--text-sub);
-            margin: 45px 0; font-style: italic; letter-spacing: 1px;
-            padding: 0 20px; border-left: 1px solid var(--fresh-green); border-right: 1px solid var(--fresh-green);
+        .main-title { 
+            font-size: 1.6rem; font-weight: 500; 
+            color: var(--text-main); margin-bottom: 25px; 
+            letter-spacing: 1px;
         }
-        .main-title { font-size: 1.7rem; font-weight: 600; margin-bottom: 20px; color: var(--text-slate); }
+        .quote-box {
+            font-size: 0.85rem; color: var(--text-light);
+            margin: 45px 0; padding: 0 30px;
+            line-height: 2.2; position: relative;
+        }
 
-        /* 答题区核心交互 */
-        .q-header { margin-bottom: 50px; }
+        /* 进度条 - 极细设计 */
+        .q-header { margin-bottom: 60px; }
         .q-num { 
-            font-size: 0.8rem; color: var(--fresh-green); 
-            font-weight: 600; letter-spacing: 2px;
+            font-size: 0.7rem; color: var(--fresh-green); 
+            font-weight: 600; letter-spacing: 3px;
             margin-bottom: 12px; display: block;
         }
-        .progress-track { width: 100%; height: 4px; background: #F0EEEA; border-radius: 2px; }
-        #progress-fill { height: 100%; background: var(--fresh-green); width: 0%; transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
+        .progress-track { width: 100%; height: 2px; background: #F1EDEA; border-radius: 1px; }
+        #progress-fill { height: 100%; background: var(--fresh-green); width: 0%; transition: width 0.8s ease; }
         
-        .q-text { font-size: 1.35rem; font-weight: 600; margin-bottom: 50px; min-height: 100px; color: var(--text-slate); }
+        .q-text { 
+            font-size: 1.35rem; font-weight: 500; 
+            margin-bottom: 50px; min-height: 110px;
+            color: var(--text-main); letter-spacing: 0.5px;
+        }
 
-        .options-list { display: flex; flex-direction: column; gap: 16px; }
-        .option-pill {
-            width: 100%; padding: 22px 30px;
-            border-radius: 22px; background: var(--btn-cream);
+        /* 选项列表 - 无重感设计 */
+        .options-list { display: flex; flex-direction: column; gap: 14px; }
+        .option-item {
+            width: 100%; padding: 20px 30px;
+            border-radius: 20px; background: #FDFBFA;
             cursor: pointer; display: flex;
             justify-content: space-between; align-items: center;
-            transition: all 0.3s ease;
-            color: var(--text-slate);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.01);
+            transition: all 0.4s ease;
+            color: var(--text-main); font-size: 1rem;
         }
-        .option-pill:hover { 
+        .option-item:hover { 
             background: #FFF; 
-            box-shadow: 0 12px 30px rgba(167, 215, 169, 0.2);
-            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(167, 215, 169, 0.12);
+            transform: scale(1.01);
             color: var(--fresh-green);
         }
-        .score-tag { font-size: 0.7rem; color: var(--text-sub); font-weight: 400; }
+        .score-hint { font-size: 0.7rem; color: var(--text-light); opacity: 0.5; }
 
         /* 结果页 */
-        .res-header { text-align: center; margin-bottom: 40px; }
-        .score-big { font-size: 4.8rem; font-weight: 300; color: var(--text-slate); margin: 5px 0; line-height: 1; }
+        .res-header { text-align: center; margin-bottom: 50px; }
+        .score-val { font-size: 5rem; font-weight: 200; color: var(--text-main); line-height: 1; margin: 15px 0; }
         .res-badge { 
-            display: inline-block; padding: 6px 22px; 
+            display: inline-block; padding: 5px 22px; 
             background: var(--light-green); color: var(--fresh-green); 
-            border-radius: 50px; font-size: 0.8rem; font-weight: 600; letter-spacing: 1px;
+            border-radius: 50px; font-size: 0.75rem; font-weight: 600; letter-spacing: 2px;
         }
 
-        .baji-box {
-            background: #F9FAF9; /* 极浅绿调背景 */
-            padding: 35px; border-radius: 28px;
-            margin: 35px 0; line-height: 2.1;
-            font-size: 1rem; color: var(--text-slate);
-            box-shadow: inset 0 2px 10px rgba(0,0,0,0.01);
+        .advice-box {
+            background: #FAFAF9;
+            padding: 35px; border-radius: 30px;
+            margin: 40px 0; line-height: 2.2;
+            font-size: 0.95rem; color: var(--text-main);
+            border: 1px solid #F3F1ED;
         }
-        .baji-box h4 { margin: 0 0 12px 0; color: var(--fresh-green); font-size: 1.1rem; }
 
-        /* 生态模块 */
-        .res-card { margin-top: 55px; border-top: 1px solid #F0EEEA; padding-top: 40px; }
-        .res-item {
+        /* 导流模块 - 现代卡片 */
+        .res-footer { margin-top: 60px; padding-top: 50px; border-top: 1px solid #F1EDEA; }
+        .eco-item {
             display: flex; align-items: center; gap: 20px;
-            background: white; padding: 25px; border-radius: 26px;
+            background: white; padding: 25px; border-radius: 24px;
             margin-bottom: 20px; text-decoration: none; color: inherit;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.02);
-            transition: all 0.3s;
+            transition: all 0.3s; box-shadow: 0 4px 15px rgba(0,0,0,0.01);
         }
-        .res-item:hover { transform: translateY(-4px); box-shadow: 0 15px 40px rgba(167, 215, 169, 0.15); }
-        .res-icon { font-size: 1.5rem; width: 54px; height: 54px; background: var(--light-green); border-radius: 18px; display: flex; align-items: center; justify-content: center; color: var(--fresh-green); }
-        .res-txt h4 { margin: 0 0 4px; color: var(--fresh-green); font-size: 1.05rem; font-weight: 600; }
-        .res-txt p { margin: 0; font-size: 0.8rem; color: var(--text-sub); }
+        .eco-item:hover { transform: translateY(-3px); box-shadow: 0 15px 45px rgba(0,0,0,0.03); }
+        .eco-icon { font-size: 1.5rem; width: 52px; height: 52px; background: var(--light-green); border-radius: 16px; display: flex; align-items: center; justify-content: center; }
+        .eco-txt h4 { margin: 0 0 4px; color: var(--text-main); font-size: 1rem; font-weight: 500; }
+        .eco-txt p { margin: 0; font-size: 0.75rem; color: var(--text-light); }
 
-        .btn-fresh {
+        .btn-green {
             background: var(--fresh-green);
             color: #FFF; border: none; padding: 22px; border-radius: 50px;
-            font-size: 1.05rem; letter-spacing: 4px; font-weight: 600; cursor: pointer; width: 100%;
-            transition: all 0.4s; box-shadow: 0 12px 35px rgba(167, 215, 169, 0.3);
+            font-size: 1rem; letter-spacing: 5px; font-weight: 500; cursor: pointer; width: 100%;
+            transition: all 0.4s; box-shadow: 0 15px 40px rgba(167, 215, 169, 0.25);
         }
-        .btn-fresh:hover { transform: scale(1.02); box-shadow: 0 15px 45px rgba(167, 215, 169, 0.4); }
+        .btn-green:hover { transform: translateY(-2px); opacity: 0.9; }
 
-        .qr-area { text-align: center; margin-top: 60px; }
-        .qr-placeholder { 
-            width: 150px; height: 150px; background: #FFF; 
-            margin: 25px auto; border-radius: 28px; 
+        .qr-section { text-align: center; margin-top: 60px; }
+        .qr-frame { 
+            width: 140px; height: 140px; background: #FFF; 
+            margin: 25px auto; border-radius: 24px; 
             display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 15px 45px rgba(0,0,0,0.04); overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.02);
         }
-        .qr-placeholder img { width: 85%; filter: grayscale(1); opacity: 0.4; }
     </style>
 </head>
 <body>
 
     <header class="brand-header">
         <div class="baji-logo">
-            <img src="https://jasmine2025888.github.io/love-language-translator/assets/logo.png" alt="猪八吉" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 fill=%22%23F0F7F0%22/><text y=%22.75em%22 x=%2250%25%22 text-anchor=%22middle%22 font-size=%2260%22>🐷</text></svg>'">
+            <img src="https://jasmine2025888.github.io/love-language-translator/assets/logo.png" alt="猪八吉" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 fill=%22%23F3F7F3%22/><text y=%22.75em%22 x=%2250%25%22 text-anchor=%22middle%22 font-size=%2260%22>🐷</text></svg>'">
         </div>
         <div class="brand-info">
             <h1>猪八吉爱媳妇</h1>
-            <p>中国式亲密关系研究所</p>
+            <p>Practical Relationship Lab</p>
         </div>
     </header>
 
     <div class="container">
-        <!-- 开始页 -->
+        <!-- 封面 -->
         <div class="card fade-in" id="start-page">
-            <h2 class="main-title">ADHD多维度深度筛查量表</h2>
-            <div class="quote-text">
+            <h2 class="main-title">ADHD 多维度深度筛查量表</h2>
+            <div class="quote-box">
                 “专注中国式亲密关系，提供实用、接地气的情感成长工具。”
             </div>
-            <p style="font-size: 0.9rem; color: var(--text-sub); text-align: justify; margin-bottom: 55px;">
-                本量表由「猪八吉爱媳妇」研究所基于 ASRS 临床标准优化。我们相信，每一个独特的灵魂都值得被精准看见。这不仅是一次测试，更是一次温柔的自我发现。
+            <p style="font-size: 0.85rem; color: var(--text-light); margin-bottom: 50px; padding: 0 10px;">
+                本量表由「猪八吉爱媳妇」研究所基于 ASRS 临床标准优化。请在一个安静的时刻开始，这不仅是一次测试，更是一次温柔的自我发现。
             </p>
-            <button class="btn-fresh" onclick="startQuiz()">开启深度探索</button>
+            <button class="btn-green" onclick="startQuiz()">开启深度探索</button>
         </div>
 
-        <!-- 答题页 -->
+        <!-- 答题 -->
         <div class="card" id="quiz-page">
             <div class="q-header">
-                <span class="q-num" id="q-label">第 01 题</span>
+                <span class="q-num" id="q-label">STEP 01 / 40</span>
                 <div class="progress-track"><div id="progress-fill"></div></div>
             </div>
-            <div class="q-text" id="q-text">加载中...</div>
+            <div class="q-text" id="q-text">正在准备探索题目...</div>
             <div class="options-list" id="options-box"></div>
         </div>
 
-        <!-- 结果页 -->
+        <!-- 结果 -->
         <div class="card" id="result-page">
             <div class="res-header">
                 <span class="res-badge">测试报告报告 · REPORT</span>
-                <div class="score-big" id="total-score">0</div>
-                <p id="result-tag" style="letter-spacing: 2px; font-weight: 600; color: var(--fresh-green);"></p>
+                <div class="score-val" id="total-score">0</div>
+                <p id="result-tag" style="letter-spacing: 2px; font-weight: 500; font-size: 0.95rem;"></p>
             </div>
 
-            <div class="baji-box">
-                <h4>猪八吉的深度解析：</h4>
-                <div id="baji-advice"></div>
+            <div class="advice-box">
+                <div style="font-weight: 600; margin-bottom: 12px; color: var(--fresh-green);">猪八吉的深度解析：</div>
+                <div id="baji-advice" style="color: var(--text-main);"></div>
             </div>
 
-            <div class="res-card">
-                <a href="#" class="res-item">
-                    <div class="res-icon">📖</div>
-                    <div class="res-txt">
+            <div class="res-footer">
+                <a href="#" class="eco-item">
+                    <div class="eco-icon">📖</div>
+                    <div class="eco-txt">
                         <h4>《猪八吉爱媳妇亲密关系手册》</h4>
                         <p>将认知转化为行动的系统指南</p>
                     </div>
                 </a>
-                <a href="#" class="res-item">
-                    <div class="res-icon">💬</div>
-                    <div class="res-txt">
+                <a href="#" class="eco-item">
+                    <div class="eco-icon">💬</div>
+                    <div class="eco-txt">
                         <h4>猪八吉疗愈社群</h4>
                         <p>在这里，遇见同频的成长伙伴</p>
                     </div>
                 </a>
             </div>
 
-            <div class="qr-area">
-                <p style="font-size: 0.85rem; color: var(--text-sub); font-weight: 500;">添加猪八吉 · 领取深度分析建议</p>
-                <div class="qr-placeholder">
-                    <img src="your-qr-code.png" alt="微信二维码">
+            <div class="qr-section">
+                <p style="font-size: 0.8rem; color: var(--text-light); letter-spacing: 1px;">添加猪八吉 · 领取深度分析建议</p>
+                <div class="qr-frame">
+                    <img src="your-qr-code.png" alt="微信二维码" style="width:80%; opacity:0.3;">
                 </div>
-                <p style="font-size: 0.75rem; color: var(--text-sub); margin-top: 10px;">小红书 / 微信：猪八吉爱媳妇</p>
+                <p style="font-size: 0.7rem; color: var(--text-light);">小红书 / 微信：猪八吉爱媳妇</p>
             </div>
 
-            <button class="btn-fresh" onclick="location.reload()" style="margin-top: 55px; background: transparent; color: var(--text-sub); box-shadow: none; font-weight: 400; letter-spacing: 1px;">重新测试</button>
+            <button class="btn-green" onclick="location.reload()" style="margin-top: 55px; background: transparent; color: var(--text-light); box-shadow: none; letter-spacing: 2px; font-weight: 400;">重新测试</button>
         </div>
     </div>
 
@@ -290,7 +297,8 @@
 
         function startQuiz() {
             document.getElementById('start-page').style.display = 'none';
-            document.getElementById('quiz-page').classList.add('fade-in');
+            const quizPage = document.getElementById('quiz-page');
+            quizPage.classList.add('fade-in');
             render();
         }
 
@@ -299,18 +307,19 @@
             const qT = document.getElementById('q-text');
             qT.style.opacity = 0;
             setTimeout(() => { 
-                qT.innerText = q.t; qT.style.opacity = 1; 
-            }, 200);
+                qT.innerText = q.t; 
+                qT.style.opacity = 1; 
+            }, 180);
 
-            document.getElementById('q-label').innerText = `第 ${String(cur + 1).padStart(2, '0')} 题`;
+            document.getElementById('q-label').innerText = `STEP ${String(cur + 1).padStart(2, '0')} / 40`;
             document.getElementById('progress-fill').style.width = `${((cur + 1) / 40) * 100}%`;
 
             const box = document.getElementById('options-box');
             box.innerHTML = '';
             labels.forEach((label, s) => {
                 const d = document.createElement('div');
-                d.className = 'option-pill';
-                d.innerHTML = `<span>${label}</span><span class="score-tag">+${s}分</span>`;
+                d.className = 'option-item';
+                d.innerHTML = `<span>${label}</span><span class="score-hint">+${s}分</span>`;
                 d.onclick = () => { 
                     score += s; 
                     if(cur < 39){ cur++; render(); } else { finish(); } 
@@ -321,23 +330,24 @@
 
         function finish() {
             document.getElementById('quiz-page').style.display = 'none';
-            document.getElementById('result-page').classList.add('fade-in');
+            const resultPage = document.getElementById('result-page');
+            resultPage.classList.add('fade-in');
             document.getElementById('total-score').innerText = score;
 
-            let t = ""; let a = "";
+            let tag = ""; let advice = "";
             if (score <= 50) {
-                t = "低度倾向 · 思维稳健";
-                a = "你的思维极具条理性。这种‘定力’是中国式亲密关系中非常宝贵的特质，能为伴侣带来极大的安全感。建议继续关注我们的成长手册，将这份定力转化为深度的情感滋养力。";
+                tag = "低度倾向 · 思维稳健";
+                advice = "你的思维极具条理性。这种‘定力’是中国式亲密关系中非常宝贵的特质，能为伴侣带来极大的安全感。建议继续关注我们的成长手册，将这份定力转化为深度的情感滋养力。";
             } else if (score <= 100) {
-                t = "中度倾向 · 能量分散";
-                a = "你的思维活跃但有时会陷入‘精力内耗’。这种倾向在亲密关系中可能表现为：答应的事忘记做、沟通时容易分心。猪八吉建议你不要自责，试着使用我们手册中的‘接地气’管理工具，和伴侣一起建立更稳定的生活节奏。";
+                tag = "中度倾向 · 能量分散";
+                advice = "你的思维活跃但有时会陷入‘精力内耗’。这种倾向在亲密关系中可能表现为：答应的事忘记做、沟通时容易分心。猪八吉建议你不要自责，试着使用我们手册中的‘接地气’管理工具，和伴侣一起建立更稳定的生活节奏。";
             } else {
-                t = "高度倾向 · 建议评估";
-                a = "你的大脑里可能正进行着一场永不停歇的‘风暴’。这让你极具创意和热情，但也可能让你在琐碎的生活中感到筋疲力尽。猪八吉建议你寻求专业评估，同时加入我们的疗愈社群。在这里，我们会陪你一起梳理那些‘乱如麻’的情绪，找回掌控感。";
+                tag = "高度倾向 · 建议评估";
+                advice = "你的大脑里可能正进行着一场永不停歇的‘风暴’。这让你极具创意和热情，但也可能让你在琐碎的生活中感到筋疲力尽。猪八吉建议你寻求专业评估，同时加入我们的疗愈社群。在这里，我们会陪你一起梳理那些‘乱如麻’的情绪，找回掌控感。";
             }
 
-            document.getElementById('result-tag').innerText = t;
-            document.getElementById('baji-advice').innerText = a;
+            document.getElementById('result-tag').innerText = tag;
+            document.getElementById('baji-advice').innerText = advice;
         }
     </script>
 </body>
