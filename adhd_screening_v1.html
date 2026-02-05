@@ -6,15 +6,15 @@
     <title>猪八吉爱媳妇 | ADHD深度探索</title>
     <style>
         :root {
-            /* 鼠尾草绿 & 燕麦系高级色盘 */
+            /* 猪八吉清新绿 & 燕麦系高级色盘 */
             --bg-oatmeal: #F8F5F2;    /* 背景：燕麦色 */
             --card-pure: #FFFFFF;     /* 卡片：纯白 */
-            --sage-green: #9EA89E;    /* 强调：鼠尾草绿 */
-            --text-slate: #4A4543;    /* 文字：暖石灰 (深而不沉) */
+            --fresh-green: #A7D7A9;   /* 强调：清新嫩绿 (更亮更透) */
+            --light-green: #F0F7F0;   /* 浅绿：用于标签背景 */
+            --text-slate: #4A4543;    /* 文字：暖石灰 */
             --text-sub: #A29C98;      /* 辅助：淡泥色 */
             --btn-cream: #FDFBFA;     /* 选项：奶油白 */
-            --accent-sand: #D9A08B;   /* 辅色：陶土沙 */
-            --diffused-shadow: 0 20px 60px rgba(74, 69, 67, 0.05); /* 弥散阴影 */
+            --diffused-shadow: 0 25px 50px rgba(167, 215, 169, 0.1); /* 带绿调的柔和阴影 */
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
@@ -27,10 +27,10 @@
             display: flex;
             flex-direction: column;
             min-height: 100vh;
-            line-height: 2; /* 增加行高，提升呼吸感 */
+            line-height: 2.0;
         }
 
-        /* 顶部品牌区 - 悬浮透明感 */
+        /* 顶部品牌区 */
         .brand-header {
             padding: 40px 20px 20px;
             display: flex;
@@ -39,14 +39,15 @@
             gap: 15px;
         }
         .baji-logo {
-            width: 44px; height: 44px; border-radius: 16px;
+            width: 46px; height: 46px; border-radius: 14px;
             overflow: hidden; background: #FFF;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+            box-shadow: 0 8px 20px rgba(167, 215, 169, 0.15);
         }
         .baji-logo img { width: 100%; height: 100%; object-fit: cover; }
         .brand-info h1 { 
-            font-size: 1.3rem; margin: 0; 
+            font-size: 1.35rem; margin: 0; 
             letter-spacing: 2px; font-weight: 500;
+            color: var(--text-slate);
         }
         .brand-info p { 
             font-size: 0.75rem; margin: 0; 
@@ -61,8 +62,8 @@
         /* 无边框卡片设计 */
         .card {
             background: var(--card-pure);
-            padding: 50px 40px;
-            border-radius: 32px;
+            padding: 55px 40px;
+            border-radius: 35px;
             box-shadow: var(--diffused-shadow);
             display: none;
             transition: all 0.6s ease;
@@ -70,7 +71,7 @@
 
         .fade-in { display: block; animation: smoothReveal 0.8s forwards; }
         @keyframes smoothReveal {
-            from { opacity: 0; transform: translateY(10px); }
+            from { opacity: 0; transform: translateY(15px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
@@ -79,95 +80,95 @@
         .quote-text {
             font-size: 0.9rem; color: var(--text-sub);
             margin: 45px 0; font-style: italic; letter-spacing: 1px;
+            padding: 0 20px; border-left: 1px solid var(--fresh-green); border-right: 1px solid var(--fresh-green);
         }
-        .main-title { font-size: 1.6rem; font-weight: 500; margin-bottom: 15px; }
+        .main-title { font-size: 1.7rem; font-weight: 600; margin-bottom: 20px; color: var(--text-slate); }
 
         /* 答题区核心交互 */
         .q-header { margin-bottom: 50px; }
         .q-num { 
-            font-size: 0.75rem; color: var(--sage-green); 
+            font-size: 0.8rem; color: var(--fresh-green); 
             font-weight: 600; letter-spacing: 2px;
-            margin-bottom: 15px; display: block;
+            margin-bottom: 12px; display: block;
         }
-        .progress-track { width: 100%; height: 3px; background: #F0EEEA; border-radius: 2px; }
-        #progress-fill { height: 100%; background: var(--sage-green); width: 0%; transition: width 0.8s ease; }
+        .progress-track { width: 100%; height: 4px; background: #F0EEEA; border-radius: 2px; }
+        #progress-fill { height: 100%; background: var(--fresh-green); width: 0%; transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1); }
         
-        .q-text { font-size: 1.3rem; font-weight: 500; margin-bottom: 45px; min-height: 90px; }
+        .q-text { font-size: 1.35rem; font-weight: 600; margin-bottom: 50px; min-height: 100px; color: var(--text-slate); }
 
         .options-list { display: flex; flex-direction: column; gap: 16px; }
         .option-pill {
             width: 100%; padding: 22px 30px;
-            border-radius: 20px; background: var(--btn-cream);
+            border-radius: 22px; background: var(--btn-cream);
             cursor: pointer; display: flex;
             justify-content: space-between; align-items: center;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            color: var(--text-slate); border: 1px solid transparent;
+            transition: all 0.3s ease;
+            color: var(--text-slate);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.01);
         }
         .option-pill:hover { 
             background: #FFF; 
-            box-shadow: 0 10px 30px rgba(158, 168, 158, 0.15);
-            transform: translateY(-2px);
-            color: var(--sage-green);
+            box-shadow: 0 12px 30px rgba(167, 215, 169, 0.2);
+            transform: translateY(-3px);
+            color: var(--fresh-green);
         }
-        .score-tag { font-size: 0.7rem; color: var(--text-sub); opacity: 0.6; }
+        .score-tag { font-size: 0.7rem; color: var(--text-sub); font-weight: 400; }
 
-        /* 结果页 - 杂志化排版 */
+        /* 结果页 */
         .res-header { text-align: center; margin-bottom: 40px; }
-        .score-big { font-size: 4.5rem; font-weight: 300; color: var(--text-slate); margin: 10px 0; }
+        .score-big { font-size: 4.8rem; font-weight: 300; color: var(--text-slate); margin: 5px 0; line-height: 1; }
         .res-badge { 
-            display: inline-block; padding: 6px 20px; 
-            background: #F2F4F2; color: var(--sage-green); 
-            border-radius: 50px; font-size: 0.8rem; font-weight: 600;
+            display: inline-block; padding: 6px 22px; 
+            background: var(--light-green); color: var(--fresh-green); 
+            border-radius: 50px; font-size: 0.8rem; font-weight: 600; letter-spacing: 1px;
         }
 
         .baji-box {
-            background: var(--bg-oatmeal);
-            padding: 35px; border-radius: 24px;
-            margin: 30px 0; line-height: 2;
-            font-size: 0.95rem; color: var(--text-slate);
-            position: relative;
+            background: #F9FAF9; /* 极浅绿调背景 */
+            padding: 35px; border-radius: 28px;
+            margin: 35px 0; line-height: 2.1;
+            font-size: 1rem; color: var(--text-slate);
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.01);
         }
-        .baji-box::before {
-            content: "“"; position: absolute; top: 10px; left: 20px;
-            font-size: 3rem; color: var(--sage-green); opacity: 0.2;
-        }
+        .baji-box h4 { margin: 0 0 12px 0; color: var(--fresh-green); font-size: 1.1rem; }
 
         /* 生态模块 */
-        .res-card { margin-top: 50px; padding-top: 40px; }
+        .res-card { margin-top: 55px; border-top: 1px solid #F0EEEA; padding-top: 40px; }
         .res-item {
             display: flex; align-items: center; gap: 20px;
-            background: white; padding: 25px; border-radius: 24px;
-            margin-bottom: 18px; text-decoration: none; color: inherit;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.02);
+            background: white; padding: 25px; border-radius: 26px;
+            margin-bottom: 20px; text-decoration: none; color: inherit;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.02);
             transition: all 0.3s;
         }
-        .res-item:hover { transform: translateY(-3px); box-shadow: var(--diffused-shadow); }
-        .res-icon { font-size: 1.5rem; width: 50px; height: 50px; background: #F8F5F2; border-radius: 15px; display: flex; align-items: center; justify-content: center; }
-        .res-txt h4 { margin: 0 0 4px; color: var(--sage-green); font-size: 1rem; }
-        .res-txt p { margin: 0; font-size: 0.75rem; color: var(--text-sub); }
+        .res-item:hover { transform: translateY(-4px); box-shadow: 0 15px 40px rgba(167, 215, 169, 0.15); }
+        .res-icon { font-size: 1.5rem; width: 54px; height: 54px; background: var(--light-green); border-radius: 18px; display: flex; align-items: center; justify-content: center; color: var(--fresh-green); }
+        .res-txt h4 { margin: 0 0 4px; color: var(--fresh-green); font-size: 1.05rem; font-weight: 600; }
+        .res-txt p { margin: 0; font-size: 0.8rem; color: var(--text-sub); }
 
-        .btn-sage {
-            background: var(--sage-green);
+        .btn-fresh {
+            background: var(--fresh-green);
             color: #FFF; border: none; padding: 22px; border-radius: 50px;
-            font-size: 1rem; letter-spacing: 4px; cursor: pointer; width: 100%;
-            transition: all 0.3s; box-shadow: 0 10px 30px rgba(158, 168, 158, 0.2);
+            font-size: 1.05rem; letter-spacing: 4px; font-weight: 600; cursor: pointer; width: 100%;
+            transition: all 0.4s; box-shadow: 0 12px 35px rgba(167, 215, 169, 0.3);
         }
-        .btn-sage:hover { opacity: 0.9; transform: scale(1.01); }
+        .btn-fresh:hover { transform: scale(1.02); box-shadow: 0 15px 45px rgba(167, 215, 169, 0.4); }
 
-        .qr-area { text-align: center; margin-top: 50px; }
+        .qr-area { text-align: center; margin-top: 60px; }
         .qr-placeholder { 
-            width: 140px; height: 140px; background: #FFF; 
-            margin: 20px auto; border-radius: 24px; 
+            width: 150px; height: 150px; background: #FFF; 
+            margin: 25px auto; border-radius: 28px; 
             display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.03); overflow: hidden;
+            box-shadow: 0 15px 45px rgba(0,0,0,0.04); overflow: hidden;
         }
+        .qr-placeholder img { width: 85%; filter: grayscale(1); opacity: 0.4; }
     </style>
 </head>
 <body>
 
     <header class="brand-header">
         <div class="baji-logo">
-            <img src="https://jasmine2025888.github.io/love-language-translator/assets/logo.png" alt="猪八吉" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 fill=%22%23F2F4F2%22/><text y=%22.75em%22 x=%2250%25%22 text-anchor=%22middle%22 font-size=%2260%22>🐷</text></svg>'">
+            <img src="https://jasmine2025888.github.io/love-language-translator/assets/logo.png" alt="猪八吉" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 fill=%22%23F0F7F0%22/><text y=%22.75em%22 x=%2250%25%22 text-anchor=%22middle%22 font-size=%2260%22>🐷</text></svg>'">
         </div>
         <div class="brand-info">
             <h1>猪八吉爱媳妇</h1>
@@ -182,10 +183,10 @@
             <div class="quote-text">
                 “专注中国式亲密关系，提供实用、接地气的情感成长工具。”
             </div>
-            <p style="font-size: 0.85rem; color: var(--text-sub); text-align: justify; margin-bottom: 50px;">
-                本量表由「猪八吉爱媳妇」研究所基于 ASRS 临床标准优化。我们相信，深度识别思维偏好是开启自我接纳与关系修复的第一步。
+            <p style="font-size: 0.9rem; color: var(--text-sub); text-align: justify; margin-bottom: 55px;">
+                本量表由「猪八吉爱媳妇」研究所基于 ASRS 临床标准优化。我们相信，每一个独特的灵魂都值得被精准看见。这不仅是一次测试，更是一次温柔的自我发现。
             </p>
-            <button class="btn-sage" onclick="startQuiz()">开启深度探索</button>
+            <button class="btn-fresh" onclick="startQuiz()">开启深度探索</button>
         </div>
 
         <!-- 答题页 -->
@@ -194,7 +195,7 @@
                 <span class="q-num" id="q-label">第 01 题</span>
                 <div class="progress-track"><div id="progress-fill"></div></div>
             </div>
-            <div class="q-text" id="q-text">Loading...</div>
+            <div class="q-text" id="q-text">加载中...</div>
             <div class="options-list" id="options-box"></div>
         </div>
 
@@ -203,11 +204,11 @@
             <div class="res-header">
                 <span class="res-badge">测试报告报告 · REPORT</span>
                 <div class="score-big" id="total-score">0</div>
-                <p id="result-tag" style="letter-spacing: 2px; font-weight: 500; color: var(--sage-green);"></p>
+                <p id="result-tag" style="letter-spacing: 2px; font-weight: 600; color: var(--fresh-green);"></p>
             </div>
 
             <div class="baji-box">
-                <div style="font-weight: 600; margin-bottom: 12px; color: var(--sage-green);">猪八吉的深度解析：</div>
+                <h4>猪八吉的深度解析：</h4>
                 <div id="baji-advice"></div>
             </div>
 
@@ -229,14 +230,14 @@
             </div>
 
             <div class="qr-area">
-                <p style="font-size: 0.8rem; color: var(--text-sub); letter-spacing: 1px;">添加猪八吉 · 领取深度分析建议</p>
+                <p style="font-size: 0.85rem; color: var(--text-sub); font-weight: 500;">添加猪八吉 · 领取深度分析建议</p>
                 <div class="qr-placeholder">
-                    <img src="your-qr-code.png" alt="微信二维码" style="width:80%; opacity:0.5;">
+                    <img src="your-qr-code.png" alt="微信二维码">
                 </div>
-                <p style="font-size: 0.7rem; color: var(--text-sub);">小红书 / 微信：猪八吉爱媳妇</p>
+                <p style="font-size: 0.75rem; color: var(--text-sub); margin-top: 10px;">小红书 / 微信：猪八吉爱媳妇</p>
             </div>
 
-            <button class="btn-sage" onclick="location.reload()" style="margin-top: 50px; background: transparent; color: var(--text-sub); box-shadow: none;">重新测试</button>
+            <button class="btn-fresh" onclick="location.reload()" style="margin-top: 55px; background: transparent; color: var(--text-sub); box-shadow: none; font-weight: 400; letter-spacing: 1px;">重新测试</button>
         </div>
     </div>
 
@@ -284,59 +285,59 @@
             { t: "你是否经常觉得生活像一团乱麻，不知从何整理？" }
         ];
 
-        const optionLabels = ["从未如此", "很少发生", "有时发生", "经常发生", "总是发生"];
-        let idx = 0; let total = 0;
+        const labels = ["从未如此", "很少发生", "有时发生", "经常发生", "总是发生"];
+        let cur = 0; let score = 0;
 
         function startQuiz() {
             document.getElementById('start-page').style.display = 'none';
-            const quizPage = document.getElementById('quiz-page');
-            quizPage.classList.add('fade-in');
-            show();
+            document.getElementById('quiz-page').classList.add('fade-in');
+            render();
         }
 
-        function show() {
-            const q = questions[idx];
+        function render() {
+            const q = questions[cur];
             const qT = document.getElementById('q-text');
             qT.style.opacity = 0;
             setTimeout(() => { 
-                qT.innerText = q.t; 
-                qT.style.opacity = 1; 
+                qT.innerText = q.t; qT.style.opacity = 1; 
             }, 200);
 
-            document.getElementById('q-label').innerText = `第 ${String(idx + 1).padStart(2, '0')} 题`;
-            document.getElementById('progress-fill').style.width = `${((idx + 1) / 40) * 100}%`;
+            document.getElementById('q-label').innerText = `第 ${String(cur + 1).padStart(2, '0')} 题`;
+            document.getElementById('progress-fill').style.width = `${((cur + 1) / 40) * 100}%`;
 
             const box = document.getElementById('options-box');
             box.innerHTML = '';
-            optionLabels.forEach((label, s) => {
+            labels.forEach((label, s) => {
                 const d = document.createElement('div');
                 d.className = 'option-pill';
                 d.innerHTML = `<span>${label}</span><span class="score-tag">+${s}分</span>`;
-                d.onclick = () => { total += s; if(idx < 39){ idx++; show(); } else { result(); } };
+                d.onclick = () => { 
+                    score += s; 
+                    if(cur < 39){ cur++; render(); } else { finish(); } 
+                };
                 box.appendChild(d);
             });
         }
 
-        function result() {
+        function finish() {
             document.getElementById('quiz-page').style.display = 'none';
-            const resultPage = document.getElementById('result-page');
-            resultPage.classList.add('fade-in');
-            document.getElementById('total-score').innerText = total;
+            document.getElementById('result-page').classList.add('fade-in');
+            document.getElementById('total-score').innerText = score;
 
-            let tag = ""; let advice = "";
-            if (total <= 50) {
-                tag = "低度倾向 · 思维稳健";
-                advice = "你的思维极具条理性。这种‘定力’是中国式亲密关系中非常宝贵的特质，能为伴侣带来极大的安全感。建议继续关注我们的成长手册，将这份定力转化为深度的情感滋养力。";
-            } else if (total <= 100) {
-                tag = "中度倾向 · 能量分散";
-                advice = "你的思维活跃但有时会陷入‘精力内耗’。这种倾向在亲密关系中可能表现为：答应的事忘记做、沟通时容易分心。猪八吉建议你不要自责，试着使用我们手册中的‘接地气’管理工具，和伴侣一起建立更稳定的生活节奏。";
+            let t = ""; let a = "";
+            if (score <= 50) {
+                t = "低度倾向 · 思维稳健";
+                a = "你的思维极具条理性。这种‘定力’是中国式亲密关系中非常宝贵的特质，能为伴侣带来极大的安全感。建议继续关注我们的成长手册，将这份定力转化为深度的情感滋养力。";
+            } else if (score <= 100) {
+                t = "中度倾向 · 能量分散";
+                a = "你的思维活跃但有时会陷入‘精力内耗’。这种倾向在亲密关系中可能表现为：答应的事忘记做、沟通时容易分心。猪八吉建议你不要自责，试着使用我们手册中的‘接地气’管理工具，和伴侣一起建立更稳定的生活节奏。";
             } else {
-                tag = "高度倾向 · 建议评估";
-                advice = "你的大脑里可能正进行着一场永不停歇的‘风暴’。这让你极具创意和热情，但也可能让你在琐碎的生活中感到筋疲力尽。猪八吉建议你寻求专业评估，同时加入我们的疗愈社群。在这里，我们会陪你一起梳理那些‘乱如麻’的情绪，找回掌控感。";
+                t = "高度倾向 · 建议评估";
+                a = "你的大脑里可能正进行着一场永不停歇的‘风暴’。这让你极具创意和热情，但也可能让你在琐碎的生活中感到筋疲力尽。猪八吉建议你寻求专业评估，同时加入我们的疗愈社群。在这里，我们会陪你一起梳理那些‘乱如麻’的情绪，找回掌控感。";
             }
 
-            document.getElementById('result-tag').innerText = tag;
-            document.getElementById('baji-advice').innerText = advice;
+            document.getElementById('result-tag').innerText = t;
+            document.getElementById('baji-advice').innerText = a;
         }
     </script>
 </body>
