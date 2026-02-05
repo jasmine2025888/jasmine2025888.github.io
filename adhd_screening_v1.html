@@ -2,291 +2,319 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>猪八吉爱媳妇 | ADHD深度筛查量表</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>猪八吉爱媳妇 | 测评中心</title>
+    <!-- 极速加载图表库 -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
     <style>
         :root {
-            --bg-oatmeal: #F5F2ED;    
-            --card-pure: #FFFFFF;     
-            --fresh-green: #A7D7A9;   
-            --light-green: #F2F6F2;   
-            --text-main: #4A4543;     
-            --text-light: #A29C98;    
-            --shadow: 0 25px 60px rgba(74, 69, 67, 0.05);
+            --bg-linen: #FAF7F2;      
+            --card-white: #FFFFFF;
+            --watermelon-red: #FF5B67; /* 醒目的西瓜红 */
+            --text-walnut: #5D524A;   
+            --text-sand: #9E8E85;     
+            --soft-shadow: 0 10px 30px rgba(255, 91, 103, 0.08);
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        
         body {
-            font-family: "Optima", "PingFang SC", "Hiragino Sans GB", sans-serif;
-            background-color: var(--bg-oatmeal);
-            color: var(--text-main);
-            margin: 0; display: flex; flex-direction: column; min-height: 100vh;
-            line-height: 2.0; -webkit-font-smoothing: antialiased;
+            font-family: -apple-system, "PingFang SC", sans-serif;
+            background-color: var(--bg-linen);
+            color: var(--text-walnut);
+            margin: 0; padding: 0;
+            overflow-x: hidden;
+            line-height: 1.5;
         }
 
+        /* 极致压缩 Header 高度 */
         .brand-header {
-            padding: 40px 24px 20px;
-            display: flex; align-items: center; justify-content: center; gap: 12px;
-            background: rgba(245, 242, 237, 0.8); backdrop-filter: blur(10px); 
-            position: sticky; top: 0; z-index: 1000;
+            padding: 15px 20px 10px;
+            display: flex; align-items: center; justify-content: center; gap: 10px;
         }
-        .baji-logo { width: 44px; height: 44px; border-radius: 14px; overflow: hidden; background: #FFF; border: 1.5px solid #F1EDEA; }
-        .brand-info h1 { font-size: 1.2rem; margin: 0; letter-spacing: 2px; font-weight: 500; }
-        .brand-info p { font-size: 0.6rem; margin: 0; color: var(--text-light); letter-spacing: 2px; }
+        .baji-logo {
+            width: 32px; height: 32px; border-radius: 50%; overflow: hidden;
+            border: 1px solid #EEE;
+        }
+        .baji-logo img { width: 100%; height: 100%; object-fit: cover; }
+        
+        .brand-info h1 { font-size: 1.1rem; margin: 0; color: var(--text-walnut); font-weight: 600; }
+        /* 研究所：变西瓜红、放大、加粗 */
+        .brand-info p { 
+            font-size: 0.85rem; margin: 0; 
+            color: var(--watermelon-red); 
+            font-weight: bold; letter-spacing: 1px;
+        }
 
-        .container { flex: 1; width: 100%; max-width: 560px; margin: 0 auto; padding: 10px 24px 100px; }
+        .container {
+            width: 100%; max-width: 500px;
+            margin: 0 auto; padding: 5px 15px 20px;
+        }
 
-        .card { background: var(--card-pure); padding: 50px 35px; border-radius: 35px; box-shadow: var(--shadow); display: none; }
-        .fade-in { display: block; animation: smoothReveal 0.8s forwards; }
-        @keyframes smoothReveal { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+        /* 压缩卡片内边距，确保一屏显示 */
+        .card {
+            background: var(--card-white);
+            padding: 25px 20px;
+            border-radius: 28px;
+            box-shadow: var(--soft-glow);
+            display: none;
+            min-height: auto;
+        }
 
-        /* 封面说明页 */
+        .fade-in { display: block; animation: smoothSlide 0.5s ease-out forwards; }
+        @keyframes smoothSlide {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* 封面压缩 */
         #start-page { text-align: center; }
-        .test-meta { display: flex; justify-content: center; gap: 20px; margin: 25px 0; }
-        .meta-item { background: var(--bg-oatmeal); padding: 10px 20px; border-radius: 15px; font-size: 0.8rem; color: var(--text-main); }
-        .instruction-box { text-align: left; background: #FAF9F8; padding: 25px; border-radius: 20px; margin: 30px 0; font-size: 0.85rem; border-left: 4px solid var(--fresh-green); }
+        .main-title { font-size: 1.3rem; margin-bottom: 10px; color: var(--text-walnut); }
+        .quote-box { font-size: 0.8rem; color: var(--text-sand); margin: 15px 0; }
 
-        /* 答题区 */
-        .q-header { margin-bottom: 50px; }
-        .q-tag { font-size: 0.75rem; color: var(--fresh-green); font-weight: 600; letter-spacing: 2px; margin-bottom: 15px; display: flex; justify-content: space-between; }
-        .progress-track { width: 100%; height: 3px; background: #F1EDEA; border-radius: 2px; }
-        #progress-fill { height: 100%; background: var(--fresh-green); width: 0%; transition: width 0.6s ease; }
-        .question-text { font-size: 1.3rem; font-weight: 500; margin-bottom: 45px; min-height: 100px; }
-        .option-item { padding: 22px 28px; border-radius: 22px; background: #FAF9F8; cursor: pointer; display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; transition: all 0.3s; }
-        .option-item:hover { background: #FFF; box-shadow: 0 15px 40px rgba(167, 215, 169, 0.15); transform: translateY(-2px); color: var(--fresh-green); }
+        /* 答题区：第x题、紧凑布局 */
+        .q-header { margin-bottom: 20px; }
+        .q-label-row { 
+            font-size: 0.85rem; color: var(--watermelon-red); 
+            margin-bottom: 8px; font-weight: bold;
+            display: flex; justify-content: space-between;
+        }
+        .bar-bg { width: 100%; height: 3px; background: #EEE; border-radius: 2px; }
+        #bar-fill { height: 100%; background: var(--watermelon-red); width: 0%; transition: width 0.3s; }
+        
+        .q-text { 
+            font-size: 1.1rem; font-weight: 600; 
+            margin-bottom: 20px; color: var(--text-walnut); 
+            min-height: 50px; line-height: 1.4;
+        }
 
-        /* 结果页对比表 */
-        .score-comparison { width: 100%; border-collapse: collapse; margin: 25px 0; font-size: 0.8rem; text-align: center; }
-        .score-comparison th { background: var(--light-green); color: var(--fresh-green); padding: 10px; border-radius: 10px 0 0 10px; }
-        .score-comparison td { border-bottom: 1px solid #F1EDEA; padding: 10px; }
-        .current-row { background: var(--light-green); font-weight: bold; border-radius: 10px; }
+        /* 选项按钮：点击变西瓜红 */
+        .options-group { display: flex; flex-direction: column; gap: 10px; }
+        .option-card {
+            width: 100%; padding: 14px 20px;
+            border: 1px solid #F0EEEA;
+            border-radius: 15px; background: #FCFAF8;
+            cursor: pointer; display: flex;
+            justify-content: space-between; align-items: center;
+            transition: all 0.2s; color: var(--text-walnut);
+            font-size: 0.95rem;
+        }
+        /* 点击时的激活状态 */
+        .option-card.active {
+            background: var(--watermelon-red) !important;
+            color: #FFF !important;
+            border-color: var(--watermelon-red);
+            transform: scale(0.98);
+        }
+        .score-hint { font-size: 0.6rem; opacity: 0.5; }
 
-        /* 深度解析 */
-        .viz-section { margin-top: 50px; border-top: 1px solid #F1EDEA; padding-top: 40px; }
-        .viz-title { font-size: 1rem; font-weight: 600; margin-bottom: 25px; display: flex; align-items: center; gap: 10px; }
-        .radar-box { width: 100%; max-width: 380px; margin: 0 auto 40px; }
-        .advice-content { line-height: 2.2; font-size: 0.95rem; text-align: justify; }
-        .advice-block { margin-bottom: 30px; }
-        .advice-subtitle { color: var(--fresh-green); font-weight: bold; border-bottom: 2px solid var(--light-green); display: inline-block; margin-bottom: 10px; }
+        /* 结果页布局 */
+        .result-header { text-align: center; margin-bottom: 20px; }
+        .score-num { font-size: 3.5rem; font-weight: bold; color: var(--watermelon-red); line-height: 1; }
+        .tag-pill { display: inline-block; padding: 4px 12px; background: #FFF5F6; color: var(--watermelon-red); border-radius: 50px; font-size: 0.75rem; margin-top: 10px; }
 
-        .btn-cta { background: var(--fresh-green); color: #FFF; border: none; padding: 22px; border-radius: 50px; font-size: 1.05rem; letter-spacing: 4px; font-weight: 600; cursor: pointer; width: 100%; box-shadow: 0 15px 40px rgba(167, 215, 169, 0.25); }
-        .eco-link { display: flex; align-items: center; gap: 18px; padding: 24px; background: #FFF; border-radius: 24px; margin-bottom: 16px; text-decoration: none; color: inherit; box-shadow: 0 4px 15px rgba(0,0,0,0.01); border: 1px solid #F1EDEA; }
+        .advice-card {
+            background: #FCFAF8; padding: 20px;
+            border-radius: 18px; margin: 20px 0;
+            line-height: 1.6; font-size: 0.9rem;
+            color: var(--text-walnut); border: 1px solid #EEE;
+        }
+
+        .btn-red {
+            background: var(--watermelon-red);
+            color: #FFF; border: none; padding: 15px; border-radius: 50px;
+            font-size: 1rem; font-weight: bold; cursor: pointer; width: 100%;
+        }
+
+        .res-item {
+            display: flex; align-items: center; gap: 12px;
+            background: white; padding: 15px; border-radius: 18px;
+            margin-bottom: 10px; text-decoration: none; color: inherit;
+            border: 1px solid #EEE;
+        }
+        .res-icon { font-size: 1.2rem; }
+        .res-info h4 { margin: 0; font-size: 0.9rem; color: var(--watermelon-red); }
+        .res-info p { margin: 0; font-size: 0.7rem; color: var(--text-sand); }
+
+        .qr-section { text-align: center; margin-top: 25px; font-size: 0.8rem; }
+        .qr-img { width: 110px; height: 110px; background: #EEE; margin: 10px auto; border-radius: 10px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
     </style>
 </head>
 <body>
 
     <header class="brand-header">
-        <div class="baji-logo"><img src="https://jasmine2025888.github.io/love-language-translator/assets/logo.png" alt="猪八吉"></div>
-        <div class="brand-info"><h1>猪八吉爱媳妇</h1><p>中国式亲密关系研究所</p></div>
+        <div class="baji-logo">
+            <img src="https://jasmine2025888.github.io/love-language-translator/assets/logo.png" alt="猪八吉">
+        </div>
+        <div class="brand-info">
+            <h1>猪八吉爱媳妇</h1>
+            <p>中国式亲密关系研究所</p>
+        </div>
     </header>
 
     <div class="container">
-        <!-- 封面说明页 -->
+        <!-- 封面 -->
         <div class="card fade-in" id="start-page">
-            <h2 style="font-size: 1.6rem; font-weight: 600; margin-bottom: 10px;">ADHD 多维度深度筛查量表</h2>
-            <div class="test-meta">
-                <div class="meta-item">⏱ 预计用时 8-12 分钟</div>
-                <div class="meta-item">📝 题目数量 40 题</div>
-            </div>
-            <div class="instruction-box">
-                <strong>测评须知：</strong><br>
-                1. 本量表基于 ASRS v1.1 临床量表优化，专注识别成人执行功能偏差。<br>
-                2. 请回顾您在<strong>过去六个月</strong>中的真实表现，凭直觉作答。<br>
-                3. 测试旨在通过科学维度拆解，为您提供更接地的自我管理建议。<br>
-                4. 请确保在一个安静、不被打扰的环境中完成探索。
-            </div>
-            <p style="font-size: 0.85rem; color: var(--text-light); text-align: justify; margin-bottom: 30px;">
-                识别特质只是第一步，系统的自我接纳与行动优化才是解决关系焦虑的终点。猪八吉将陪你一起，开启这场大脑图谱的深度探索。
+            <h2 class="main-title">ADHD多维度深度筛查量表</h2>
+            <div class="quote-box">“实用、接地气的情感成长工具”</div>
+            <p style="font-size: 0.8rem; color: var(--text-sand); margin-bottom: 25px;">
+                本量表由「猪八吉爱媳妇」研究所优化，助你深度识别思维偏好。
             </p>
-            <button class="btn-cta" onclick="startQuiz()">开启深度测评</button>
+            <button class="btn-red" onclick="startQuiz()">开启深度探索</button>
         </div>
 
-        <!-- 答题页 -->
+        <!-- 答题页：高度压缩版 -->
         <div class="card" id="quiz-page">
             <div class="q-header">
-                <div class="q-tag">
-                    <span id="q-label">STEP 01</span>
-                    <span id="q-count">01 / 40</span>
+                <div class="q-label-row">
+                    <span id="q-label">第 1 题</span>
+                    <span>1 / 40</span>
                 </div>
-                <div class="progress-track"><div id="progress-fill"></div></div>
+                <div class="bar-bg"><div id="bar-fill"></div></div>
             </div>
-            <div class="question-text" id="q-text">正在初始化题目...</div>
+            <div class="q-text" id="q-text">Loading...</div>
             <div class="options-group" id="options-box"></div>
         </div>
 
-        <!-- 结果报告页 -->
+        <!-- 结果页 -->
         <div class="card" id="result-page">
-            <div style="text-align: center; margin-bottom: 40px;">
-                <p style="font-size: 0.8rem; color: var(--text-light); margin: 0;">最终测评总分</p>
-                <div style="font-size: 5rem; font-weight: 200; line-height: 1;" id="total-score">0</div>
-                <div style="display: inline-block; padding: 6px 20px; background: var(--light-green); color: var(--fresh-green); border-radius: 50px; font-weight: 600; margin-top: 15px;" id="result-tag">--</div>
+            <div class="result-header">
+                <div class="score-num" id="total-score">0</div>
+                <div class="tag-pill" id="result-tag">--</div>
             </div>
 
-            <div class="viz-section">
-                <div class="viz-title">📊 分数对照及等级定位</div>
-                <table class="score-comparison">
-                    <tr id="row-low"><td>0 - 50分</td><td>思维稳健型</td><td>大脑运转有序，具备较强执行力</td></tr>
-                    <tr id="row-mid"><td>51 - 100分</td><td>能量分散型</td><td>思维活跃但存在内耗，易分心</td></tr>
-                    <tr id="row-high"><td>101分以上</td><td>深度活跃型</td><td>典型 ADHD 倾向，建议专业评估</td></tr>
-                </table>
+            <!-- 可视化雷达 -->
+            <div style="max-width: 260px; margin: 0 auto 20px;">
+                <canvas id="radarChart"></canvas>
             </div>
 
-            <div class="viz-section">
-                <div class="viz-title">🧭 维度解析图谱</div>
-                <div class="radar-box"><canvas id="radarChart"></canvas></div>
+            <div class="advice-card">
+                <div style="font-weight: bold; margin-bottom: 8px; color: var(--watermelon-red);">猪八吉深度解析：</div>
+                <div id="baji-advice" style="font-size: 0.85rem; line-height: 1.5;"></div>
             </div>
 
-            <div class="viz-section">
-                <div class="viz-title">💡 猪八吉深度建议</div>
-                <div class="advice-content" id="baji-advice-deep">
-                    <!-- 动态生成深度解析 -->
+            <div class="res-item">
+                <div class="res-icon">📖</div>
+                <div class="res-info">
+                    <h4>《猪八吉爱媳妇亲密关系手册》</h4>
+                    <p>系统化自我管理指南</p>
                 </div>
             </div>
 
-            <div class="eco-section" style="border-top: 1.5px dashed #F1EDEA; padding-top: 40px;">
-                <a href="#" class="eco-link">
-                    <div class="eco-icon">📖</div>
-                    <div class="eco-info"><h4>《猪八吉爱媳妇亲密关系手册》</h4><p>系统化自我管理与沟通优化指南</p></div>
-                </a>
-                <a href="#" class="eco-link">
-                    <div class="eco-icon">💬</div>
-                    <div class="eco-info"><h4>猪八吉疗愈社群</h4><p>在同频陪伴中练习改变，获取深度支持</p></div>
-                </a>
+            <div class="qr-section">
+                <p>添加猪八吉 · 领取深度分析</p>
+                <div class="qr-img"><img src="your-qr-image.png" alt="QR" style="width:80%; opacity:0.1"></div>
             </div>
 
-            <div style="text-align: center; margin-top: 50px;">
-                <p style="font-size: 0.85rem; color: var(--text-light);">添加猪八吉 · 领取深度解析报告</p>
-                <div style="width: 140px; height: 140px; background: #FFF; margin: 20px auto; border-radius: 20px; border: 1.5px solid #F1EDEA; display: flex; align-items: center; justify-content: center; overflow: hidden;">
-                    <img src="your-qr-image.png" alt="二维码" style="width:85%; opacity: 0.2;">
-                </div>
-                <button class="btn-cta" onclick="location.reload()" style="background: transparent; color: var(--text-light); box-shadow: none; border: 1px solid #E8E4E0; font-weight: 400;">重新开始测评</button>
-            </div>
+            <button class="btn-red" onclick="location.reload()" style="margin-top: 20px; background: #EEE; color: #999;">重新开始</button>
         </div>
     </div>
 
     <script>
         const questions = [
-            // 全量 40 题 (d 分配：0:专注, 1:执行, 2:情绪, 3:冲动)
-            { t: "在完成需要高度精细度的任务时，你是否常犯粗心错误？", d: 0 },
-            { t: "你是否经常发现自己很难长时间保持专注，即便在喜欢的活动中？", d: 0 },
-            { t: "在与人对话时，你的思绪是否经常不自觉地飘向别处？", d: 0 },
-            { t: "你是否经常开始了一件事，但很快就被其他干扰带走导致烂尾？", d: 0 },
-            { t: "在组织复杂项目或家庭琐事时，你是否感到无从下手？", d: 1 },
-            { t: "你是否经常在需要排队或等待时，感到极其严重的焦躁不安？", d: 3 },
-            { t: "当周围有轻微动静（如窗外声音）时，你是否会立刻断掉思路？", d: 0 },
-            { t: "你是否发现自己的房间或桌面经常处于混乱状态且难以维持整洁？", d: 1 },
-            { t: "你是否经常因为拖延而错过重要的截止日期或承诺？", d: 1 },
-            { t: "在被要求保持安静坐好的场合，你是否会不由自主地扭动身体？", d: 3 },
-            { t: "你是否经常发现自己话说得太多，以至于打断了别人的发言？", d: 3 },
-            { t: "你是否经常感到情绪像‘过山车’一样，波动得非常迅速？", d: 2 },
-            { t: "对于那些看起来‘琐碎但不急’的事情（如缴费），你是否习惯逃避？", d: 1 },
-            { t: "你是否经常在问题还没问完时，就已经抢先说出了答案？", d: 3 },
-            { t: "在安静休闲的场合，你是否仍感到一种‘被马达驱动’的躁动感？", d: 3 },
-            { t: "你是否经常丢失生活必需品，如钥匙、钱包、手机？", d: 1 },
-            { t: "你是否经常感到挫败感，觉得自己的能力被‘混乱’限制了？", d: 2 },
-            { t: "对于周围环境的细微变化（气味、光线），你是否过度敏感？", d: 2 },
-            { t: "你是否发现自己很难按照‘先后顺序’来完成一串任务？", d: 1 },
-            { t: "你是否经常在别人还没说完话时，就忍不住插嘴接话？", d: 3 },
-            { t: "你是否经常感到大脑里像有很多个电视频道在同时播放？", d: 0 },
-            { t: "你是否经常通过购买新东西或寻找新刺激来缓解无聊？", d: 3 },
-            { t: "你是否发现自己很难记住刚才读过的这一行文字的内容？", d: 0 },
-            { t: "你是否经常在截止日期最后几小时才爆发出惊人的专注力？", d: 1 },
-            { t: "你是否经常感到自尊心受挫，觉得自己‘不如别人有条理’？", d: 2 },
-            { t: "你是否经常因为‘过度投入’某件有趣的事而忘记吃饭睡觉？", d: 0 },
-            { t: "在对话中，你是否经常忘记自己原本想说什么？", d: 0 },
-            { t: "你是否经常感到一种莫名的‘紧迫感’，却不知道具体在急什么？", d: 2 },
-            { t: "你是否发现自己很难建立并维持一种规律的生活习惯？", d: 1 },
-            { t: "你是否经常感到情绪低落是因为‘事情多到理不清楚’？", d: 2 },
-            { t: "在处理财务账单或法律文书时，你是否感到极度厌恶？", d: 1 },
-            { t: "你是否经常在公共场合因为反应太快而表现得有些冲动？", d: 3 },
-            { t: "你是否发现自己很难处理长期的、没有即时反馈的目标？", d: 1 },
-            { t: "你是否经常感到大脑处于‘雾蒙蒙’的状态，反应变慢？", d: 0 },
-            { t: "你是否经常发现自己很难判断完成一项任务具体需要多久？", d: 1 },
-            { t: "你是否经常因为‘想做的事太多’而导致一件都没做成？", d: 1 },
-            { t: "你是否经常发现自己在安静阅读时，眼睛在动但脑子没动？", d: 0 },
-            { t: "你是否经常感到社交疲劳是因为你需要用力克制自己的多动？", d: 3 },
-            { t: "你是否觉得自己的情绪很容易被伴侣的一个小动作点燃？", d: 2 },
-            { t: "你是否经常感到生活处于‘失控’边缘，急需一个支点？", d: 2 }
+            { t: "在完成枯燥或重复性任务时，你是否感到极度困难？", d: 0 },
+            { t: "你是否经常在需要关注细节时表现得不细心，常犯粗心错误？", d: 0 },
+            { t: "当别人直接对你说话时，你是否经常显得心不在焉？", d: 0 },
+            { t: "你是否经常无法按指示完成任务，导致工作/家务半途而废？", d: 1 },
+            { t: "你是否经常难以组织和安排自己的任务和活动？", d: 1 },
+            { t: "你是否经常回避、厌恶或不情愿去做需要持续动脑的任务？", d: 1 },
+            { t: "你是否经常丢失任务或活动所需的物品（手机、钥匙）？", d: 1 },
+            { t: "你是否经常容易被外界刺激干扰而分心？", d: 0 },
+            { t: "你是否在日常活动中经常忘记缴费、约会等琐事？", d: 1 },
+            { t: "你是否发现自己很难从一个活动切换到另一个活动？", d: 0 },
+            { t: "你是否经常手脚动个不停，或在座位上扭动？", d: 3 },
+            { t: "在被要求坐好的场合，你是否经常擅自离开座位？", d: 3 },
+            { t: "你是否经常在不适当的场合感到坐立不安或想跑动？", d: 3 },
+            { t: "你是否经常难以安静地参加休闲活动？", d: 3 },
+            { t: "你是否经常表现得像“被马达驱动”一样忙个不停？", d: 3 },
+            { t: "你是否经常说话过多，有时停不下来？", d: 3 },
+            { t: "在问题还没问完时，你是否经常抢着回答？", d: 3 },
+            { t: "在需要排队轮候时，你是否经常感到极度不耐烦？", d: 3 },
+            { t: "你是否经常打断他人的对话或强行加入他人活动？", d: 3 },
+            { t: "你是否经常在还没想清楚后果前就采取行动？", d: 3 },
+            { t: "你是否经常感到情绪波动剧烈，且难以控制？", d: 2 },
+            { t: "你是否发现自己很容易因为一点小挫折而感到极度沮丧？", d: 2 },
+            { t: "你是否经常感到一种内在的、无法解释的焦虑感？", d: 2 },
+            { t: "你是否经常拖延那些看起来并不难处理的决定？", d: 1 },
+            { t: "你是否发现自己很难维持长期的兴趣或习惯？", d: 1 },
+            { t: "你是否经常在对话中忘记自己刚才想说什么？", d: 0 },
+            { t: "你是否经常在寻找物品上花费大量时间？", d: 1 },
+            { t: "你是否感觉自己的睡眠模式非常混乱？", d: 2 },
+            { t: "你是否经常被家人或朋友抱怨“做事没计划”？", d: 1 },
+            { t: "你是否经常在截止日期临近时才爆发出惊人的动力？", d: 1 },
+            { t: "你是否经常感到自己的大脑像有很多个频道在同时播放？", d: 0 },
+            { t: "你是否发现自己很难处理多线并行的复杂任务？", d: 1 },
+            { t: "你是否经常在阅读长篇文章时发现自己一直在走神？", d: 0 },
+            { t: "你是否经常因为过度投入某件有趣的事而忘记时间？", d: 0 },
+            { t: "你是否经常感到自己的情绪很容易受周围环境影响？", d: 2 },
+            { t: "你是否经常感到自尊心受挫，觉得自己不如同龄人有条理？", d: 2 },
+            { t: "你是否经常因为忘记重要的承诺而感到愧疚？", d: 1 },
+            { t: "你是否经常通过购买新东西来获得短暂的兴奋感？", d: 3 },
+            { t: "你是否经常在安静的环境中感到特别难受？", d: 3 },
+            { t: "你是否经常觉得生活像一团乱麻，不知从何整理？", d: 1 }
         ];
 
-        let cur = 0; let scores = { 0:0, 1:0, 2:0, 3:0 };
+        let idx = 0; let dScores = {0:0, 1:0, 2:0, 3:0};
 
         function startQuiz() {
             document.getElementById('start-page').style.display = 'none';
             document.getElementById('quiz-page').classList.add('fade-in');
-            render();
+            show();
         }
 
-        function render() {
-            const q = questions[cur];
+        function show() {
+            const q = questions[idx];
             document.getElementById('q-text').innerText = q.t;
-            document.getElementById('q-label').innerText = `STEP ${String(cur + 1).padStart(2, '0')}`;
-            document.getElementById('q-count').innerText = `${cur + 1} / 40`;
-            document.getElementById('progress-fill').style.width = `${((cur + 1)/40)*100}%`;
+            document.getElementById('q-label').innerText = `第 ${idx + 1} 题`;
+            document.getElementById('bar-fill').style.width = `${((idx + 1) / 40) * 100}%`;
 
             const box = document.getElementById('options-box');
             box.innerHTML = '';
-            ["从不", "很少", "有时", "经常", "总是"].forEach((label, s) => {
-                const btn = document.createElement('div');
-                btn.className = 'option-item';
-                btn.innerHTML = `<span>${label}</span><span style="opacity:0.3; font-size:0.7rem">+${s}</span>`;
-                btn.onclick = () => { scores[q.d] += s; if(cur<39){ cur++; render(); } else { finish(); } };
-                box.appendChild(btn);
+            ["从不", "很少", "有时", "经常", "总是"].forEach((l, s) => {
+                const d = document.createElement('div');
+                d.className = 'option-card';
+                d.innerHTML = `<span>${l}</span><span class="score-hint">+${s}</span>`;
+                d.onclick = function() {
+                    // 点击反馈逻辑
+                    this.classList.add('active');
+                    setTimeout(() => {
+                        dScores[q.d] += s;
+                        if(idx < 39){ idx++; show(); } else { result(); }
+                    }, 150);
+                };
+                box.appendChild(d);
             });
         }
 
-        function finish() {
+        function result() {
             document.getElementById('quiz-page').style.display = 'none';
             document.getElementById('result-page').classList.add('fade-in');
-            const total = Object.values(scores).reduce((a,b)=>a+b, 0);
+            const total = Object.values(dScores).reduce((a,b)=>a+b, 0);
             document.getElementById('total-score').innerText = total;
 
-            let tag = ""; let deepAdvice = "";
-            if(total <= 50) {
-                tag = "低度倾向 · 思维稳健";
-                document.getElementById('row-low').className = 'current-row';
-                deepAdvice = `
-                    <div class="advice-block"><span class="advice-subtitle">认知剖析：</span>你的神经系统处于非常平衡的状态，具备良好的“顶层控制功能”。在亲密关系中，你是那个定海神针。</div>
-                    <div class="advice-block"><span class="advice-subtitle">行为建议：</span>继续保持这种秩序感，但猪八吉提醒你：不要过度追求完美，有时候可以适度放松大脑的绷紧程度。</div>
-                `;
-            } else if(total <= 100) {
-                tag = "中度倾向 · 能量分散";
-                document.getElementById('row-mid').className = 'current-row';
-                deepAdvice = `
-                    <div class="advice-block"><span class="advice-subtitle">专注力解析：</span>你的大脑像有很多后台程序的电脑，容易因为“弹窗”而掉线。在沟通时，这常让伴侣误解为“不在意”。</div>
-                    <div class="advice-block"><span class="advice-subtitle">执行策略：</span>猪八吉建议你使用“可视化工具”。将复杂的家务或承诺拆解为具体的“微动作”，降低启动门槛。</div>
-                    <div class="advice-block"><span class="advice-subtitle">情绪调频：</span>由于精力内耗，你可能在傍晚感到莫名疲劳。请尝试每天给自己15分钟的“无功能留白时间”。</div>
-                `;
-            } else {
-                tag = "高度倾向 · 建议评估";
-                document.getElementById('row-high').className = 'current-row';
-                deepAdvice = `
-                    <div class="advice-block"><span class="advice-subtitle">执行功能障碍：</span>这不是你的性格缺陷，而是大脑额叶的“指挥官”暂时旷工。你的生活可能经常处于“应急模式”，导致巨大的心理疲惫。</div>
-                    <div class="advice-block"><span class="advice-subtitle">多动/冲动维度：</span>你的高能量既是创意来源，也是关系摩擦的起火点。学习“三秒停顿法”能大幅缓解言语冲突。</div>
-                    <div class="advice-block"><span class="advice-subtitle">行动处方：</span>猪八吉强烈建议你寻求专业心理辅导，并配合我们的《社群》进行认知重塑。接纳自己的独特，是重获自由的第一步。</div>
-                `;
-            }
-            document.getElementById('result-tag').innerText = tag;
-            document.getElementById('baji-advice-deep').innerHTML = deepAdvice;
-            initRadar([scores[0], scores[1], scores[2], scores[3]]);
-        }
+            let tag = ""; let advice = "";
+            if(total <= 50) { tag = "低度倾向 · 稳健型"; advice = "你的思维极具条理性，是亲密关系中的定海神针。"; }
+            else if(total <= 100) { tag = "中度倾向 · 分散型"; advice = "你的思维活跃但易内耗，建议建立更稳定的生活节奏。"; }
+            else { tag = "高度倾向 · 活跃型"; advice = "你的大脑风暴永不停歇，建议寻求专业评估并接纳自我。"; }
 
-        function initRadar(data) {
-            new Chart(document.getElementById('radarChart').getContext('2d'), {
+            document.getElementById('result-tag').innerText = tag;
+            document.getElementById('baji-advice').innerText = advice;
+            
+            // 初始化雷达图
+            const ctx = document.getElementById('radarChart').getContext('2d');
+            new Chart(ctx, {
                 type: 'radar',
                 data: {
-                    labels: ['专注力', '执行力', '情绪调控', '冲动控制'],
+                    labels: ['专注', '执行', '情绪', '冲动'],
                     datasets: [{
-                        data: data.map(v => Math.min((v/40)*100, 100)), // 标准化到 0-100
-                        backgroundColor: 'rgba(167, 215, 169, 0.2)',
-                        borderColor: '#A7D7A9',
-                        pointBackgroundColor: '#FFF',
-                        pointRadius: 4
+                        data: [dScores[0], dScores[1], dScores[2], dScores[3]],
+                        backgroundColor: 'rgba(255, 91, 103, 0.2)',
+                        borderColor: '#FF5B67',
+                        borderWidth: 2, pointRadius: 0
                     }]
                 },
                 options: {
-                    scales: { r: { beginAtZero: true, max: 100, ticks: { display: false }, grid: { color: '#F1EDEA' } } },
+                    scales: { r: { beginAtZero: true, ticks: { display: false }, grid: { color: '#EEE' } } },
                     plugins: { legend: { display: false } }
                 }
             });
