@@ -3,183 +3,299 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>猪八吉 | ADHD 多维度筛查量表</title>
+    <title>猪八吉爱媳妇 | ADHD 多维度深度筛查</title>
     <style>
         :root {
-            --primary-color: #FF85A2; /* 猪八吉粉 */
-            --bg-color: #FFF9F5;    /* 奶油杏 */
+            --primary-color: #FF85A2; 
+            --secondary-color: #FFB347;
+            --bg-color: #FFF9F5;    
             --card-bg: #FFFFFF;
-            --text-color: #5A4A42;
-            --accent-color: #FFB347;
-            --shadow: 0 10px 30px rgba(255, 133, 162, 0.15);
+            --text-main: #5A4A42;
+            --text-light: #9E8E85;
+            --shadow: 0 15px 35px rgba(255, 133, 162, 0.12);
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-
         body {
             font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
             background-color: var(--bg-color);
-            color: var(--text-color);
+            color: var(--text-main);
             margin: 0;
             display: flex;
             flex-direction: column;
-            align-items: center;
             min-height: 100vh;
-            overflow-x: hidden;
         }
 
-        /* 顶部标题栏 */
-        .header {
-            width: 100%;
+        /* 统一品牌 Header */
+        .brand-header {
             background: var(--card-bg);
-            padding: 18px 0;
-            text-align: center;
-            font-weight: bold;
-            color: var(--primary-color);
-            font-size: 1.1rem;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
             position: sticky;
             top: 0;
             z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.02);
         }
+        .baji-logo {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border: 2px solid var(--bg-color);
+        }
+        .baji-logo img { width: 100%; height: 100%; object-fit: cover; }
+        .brand-info h1 { font-size: 1.1rem; margin: 0; color: var(--primary-color); }
+        .brand-info p { font-size: 0.7rem; margin: 0; color: var(--text-light); }
 
         .container {
-            width: 92%;
+            flex: 1;
+            width: 100%;
             max-width: 500px;
-            margin: 20px 0;
-            position: relative;
+            margin: 0 auto;
+            padding: 20px;
         }
 
-        /* 卡片通用样式 */
+        /* 卡片动效 */
         .card {
             background: var(--card-bg);
-            padding: 30px 25px;
-            border-radius: 30px;
+            padding: 30px 20px;
+            border-radius: 28px;
             box-shadow: var(--shadow);
-            display: none; /* 默认隐藏，通过JS切换 */
-            animation: fadeIn 0.5s ease;
+            display: none;
+            animation: slideUp 0.4s ease-out;
         }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* 封面页样式 */
+        /* 封面页 */
         #start-page { display: block; text-align: center; }
-        .mascot-img { width: 120px; height: 120px; margin-bottom: 20px; }
-        .start-title { font-size: 1.5rem; color: var(--text-color); margin-bottom: 15px; }
-        .start-desc { font-size: 0.95rem; color: #888; line-height: 1.6; margin-bottom: 30px; }
-        .btn-main {
-            background: linear-gradient(135deg, var(--primary-color), #FFB3C1);
-            color: white;
-            border: none;
-            padding: 16px 50px;
-            border-radius: 50px;
-            font-size: 1.1rem;
-            font-weight: bold;
-            cursor: pointer;
-            box-shadow: 0 5px 15px rgba(255, 133, 162, 0.3);
-            transition: transform 0.2s;
+        .cover-img { width: 180px; margin-bottom: 20px; border-radius: 20px; }
+        .brand-quote {
+            font-style: italic;
+            font-size: 0.9rem;
+            color: var(--primary-color);
+            margin: 15px 0;
+            padding: 10px;
+            border-top: 1px dashed #FFD0DA;
+            border-bottom: 1px dashed #FFD0DA;
         }
-        .btn-main:active { transform: scale(0.95); }
 
-        /* 答题页样式 */
-        .progress-container { margin-bottom: 30px; }
-        .progress-text { font-size: 0.8rem; color: #BBB; margin-bottom: 8px; text-align: right; }
-        .progress-bar { width: 100%; height: 6px; background: #F0F0F0; border-radius: 10px; overflow: hidden; }
-        #progress-inner { height: 100%; background: var(--primary-color); width: 0%; transition: width 0.3s; }
+        /* 答题页 */
+        .q-header { margin-bottom: 25px; }
+        .progress-num { font-size: 0.8rem; color: var(--text-light); text-align: right; margin-bottom: 5px; }
+        .progress-bar { width: 100%; height: 6px; background: #F0F0F0; border-radius: 10px; }
+        #progress-inner { height: 100%; background: linear-gradient(90deg, var(--primary-color), var(--secondary-color)); width: 0%; transition: width 0.3s; }
         
-        .question-box h2 { font-size: 1.2rem; line-height: 1.5; margin-bottom: 30px; height: 3.6rem; display: flex; align-items: center; }
-        .options-list { display: flex; flex-direction: column; gap: 12px; }
-        .option-btn {
-            padding: 18px;
-            border: 2px solid #F8F8F8;
-            border-radius: 18px;
-            background: #FAFAFA;
+        .question-text { font-size: 1.2rem; line-height: 1.6; margin-bottom: 30px; min-height: 80px; }
+        .option-item {
+            width: 100%;
+            padding: 16px 20px;
+            margin-bottom: 12px;
+            border: 1.5px solid #F0F0F0;
+            border-radius: 16px;
+            background: #FFF;
             cursor: pointer;
-            text-align: left;
-            font-size: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             transition: all 0.2s;
-            color: var(--text-color);
-            font-weight: 500;
         }
-        .option-btn:active { background: var(--bg-color); border-color: var(--primary-color); color: var(--primary-color); }
+        .option-item:active { transform: scale(0.98); background: var(--bg-color); border-color: var(--primary-color); }
+        .option-score { font-size: 0.75rem; color: #BBB; background: #F8F8F8; padding: 2px 8px; border-radius: 6px; }
 
-        /* 结果页样式 */
-        .result-title { font-size: 1.3rem; margin-bottom: 10px; }
-        .score-box { font-size: 3rem; font-weight: 800; color: var(--primary-color); margin: 15px 0; }
-        .result-tag { display: inline-block; padding: 5px 15px; background: var(--bg-color); color: var(--primary-color); border-radius: 20px; font-size: 0.85rem; margin-bottom: 20px; }
-        .result-content { text-align: left; background: #FFF9F5; padding: 20px; border-radius: 20px; line-height: 1.7; font-size: 0.95rem; margin-bottom: 25px; }
+        /* 结果页生态导流 */
+        .result-header { text-align: center; margin-bottom: 25px; }
+        .score-display { font-size: 3.5rem; font-weight: 800; color: var(--primary-color); }
+        .baji-advice-box {
+            background: #FFF9F5;
+            border: 1px solid #FFE0E6;
+            padding: 20px;
+            border-radius: 20px;
+            position: relative;
+            margin-bottom: 30px;
+        }
+        .baji-advice-box::before {
+            content: "猪八吉的贴心话";
+            position: absolute;
+            top: -12px; left: 20px;
+            background: var(--primary-color);
+            color: white;
+            font-size: 0.7rem;
+            padding: 2px 10px;
+            border-radius: 10px;
+        }
 
-        .footer-ip { margin-top: 20px; text-align: center; color: #CCC; font-size: 0.85rem; padding-bottom: 40px; }
+        /* 生态导流模块 */
+        .eco-module {
+            background: linear-gradient(135deg, #FFF, #FFF4F7);
+            border-radius: 24px;
+            padding: 20px;
+            border: 1px solid #FFD6E0;
+            margin-top: 20px;
+        }
+        .eco-title { font-weight: bold; font-size: 1rem; color: var(--text-main); margin-bottom: 15px; display: flex; align-items: center; gap: 8px; }
+        .eco-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: white;
+            padding: 12px;
+            border-radius: 15px;
+            margin-bottom: 10px;
+            text-decoration: none;
+            color: inherit;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+        }
+        .eco-icon { width: 40px; height: 40px; border-radius: 10px; background: var(--bg-color); display: flex; align-items: center; justify-content: center; font-size: 1.2rem; }
+        .eco-info h4 { margin: 0; font-size: 0.9rem; color: var(--primary-color); }
+        .eco-info p { margin: 0; font-size: 0.75rem; color: var(--text-light); }
+
+        .qr-section { text-align: center; margin-top: 20px; padding: 20px; border-top: 1px dashed #DDD; }
+        .qr-placeholder { width: 120px; height: 120px; background: #EEE; margin: 10px auto; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; color: #999; }
+
+        .btn-action {
+            background: var(--primary-color);
+            color: white; border: none; padding: 15px 40px; border-radius: 50px;
+            font-size: 1rem; font-weight: bold; cursor: pointer; width: 100%;
+        }
     </style>
 </head>
 <body>
 
-    <div class="header">🐷 猪八吉暖心测评</div>
+    <header class="brand-header">
+        <div class="baji-logo">
+            <!-- 这里可以放你的猪八吉头像图片链接 -->
+            <img src="https://jasmine2025888.github.io/love-language-translator/assets/logo.png" alt="猪八吉" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🐷</text></svg>'">
+        </div>
+        <div class="brand-info">
+            <h1>猪八吉爱媳妇</h1>
+            <p>专注中国式亲密关系 · 情感成长陪伴</p>
+        </div>
+    </header>
 
     <div class="container">
-        <!-- 封面页 -->
+        <!-- 开始页 -->
         <div class="card" id="start-page">
-            <div class="mascot-img">🌸</div> <!-- 以后可以换成猪八吉的图片URL -->
-            <div class="start-title">ADHD 多维度筛查量表</div>
-            <div class="start-desc">
-                总是静不下心？或是经常丢三落四？<br>
-                别担心，猪八吉陪你一起探索头脑的小宇宙。<br>
-                本量表参考 ASRS 标准，请按最近半年的真实情况回答。
-            </div>
-            <button class="btn-main" onclick="startQuiz()">开始探索</button>
+            <h2 style="margin-top:0">ADHD多维度深度筛查量表</h2>
+            <div class="brand-quote">“识别模式只是第一步。理解、修复与滋养关系，需要系统方法和持续支持。”</div>
+            <p style="font-size: 0.9rem; color: #888; text-align: left; line-height: 1.6;">
+                总是静不下心？或是经常丢三落四？这份深度量表将从专注力、多动性、冲动及情绪管理四个维度，由猪八吉陪你一起探索你的“大脑使用说明书”。
+            </p>
+            <button class="btn-action" onclick="startQuiz()" style="margin-top:20px">开启深度探索</button>
         </div>
 
         <!-- 答题页 -->
         <div class="card" id="quiz-page">
-            <div class="progress-container">
-                <div class="progress-text" id="progress-text">1/18</div>
+            <div class="q-header">
+                <div class="progress-num" id="q-progress">1 / 40</div>
                 <div class="progress-bar"><div id="progress-inner"></div></div>
             </div>
-            <div class="question-box">
-                <h2 id="q-text">题目加载中...</h2>
-                <div class="options-list" id="options-box"></div>
-            </div>
+            <div class="question-text" id="q-text">题目加载中...</div>
+            <div class="options-container" id="options-box"></div>
         </div>
 
         <!-- 结果页 -->
         <div class="card" id="result-page">
-            <div class="result-title">探索报告</div>
-            <div class="result-tag">测评结果仅供参考</div>
-            <div class="score-box" id="score-display">0</div>
-            <div class="result-content" id="result-desc">报告计算中...</div>
-            <button class="btn-main" onclick="location.reload()">重新测评</button>
+            <div class="result-header">
+                <p style="margin:0; color:#999; font-size:0.8rem;">测评得分</p>
+                <div class="score-display" id="total-score">0</div>
+                <p id="result-tag" style="font-weight:bold; color:var(--primary-color)"></p>
+            </div>
+
+            <div class="baji-advice-box" id="baji-advice">
+                <!-- 动态内容 -->
+            </div>
+
+            <!-- 生态导流模块 -->
+            <div class="eco-module">
+                <div class="eco-title">🚀 猪八吉的情感成长工具箱</div>
+                <a href="#" class="eco-item">
+                    <div class="eco-icon">📖</div>
+                    <div class="eco-info">
+                        <h4>《猪八吉爱媳妇亲密关系手册》</h4>
+                        <p>系统解决关系冲突，建立深度链接</p>
+                    </div>
+                </a>
+                <a href="#" class="eco-item">
+                    <div class="eco-icon">🏘️</div>
+                    <div class="eco-info">
+                        <h4>猪八吉疗愈社群</h4>
+                        <p>在陪伴中练习改变，获取专属支持</p>
+                    </div>
+                </a>
+            </div>
+
+            <!-- 私域导流 -->
+            <div class="qr-section">
+                <p style="font-size:0.9rem; font-weight:bold; margin-bottom:5px;">添加猪八吉 领取深度解析</p>
+                <p style="font-size:0.75rem; color:#999;">小红书：猪八吉爱媳妇 | 微信二维码如下</p>
+                <div class="qr-placeholder">
+                    <!-- 以后把你的微信二维码图片放在这里 -->
+                    [ 微信二维码图片 ]
+                </div>
+            </div>
+
+            <button class="btn-action" onclick="location.reload()" style="margin-top:20px; background:#EEE; color:#666;">重新测评</button>
         </div>
     </div>
 
-    <div class="footer-ip">关注 @猪八吉爱媳妇 · 遇见更懂你的人</div>
-
     <script>
         const questions = [
-            { t: "你是否经常在需要关注细节的事情上犯粗心的错误？" },
-            { t: "在完成任务或参加活动时，你是否经常难以维持注意力？" },
-            { t: "当别人直接对你说话时，你是否经常显得没在听？" },
+            // 专注力维度
+            { t: "在完成枯燥或重复性任务时，你是否感到极度困难？" },
+            { t: "你是否经常在需要关注细节时表现得不细心，常犯粗心错误？" },
+            { t: "当别人直接对你说话时，你是否经常显得心不在焉？" },
             { t: "你是否经常无法按指示完成任务，导致工作/家务半途而废？" },
             { t: "你是否经常难以组织和安排自己的任务和活动？" },
             { t: "你是否经常回避、厌恶或不情愿去做需要持续动脑的任务？" },
-            { t: "你是否经常丢失任务或活动所需的物品（如手机、钥匙、文具）？" },
-            { t: "你是否经常容易被外界的刺激干扰而分心？" },
-            { t: "你是否在日常活动中经常忘记事情（如缴费、约会）？" },
+            { t: "你是否经常丢失任务或活动所需的物品（手机、钥匙）？" },
+            { t: "你是否经常容易被外界刺激干扰而分心？" },
+            { t: "你是否在日常活动中经常忘记缴费、约会等琐事？" },
+            { t: "你是否发现自己很难从一个活动切换到另一个活动？" },
+            // 多动/冲动维度
             { t: "你是否经常手脚动个不停，或在座位上扭动？" },
-            { t: "在被要求坐好的场合，你是否经常擅自离开座位？" },
-            { t: "你是否经常在不适当的场合跑来跑去或爬上爬下？" },
+            { t: "在需要坐好的场合，你是否经常擅自离开座位？" },
+            { t: "你是否经常在不适当的场合感到坐立不安或想跑动？" },
             { t: "你是否经常难以安静地参加休闲活动？" },
-            { t: "你是否经常像“被马达驱动”一样忙个不停？" },
-            { t: "你是否经常话说得过多？" },
+            { t: "你是否经常表现得像“被马达驱动”一样忙个不停？" },
+            { t: "你是否经常说话过多，有时停不下来？" },
             { t: "在问题还没问完时，你是否经常抢着回答？" },
-            { t: "在需要轮流等待时，你是否经常难以等待？" },
-            { t: "你是否经常打断或侵扰他人的活动（如强行加入对话）？" }
+            { t: "在需要排队轮候时，你是否经常感到极度不耐烦？" },
+            { t: "你是否经常打断他人的对话或强行加入他人活动？" },
+            { t: "你是否经常在还没想清楚后果前就采取行动？" },
+            // 情绪与生活维度 (补充至40题)
+            { t: "你是否经常感到情绪波动剧烈，且难以控制？" },
+            { t: "你是否发现自己很容易因为一点小挫折而感到极度沮丧？" },
+            { t: "你是否经常感到一种内在的、无法解释的焦虑感？" },
+            { t: "你是否经常拖延那些看起来并不难处理的决定？" },
+            { t: "你是否发现自己很难维持长期的兴趣或习惯？" },
+            { t: "你是否经常在对话中忘记自己刚才想说什么？" },
+            { t: "你是否经常在寻找物品上花费大量时间？" },
+            { t: "你是否感觉自己的睡眠模式非常混乱？" },
+            { t: "你是否经常被家人或朋友抱怨“做事没计划”？" },
+            { t: "你是否经常在截止日期临近时才爆发出惊人的动力？" },
+            { t: "你是否经常感到自己的大脑像有很多个频道在同时播放？" },
+            { t: "你是否发现自己很难处理多线并行的复杂任务？" },
+            { t: "你是否经常在阅读长篇文章时发现自己一直在走神？" },
+            { t: "你是否经常因为过度投入某件有趣的事而忘记时间？" },
+            { t: "你是否经常感到自己的情绪很容易受周围环境影响？" },
+            { t: "你是否经常感到自尊心受挫，觉得自己不如同龄人有条理？" },
+            { t: "你是否经常因为忘记重要的承诺而感到愧疚？" },
+            { t: "你是否经常通过购买新东西来获得短暂的兴奋感？" },
+            { t: "你是否经常在安静的环境中感到特别难受？" },
+            { t: "你是否经常觉得生活像一团乱麻，不知从何整理？" }
         ];
 
         const optionLabels = ["从不", "很少", "有时", "经常", "总是"];
-        let currentStep = 0;
+        let currentIdx = 0;
         let scores = [];
 
         function startQuiz() {
@@ -189,48 +305,54 @@
         }
 
         function showQuestion() {
-            const q = questions[currentStep];
-            document.getElementById('q-text').innerText = q.t;
-            document.getElementById('progress-text').innerText = `${currentStep + 1} / ${questions.length}`;
-            document.getElementById('progress-inner').style.width = `${((currentStep + 1) / questions.length) * 100}%`;
+            const q = questions[currentIdx];
+            document.getElementById('q-text').innerText = `${currentIdx + 1}. ${q.t}`;
+            document.getElementById('q-progress').innerText = `${currentIdx + 1} / ${questions.length}`;
+            document.getElementById('progress-inner').style.width = `${((currentIdx + 1) / questions.length) * 100}%`;
 
             const box = document.getElementById('options-box');
             box.innerHTML = '';
-            optionLabels.forEach((label, index) => {
-                const btn = document.createElement('button');
-                btn.className = 'option-btn';
-                btn.innerText = label;
-                btn.onclick = () => handleSelect(index);
-                box.appendChild(btn);
+            optionLabels.forEach((label, score) => {
+                const div = document.createElement('div');
+                div.className = 'option-item';
+                div.innerHTML = `<span>${label}</span><span class="option-score">+${score}分</span>`;
+                div.onclick = () => handleSelect(score);
+                box.appendChild(div);
             });
         }
 
-        function handleSelect(val) {
-            scores.push(val);
-            if (currentStep < questions.length - 1) {
-                currentStep++;
+        function handleSelect(score) {
+            scores.push(score);
+            if (currentIdx < questions.length - 1) {
+                currentIdx++;
                 showQuestion();
             } else {
-                showResult();
+                renderResult();
             }
         }
 
-        function showResult() {
+        function renderResult() {
+            const total = scores.reduce((a, b) => a + b, 0);
             document.getElementById('quiz-page').style.display = 'none';
             document.getElementById('result-page').style.display = 'block';
-            
-            const totalScore = scores.reduce((a, b) => a + b, 0);
-            document.getElementById('score-display').innerText = totalScore;
+            document.getElementById('total-score').innerText = total;
 
-            let comment = "";
-            if (totalScore <= 18) {
-                comment = "【猪八吉观察】你的专注力表现很稳健哦！虽然生活中难免有小插曲，但你的大脑运转非常有条理。继续保持这种节奏吧。";
-            } else if (totalScore <= 36) {
-                comment = "【猪八吉建议】你的头脑里似乎住着一只活泼的小猴子，偶尔会让你分心。这可能与近期的压力或环境有关。猪八吉提醒你：试着把大任务拆成小块，一步步来。";
+            let tag = "";
+            let advice = "";
+
+            if (total <= 40) {
+                tag = "低风险 · 状态平稳";
+                advice = "你的思维非常有条理！猪八吉觉得你目前的状态很稳健。如果在生活中偶尔有分心，可能只是因为压力。记得多关注关系的滋养，保持这份定力。";
+            } else if (total <= 80) {
+                tag = "中风险 · 存在倾向";
+                advice = "【猪八吉提醒】你就像一台高性能但偶尔调错频道的收音机。你的分心和冲动可能已经影响到了关系中的‘有效沟通’。建议学习我们的《亲密关系手册》，利用其中的工具来管理执行功能，减少生活中的冲突。";
             } else {
-                comment = "【猪八吉贴心话】测评显示你的 ADHD 倾向较为明显。这并不是你的错，很多极具创意的人都有这种特质。如果这已经影响了你的生活，猪八吉建议你可以找专业医生聊聊，科学地接纳并引导这份“活跃”。";
+                tag = "高风险 · 建议评估";
+                advice = "【猪八吉贴心话】现在的你可能常感到生活像乱成一团的毛线。这不是因为你不够努力，而是你的大脑运转方式比较特殊。很多伟大的创意者都如此。猪八吉建议你在寻求专业评估的同时，加入我们的疗愈社群，和大家一起练习科学的‘精力管理’。";
             }
-            document.getElementById('result-desc').innerHTML = comment;
+
+            document.getElementById('result-tag').innerText = tag;
+            document.getElementById('baji-advice').innerText = advice;
         }
     </script>
 </body>
