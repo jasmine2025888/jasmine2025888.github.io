@@ -7,7 +7,6 @@
     <style>
         body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; max-width: 800px; margin: 40px auto; padding: 0 20px; line-height: 1.6; background-color: #f0f2f5; }
         h1 { color: #1a1a1a; text-align: center; }
-        p { text-align: center; color: #666; }
         .test-list { list-style: none; padding: 0; margin-top: 30px; }
         .test-list li { margin-bottom: 15px; }
         .test-list a { 
@@ -17,46 +16,29 @@
             border-left: 5px solid #0066cc;
         }
         .test-list a:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); background: #f8fbff; }
-        .tag { font-size: 12px; color: #999; margin-top: 5px; display: block; }
+        .tag { font-size: 11px; color: #999; margin-left: 10px; font-weight: normal; }
     </style>
 </head>
 <body>
 
     <h1>🧠 心理测试中心</h1>
-    <p>请选择以下测评开始测试：</p>
 
     <ul class="test-list">
-        <!-- 文件夹形式的测评 -->
-        <li>
-            <a href="./love-language-translator/index.html">❤️ 爱的语言翻译器</a>
-            <span class="tag">文件夹目录：love-language-translator</span>
-        </li>
-        <li>
-            <!-- 注意：如果之后改了文件夹名，这里也要跟着改 -->
-            <a href="./npd%20test%2030/index.html">🛡️ NPD 性格测试 (30题)</a>
-            <span class="tag">文件夹目录：npd test 30</span>
-        </li>
+        <!-- 文件夹目录下的测试 -->
+        <li><a href="./love-language-translator/index.html">❤️ 爱的语言翻译器 <span class="tag">(文件夹: love-language)</span></a></li>
+        <li><a href="./npd%20test%2030/index.html">🛡️ NPD 性格测试 (30题) <span class="tag">(注意: 路径含空格)</span></a></li>
 
-        <!-- 单个 HTML 文件形式的测评（12月做的） -->
-        <li>
-            <a href="./scl90_professional.html">📊 SCL-90 完整专业版 (90题)</a>
-        </li>
-        <li>
-            <a href="./adhd_screening_v1.html">🎯 ADHD 多维度筛查量表</a>
-        </li>
-        <li>
-            <a href="./anxiety_pro.html">😟 48题焦虑深度测评</a>
-        </li>
-        <li>
-            <a href="./scl90_final.html">📋 SCL-90 最终修订版</a>
-        </li>
-        <li>
-            <a href="./test.html">🧪 基础功能测试页</a>
-        </li>
+        <!-- 根目录下的独立 HTML (12月旧链接) -->
+        <li><a href="./scl90_professional.html">📊 SCL-90 完整专业版 (90题)</a></li>
+        <li><a href="./scl90_final.html">📋 SCL-90 最终修订版</a></li>
+        <li><a href="./scl90.html">📝 SCL-90 基础美化版</a></li>
+        <li><a href="./adhd_screening_v1.html">🎯 ADHD 多维度筛查量表</a></li>
+        <li><a href="./anxiety_pro.html">😟 48题焦虑深度测评</a></li>
+        <li><a href="./test.html">🧪 基础功能测试页</a></li>
     </ul>
 
     <footer style="margin-top: 50px; text-align: center; font-size: 12px; color: #bbb;">
-        © 2024-2025 Jasmine 心理测评库
+        © 2024-2025 Jasmine 心理测评库 · 已上线
     </footer>
 
 </body>
